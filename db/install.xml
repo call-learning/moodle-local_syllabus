@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/syllabus/db" VERSION="20201102" COMMENT="XMLDB file for Moodle local/syllabus"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="local_syllabus_location" COMMENT="Syllabus location tables, store location for each course custom field.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="fieldid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Course custom field id"/>
+        <FIELD NAME="location" TYPE="char" LENGTH="254" NOTNULL="false" DEFAULT="none" SEQUENCE="false" COMMENT="A location on the syllabus page"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fieldid_fk" TYPE="foreign" FIELDS="fieldid" REFTABLE="customfield_field" REFFIELDS="id"/>
+        <KEY NAME="usermodified" TYPE="foreign" FIELDS="usermodified" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

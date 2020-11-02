@@ -1,0 +1,106 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+  }}
+{{!
+  @template local_syllabus/syllabus
+
+  Syllabus display page
+
+  The purpose of this template is to render a list.
+
+  Classes required for JS:
+  * none
+
+  Data attributes required for JS:
+  * data-component
+  * data-area
+  * data-itemid
+
+  Context variables required for this template:
+  * attributes Array of name / value pairs.
+
+  Example context (json):
+  {
+      "component": "core_nonexisting",
+      "area": "course",
+      "itemid": 0,
+      "usescategories": 1,
+      "locations": [
+          { "id": "content",
+            "fields": [
+                { "id": 0, "name": "Field name", "shortname": "shortname", "type": "Text" },
+                { "id": 0, "name": "Another field", "shortname": "checkme", "type": "Checkbox" }
+            ]
+          },
+          { "id": "after-summary",
+            "fields": [] }
+      ],
+      "otherfields": [
+          { "id": "0",
+            "name": "Category name",
+            "fields": [
+                { "id": 0, "name": "Field name", "shortname": "shortname", "type": "Text" },
+                { "id": 0, "name": "Another field", "shortname": "checkme", "type": "Checkbox" }
+            ]
+          },
+          { "id": "1",
+            "name": "Category name 2",
+            "fields": [] }
+      ],
+  }
+}}
+<div data-region="list-page" id="syllabus-management">
+    <div class="location-list">
+        {{#locations}}
+            <div data-location-id="{{id}}" id="location-{{id}}" class="mt-2">
+                <div class="row justify-content-between align-items-end">
+                    <div class="col">
+                        <h3>{{id}}</h3>
+                    </div>
+                </div>
+                <table class="generaltable fullwidth fieldslist">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="col-5">{{#str}} customfield, core_customfield {{/str}}</th>
+                        <th scope="col" class="col-3">{{#str}} shortname, core_customfield {{/str}}</th>
+                        <th scope="col" class="col-2">{{#str}} type, core_customfield {{/str}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#fields}}
+                        <tr data-field-name="{{name}}" data-field-id="{{id}}" class="field">
+                            <td class="col-5"><span class="movefield">{{> core/drag_handle}}</span>{{{name}}}</td>
+                            <td class="col-3">{{{shortname}}}</td>
+                            <td class="col-2">{{{type}}}</td>
+                        </tr>
+                    {{/fields}}
+                    {{^fields}}
+                        <tr class="nofields">
+                            <td colspan="4">{{# str }} therearenofields, core_customfield {{/ str }}</td>
+                        </tr>
+                    {{/fields}}
+                    </tbody>
+                </table>
+            </div>
+        {{/locations}}
+    </div>
+</div>
+
+{{#js}}
+    require(['local_syllabus/syllabus_management'], function(s) {
+    s.init();
+    });
+{{/js}}
