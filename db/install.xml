@@ -24,7 +24,8 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="origin" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="1" SEQUENCE="false" COMMENT="coursecustomfield=1, coursefield=2, tag=3"/>
-        <FIELD NAME="data" TYPE="char" LENGTH="254" NOTNULL="false" SEQUENCE="false" COMMENT="Data depending on the field type (can be id for custom fields, ...)."/>
+        <FIELD NAME="iddata" TYPE="char" LENGTH="254" NOTNULL="false" SEQUENCE="false" COMMENT="Data depending on the field type (can be id for custom fields, ...). It should uniquely identify the remote entity."/>
+        <FIELD NAME="data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Additional data used to display the field for example. Json encoded data."/>
         <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>

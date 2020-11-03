@@ -121,8 +121,8 @@ class manage_customfields extends external_api {
                     'Location on the syllabus page',
                     VALUE_REQUIRED
                 ),
-                'previousfieldid' => new external_value(PARAM_INT,
-                    'Field id of the previous field, so we can sort it in the right order',
+                'beforeid' => new external_value(PARAM_INT,
+                    'Field id of the next field, so we can sort it in the right order',
                     VALUE_OPTIONAL,
                     0
                 ),
@@ -139,9 +139,9 @@ class manage_customfields extends external_api {
      * @throws \invalid_parameter_exception
      * @throws \moodle_exception
      */
-    public static function move_field_to_location(string $fieldid, string $location, int $previousfieldid = 0) {
+    public static function move_field_to_location(string $fieldid, string $location, int $beforeid = 0) {
         // Validate parameters.
-        $inparams = compact(array('fieldid', 'location', 'previousfieldid'));
+        $inparams = compact(array('fieldid', 'location', 'beforeid'));
         self::validate_parameters(self::move_field_to_location_parameters(), $inparams);
         self::validate_field_id($fieldid);
 
@@ -153,23 +153,22 @@ class manage_customfields extends external_api {
         }
         $loc->set('location', $location);
 
-        $alllocations = syllabus_location::get_records(array('location' => $location));
+        $alllocations = syllabus_location::get_records(array('location' => $location), 'sortorder');
 
-        $sortorder = 1; // We start with one, so if the field is added to the beginning, then 0 is the right
-        // order.
-        $cfsortorder = 0;
+        $sortorder = 0; // We start with 0.
+        $cfsortorder = -1; // No next field.
         // Move each location to the right sortorder.
         foreach ($alllocations as $ltosort) {
-            if ($ltosort->get('id') == $previousfieldid) {
-                $cfsortorder = $sortorder;
-                $ltosort->sortorder = ++$sortorder;
-            } else {
-                $ltosort->sortorder = $sortorder;
+            if ($ltosort->get('fieldid') == $beforeid) {
+                $cfsortorder = $sortorder++; // Make space for this field.
             }
-            $ltosort->save(); // Make sure we reorder all fields.
+            $ltosort->set('sortorder', $sortorder);
+            $ltosort->save();
             $sortorder++;
         }
-
+        if ($cfsortorder == -1) {
+            $cfsortorder = $sortorder;
+        }
         $loc->set('sortorder', $cfsortorder);
         $loc->save();
     }

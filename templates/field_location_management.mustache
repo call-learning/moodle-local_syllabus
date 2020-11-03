@@ -78,6 +78,7 @@
                         <th scope="col" class="col-3">{{#str}} shortname, local_syllabus {{/str}}</th>
                         <th scope="col" class="col-2">{{#str}} origin, local_syllabus {{/str}}</th>
                         <th scope="col" class="col-2">{{#str}} type, local_syllabus {{/str}}</th>
+                        <th scope="col" class="col-2">{{#str}} action, local_syllabus {{/str}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -87,11 +88,17 @@
                             <td class="col-3">{{{shortname}}}</td>
                             <td class="col-2">{{{origin}}}</td>
                             <td class="col-2">{{{type}}}</td>
+                            <td class="col-2">
+                                <a href="{{editfieldurl}}" data-role="editfield">{{#pix}}
+                                    t/edit, core, {{#str}} edit, moodle {{/str}} {{/pix}}</a>
+                                <a href="#" data-id="{{id}}" data-role="removefield">{{#pix}}
+                                    t/delete, core, {{#str}} delete, moodle {{/str}} {{/pix}}</a>
+                            </td>
                         </tr>
                     {{/fields}}
                     {{^fields}}
                         <tr class="nofields">
-                            <td colspan="4">{{# str }} therearenofields, local_syllabus {{/ str }}</td>
+                            <td colspan="5">{{# str }} therearenofields, local_syllabus {{/ str }}</td>
                         </tr>
                     {{/fields}}
                     </tbody>

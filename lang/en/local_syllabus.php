@@ -25,7 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['action'] = 'Action';
+$string['displayclass'] = 'Display class';
+$string['editfield'] = 'Additional fields parameters';
 $string['field'] = 'Field';
+$string['icon'] = 'Icon';
+$string['labells'] = 'Label language string';
 $string['movefield'] = 'Move Field';
 $string['generalsettings'] = 'General Settings';
 $string['origin:course'] = 'Origin : Course';
@@ -41,6 +46,9 @@ $string['syllabus:customfield_def:desc']= 'Custom Field Definition '.
     'name|shortname|type|description|sortorder|categoryname|configdata(json)';
 $string['syllabuspositions'] = 'Setup Syllabus field positions';
 $string['syllabus_management'] = 'Syllabus Management';
+$string['syllabus_edit_field'] = 'Syllabus Edit Additional Parameters for "{$a}"';
 $string['syllabus_manage_fields'] = 'Syllabus Manage Fields';
 $string['therearenofields'] = 'No fields';
 $string['type'] = 'Type';
+$string['display:base'] = 'Basic display';
+$string['display:price'] = 'Price display';

@@ -38,6 +38,12 @@ class syllabus_location extends persistent {
      */
     const NONE = 'none';
 
+
+    /**
+     * Location type: title area
+     */
+    const TITLE = 'title';
+
     /**
      * Location type: header
      */
@@ -49,23 +55,18 @@ class syllabus_location extends persistent {
     const SIDE = 'side';
 
     /**
-     * Location type: after course summary
+     * Location type: content
      */
-    const AFTER_SUMMARY = 'after-summary';
-
-    /**
-     * Location type: before course summary
-     */
-    const BEFORE_SUMMARY = 'before-summary';
+    const CONTENT = 'content';
 
     /**
      * Type of locaiton
      */
     const LOCATION_TYPES = [
+        self::TITLE,
         self::HEADER,
         self::SIDE,
-        self::AFTER_SUMMARY,
-        self::BEFORE_SUMMARY,
+        self::CONTENT,
         self::NONE
     ];
 
@@ -89,5 +90,30 @@ class syllabus_location extends persistent {
                 'type' => PARAM_INT,
             )
         );
+    }
+
+    /**
+     * Get all fields for this location (none is dealt differently)
+     *
+     * @param $location
+     * @return array of syllabus location
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public static function get_all_fields_by_location($location) {
+        global $DB;
+        // Retrieve all fields in this location.
+        $sql = "SELECT f.id as id"
+            . " FROM {" . syllabus_field::TABLE . "} as f"
+            . " LEFT JOIN {" . self::TABLE . "} fl ON fl.fieldid = f.id"
+            . " WHERE COALESCE(fl.location,:locationnone) = :location"
+            . " ORDER BY fl.sortorder ASC";
+        $fieldsid = $DB->get_fieldset_sql($sql, array('location' => $location,
+            'locationnone' => self::NONE));
+        $fields = [];
+        foreach ($fieldsid as $fid) {
+            $fields[] = new syllabus_field($fid);
+        }
+        return $fields;
     }
 }

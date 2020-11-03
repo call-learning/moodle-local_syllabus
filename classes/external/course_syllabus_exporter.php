@@ -37,17 +37,47 @@ use renderer_base;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_syllabus_exporter extends course_summary_exporter {
+    /**
+     * Constructor - saves the persistent object, and the related objects.
+     *
+     * @param mixed $data - Either an stdClass or an array of values.
+     * @param array $related - An optional list of pre-loaded objects related to this object.
+     */
+    public function __construct($data, $related = array()) {
+        parent::__construct($data, ['context' => \context_course::instance($data->id)]);
+    }
+
     protected function get_other_values(renderer_base $output) {
+        global $USER;
         $courseimage = self::get_course_image($this->data);
         if (!$courseimage) {
             $courseimage = $output->get_generated_image_for_id($this->data->id);
         }
         $coursecategory = \core_course_category::get($this->data->category, MUST_EXIST, true);
+
+        $modules = [];
+        $isenrolled = !is_enrolled($this->related['context']);
+        $viewurl = (new moodle_url('/course/view.php', array('id' => $this->data->id)))->out(false);
+        $action = \html_writer::link($viewurl, get_string('view'),
+            array('class' => 'btn btn-primary'));
+        if (empty($isenrolled) && !is_primary_admin($USER->id)) {
+            $enrols = enrol_get_plugins(true);
+            $enrolinstances = enrol_get_instances($this->data->id, true);
+            foreach ($enrolinstances as $instance) {
+                if (!isset($enrols[$instance->enrol])
+                    || !$enrols[$instance->enrol]->can_self_enrol($instance)) {
+                    continue;
+                }
+                $action .= $enrols[$instance->enrol]->enrol_page_hook($instance);;
+            }
+        }
         return array(
-            'fullnamedisplay' => get_course_display_name_for_list($this->data),
-            'viewurl' => (new moodle_url('/course/view.php', array('id' => $this->data->id)))->out(false),
+            'fullnamehtml' => \html_writer::tag('h3', get_course_display_name_for_list($this->data)),
+            'viewurl' => $viewurl,
             'courseimage' => $courseimage,
-            'coursecategory' => $coursecategory->name
+            'coursecategory' => $coursecategory->name,
+            'action' => $action,
+            'isenrolled' => !is_enrolled($this->related['context'])
         );
     }
 
@@ -65,7 +95,7 @@ class course_syllabus_exporter extends course_summary_exporter {
             'idnumber' => array(
                 'type' => PARAM_RAW,
             ),
-            'summaryhtml' => array(
+            'summary' => array(
                 'type' => PARAM_RAW,
                 'null' => NULL_ALLOWED
             ),
@@ -95,8 +125,8 @@ class course_syllabus_exporter extends course_summary_exporter {
 
     public static function define_other_properties() {
         return array(
-            'fullnamedisplay' => array(
-                'type' => PARAM_TEXT,
+            'fullnamehtml' => array(
+                'type' => PARAM_CLEANHTML,
             ),
             'viewurl' => array(
                 'type' => PARAM_URL,
@@ -106,7 +136,13 @@ class course_syllabus_exporter extends course_summary_exporter {
             ),
             'coursecategory' => array(
                 'type' => PARAM_TEXT
-            )
+            ),
+            'action' => array(
+                'type' => PARAM_RAW
+            ),
+            'isenrolled' => array(
+                'type' => PARAM_BOOL
+            ),
         );
     }
 }

@@ -27,37 +27,40 @@
 require_once('../../config.php');
 global $CFG, $PAGE, $OUTPUT;
 require_once($CFG->libdir . '/adminlib.php');
-admin_externalpage_setup('syllabus_manage_fields');
+$fieldid = required_param('id', PARAM_INT);
 
-// Check if we asked to reset the positions.
-$resetallposition = optional_param('resetallposition', false, PARAM_BOOL);
-if ($resetallposition && confirm_sesskey()) {
-    global $DB;
-    $DB->delete_records(\local_syllabus\syllabus_location::TABLE);
-    $url = (new moodle_url(qualified_me()));
-    $PAGE->set_url($url);
-}
-
+$action = get_string('editfield', 'local_syllabus');
+$PAGE->set_context(\context_system::instance());
+$PAGE->set_title($action);
+$PAGE->set_heading($action);
+$editpageurl = new moodle_url('/local/syllabus/editfield.php', array('id'=>$fieldid));
+$listpageurl = new moodle_url('/local/syllabus/manage.php');
+$PAGE->set_url($editpageurl);
 $output = $PAGE->get_renderer('local_syllabus');
-$listmanagement = new \local_syllabus\output\field_location_management();
-$form = new \local_syllabus\form\syllabus_management_form();
+
+$persistent = new \local_syllabus\syllabus_field($fieldid);
+
+$form = new \local_syllabus\form\syllabus_field_editor(null, [
+    'persistent' => $persistent,  // An instance, or null.
+]);
+$jsondata = array();
+if ($additionaldata = $persistent->get('data')) {
+    $jsondata = json_decode($additionaldata);
+}
+$form->set_data($jsondata);
 if ($data = $form->get_data()) {
 
+    $persistent->set('data', json_encode($data));
+    $persistent->save();
+    redirect($listpageurl);
+}
+if ($form->is_cancelled()) {
+    redirect($listpageurl);
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(new lang_string('syllabus_management', 'local_syllabus'));
+echo $OUTPUT->heading(new lang_string('syllabus_edit_field', 'local_syllabus',
+    $persistent->get_formatted_name()));
 echo $form->render();
 /* @var core_renderer $OUTPUT */
-echo $OUTPUT->heading(get_string('syllabuspositions', 'local_syllabus'));
-echo $OUTPUT->action_link(
-    new moodle_url($PAGE->url, [
-        'resetallposition'        => true,
-        'sesskey'   => sesskey(),
-    ]),
-    get_string('resetallpositions', 'local_syllabus'),
-    new confirm_action(get_string('resetallpositions:confirmation', 'local_syllabus')),
-    array('class'=>'btn btn-primary float-right')
-);
-echo $output->render($listmanagement);
 echo $OUTPUT->footer();

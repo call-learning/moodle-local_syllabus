@@ -56,17 +56,11 @@ class field_location_management implements renderable, templatable {
         $data->locations = array();
 
         foreach (syllabus_location::LOCATION_TYPES as $location) {
-            $fieldsbylocation = syllabus_location::get_records(array('location' => $location), 'sortorder');
             $locationobject = ['id' => $location, 'fields' => []];
-            // Retrieve all fields in this location.
-            $sql = "SELECT " . syllabus_field::get_sql_fields('f', 'lcf')
-                . " FROM {" . syllabus_field::TABLE . "} as f"
-                . " LEFT JOIN {" . syllabus_location::TABLE . "} fl ON fl.fieldid = f.id"
-                . " WHERE COALESCE(fl.location,:locationnone) = :location";
-            $allfields = $DB->get_records_sql($sql, array('location' => $location, 'locationnone' => syllabus_location::NONE));
+            $allfields = syllabus_location::get_all_fields_by_location($location);
             if ($allfields) {
                 foreach ($allfields as $fl) {
-                    $fieldarray = $this->create_field_data($fl->lcfid);
+                    $fieldarray = $this->create_field_data($fl);
                     $locationobject['fields'][] = $fieldarray;
                 }
             }
@@ -76,10 +70,10 @@ class field_location_management implements renderable, templatable {
         return $data;
     }
 
-    protected function create_field_data($fieldid) {
+    protected function create_field_data($field) {
+        global $CFG;
         $fieldarray = [];
-        $field = new syllabus_field($fieldid);
-
+        $fieldid = $field->get('id');
         $fieldname = $field->get_formatted_name();
         $fieldarray['type'] = $field->get_type();
         $fieldarray['origin'] = $field->get_origin_displayname();
@@ -87,6 +81,7 @@ class field_location_management implements renderable, templatable {
         $fieldarray['name'] = $fieldname;
         $fieldarray['shortname'] = $field->get_shortname();
         $fieldarray['movetitle'] = get_string('movefield', 'local_syllabus', $fieldname);
+        $fieldarray['editfieldurl'] = new \moodle_url($CFG->wwwroot.'/local/syllabus/editfield.php', array('id'=>$fieldid));
         return $fieldarray;
     }
 

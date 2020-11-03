@@ -25,7 +25,10 @@
 namespace local_syllabus;
 
 use core\persistent;
+use core_customfield\data_controller;
+use core_customfield\field;
 use core_customfield\field_controller;
+use local_syllabus\display\base;
 use local_syllabus\external\course_syllabus_exporter;
 
 defined('MOODLE_INTERNAL') || die();
@@ -77,8 +80,12 @@ class syllabus_field extends persistent {
                 'type' => PARAM_INT,
                 'choices' => array_keys(static::get_fields_types_names())
             ),
-            'data' => array(
+            'iddata' => array(
                 'type' => PARAM_ALPHANUMEXT,
+            ),
+            'data' => array(
+                'type' => PARAM_RAW,
+                'default' => ''
             ),
         );
     }
@@ -96,7 +103,7 @@ class syllabus_field extends persistent {
         $existingfield = self::get_record(
             array(
                 'origin' => $fielddef['origin'],
-                'data' => strval($fielddef['data'])
+                'iddata' => strval($fielddef['iddata'])
             ));
         if (!$existingfield) {
             $sfield = new self(0, (object) $fielddef);
@@ -117,14 +124,14 @@ class syllabus_field extends persistent {
                 return get_string('tag');
             case self::ORIGIN_COURSE_FIELD:
                 $sm = get_string_manager();
-                if ($sm->string_exists('origin:' . $this->get('data'), 'local_syllabus')) {
-                    return get_string('origin:' . $this->get('data'), 'local_syllabus');
-                } else if ($sm->string_exists($this->get('data'), 'moodle')) {
-                    return get_string($this->get('data'));
+                if ($sm->string_exists('origin:' . $this->get('iddata'), 'local_syllabus')) {
+                    return get_string('origin:' . $this->get('iddata'), 'local_syllabus');
+                } else if ($sm->string_exists($this->get('iddata'), 'moodle')) {
+                    return get_string($this->get('iddata'));
                 }
-                return $this->get('data');
+                return $this->get('iddata');
             case self::ORIGIN_CUSTOM_FIELD:
-                $cfield = field_controller::create($this->get('data')); // Data should be the id.
+                $cfield = static::get_customfield_from_shortname($this->get('iddata')); // Data should be the id.
                 return $cfield->get_formatted_name();
         }
     }
@@ -148,13 +155,13 @@ class syllabus_field extends persistent {
             case self::ORIGIN_COURSE_FIELD:
                 $allfields = self::get_all_native_course_fields();
                 foreach ($allfields as $id => $def) {
-                    if ($id = $this->get('data')) {
+                    if ($id = $this->get('iddata')) {
                         return $def['type'];
                     }
                 }
                 return PARAM_RAW;
             case self::ORIGIN_CUSTOM_FIELD:
-                $cfield = field_controller::create($this->get('data')); // Data should be the id.
+                $cfield = static::get_customfield_from_shortname($this->get('iddata'));// Data should be the id.
                 return $fieldtypes[$cfield->get('type')];
         }
     }
@@ -181,11 +188,109 @@ class syllabus_field extends persistent {
             case self::ORIGIN_TAG:
                 return 'tag';
             case self::ORIGIN_COURSE_FIELD:
-                return $this->get('data');
+                return $this->get('iddata');
             case self::ORIGIN_CUSTOM_FIELD:
-                $cfield = field_controller::create($this->get('data')); // Data should be the id.
-                return $cfield->get('shortname');
+                return $this->get('iddata');
         }
+    }
+
+    /**
+     * Get display class to display the field
+     *
+     * @return string
+     * @throws \coding_exception
+     */
+    public function get_display_object($courseid) {
+        if ($data = $this->get_additional_data()) {
+            if (!empty($data->displayclass)) {
+                $displayclassname = $data->displayclass;
+                return new $displayclassname($this, $courseid);
+            }
+        }
+        return new base($this, $courseid);
+    }
+
+    /**
+     * Get additional data
+     *
+     * @return mixed|null
+     * @throws \coding_exception
+     */
+    public function get_additional_data() {
+        $additionaldata = $this->get('data');
+        try {
+            if ($additionaldata) {
+                return json_decode($additionaldata);
+            }
+        } catch (JsonException $e) {
+            debug('Error decoding additionnal data' . $e->getMessage());
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * Get all values (raw) for this course
+     * We assume that the field data/shortnames are unique.
+     * If not we will send a debug message but that will need to be fixed.
+     *
+     * @param int $courseid
+     * @return \stdClass
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     */
+    public static function get_raw_values($courseid, \renderer_base $output) {
+        global $DB;
+        $exporterclass = static::get_course_syllabus_exporter_class();
+        $course = $DB->get_record('course', array('id' => $courseid));
+        $exporter = new $exporterclass($course);
+        $exportresults = $exporter->export($output);;
+
+        $rawvalue = new \stdClass();
+        foreach (static::get_records() as $field) {
+            $value = '';
+            switch ($field->get('origin')) {
+                case self::ORIGIN_TAG:
+                    $value = '';
+                    $tags = \core_tag_tag::get_item_tags_array('core', 'course', $courseid);
+                    if ($tags) {
+                        foreach ($tags as $tag) {
+                            $value .= \html_writer::span($tag->name, 'badge badge-primary');;
+                        }
+                    }
+                    break;
+                case self::ORIGIN_COURSE_FIELD:
+                    $fieldname = $field->get('iddata');
+                    $value = $exportresults->$fieldname;
+                    break;
+                case self::ORIGIN_CUSTOM_FIELD:
+                    $coursefield = self::get_customfield_from_shortname($field->get('iddata'));
+                    try {
+                        $cfielddata = data_controller::create($courseid, null, $coursefield); // Data should be the id.
+                        $value = $cfielddata->display();
+                    } catch (\moodle_exception $e) {
+                        $value = '';
+                    }
+            }
+            $fieldiddata = $field->get('iddata');
+            if (!empty($rawvalue->$fieldiddata)) {
+                debugging("The field ($fieldiddata) should be unique !", DEBUG_NORMAL);
+            }
+            $rawvalue->$fieldiddata = $value;
+        }
+        return $rawvalue;
+    }
+
+    /**
+     * @return string
+     */
+    protected static function get_course_syllabus_exporter_class() {
+        global $CFG;
+        $exportclass = course_syllabus_exporter::class;
+        if (!empty($CFG->syllabus_course_exporterclass) && class_exists($CFG->syllabus_course_exporterclass)) {
+            $exportclass = $CFG->syllabus_course_exporterclass;
+        }
+        return $exportclass;
     }
 
     /**
@@ -194,13 +299,10 @@ class syllabus_field extends persistent {
      * @return array|array[]
      */
     protected static function get_all_native_course_fields() {
-        global $CFG;
-        $exporterclass = course_syllabus_exporter::class;
-        if (!empty($CFG->syllabus_course_exporterclass) && class_exists( $CFG->syllabus_course_exporterclass)) {
-            $exportclass = $CFG->syllabus_course_exporterclass;
-        }
-        return array_merge($exporterclass::define_properties(),
-            $exporterclass::define_other_properties());
+        $exporterclass = self::get_course_syllabus_exporter_class();
+        return array_merge(
+            $exporterclass::define_other_properties(),
+            $exporterclass::define_properties());
     }
 
     /**
@@ -210,7 +312,7 @@ class syllabus_field extends persistent {
      */
     public static function get_all_possible_fields() {
         // Tags.
-        $tagfields = [['origin' => self::ORIGIN_TAG, 'data' => '']];
+        $tagfields = [['origin' => self::ORIGIN_TAG, 'iddata' => 'coursetags']];
 
         // Retrieve all course custom field and add them.
         $handler = \core_course\customfield\course_handler::create();
@@ -222,7 +324,7 @@ class syllabus_field extends persistent {
             foreach ($cat->get_fields() as $f) {
                 $customfields[] = [
                     'origin' => self::ORIGIN_CUSTOM_FIELD,
-                    'data' => $f->get('id')
+                    'iddata' => $f->get('shortname')
                 ];
             }
         }
@@ -232,11 +334,23 @@ class syllabus_field extends persistent {
             function($key) {
                 return [
                     'origin' => self::ORIGIN_COURSE_FIELD,
-                    'data' => $key
+                    'iddata' => $key
                 ];
             },
             array_keys($allcfs)
         );
         return array_merge($coursefield, $tagfields, $customfields);
     }
+
+    /**
+     * @param $shortname
+     * @return field_controller
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     */
+    protected static function get_customfield_from_shortname($shortname) {
+        $field = field::get_record(array('shortname' => $shortname));
+        return field_controller::create($field->get('id'));
+    }
+
 }

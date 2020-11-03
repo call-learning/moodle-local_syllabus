@@ -41,7 +41,7 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_context($context);
 $PAGE->set_heading($course->fullname);
 $output = $PAGE->get_renderer('local_syllabus');
-$syllabus = new \local_syllabus\output\syllabus($course);
+$syllabus = new \local_syllabus\output\syllabus($course->id);
 
 echo $OUTPUT->header();
 echo $output->render($syllabus);

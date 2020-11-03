@@ -25,7 +25,8 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification', 'core/sortable_l
               Ajax,
               Str,
               Notification,
-              SortableList) {
+              SortableList
+              ) {
         return {
             init: function () {
                 // Sort fields who already have a location.
@@ -63,14 +64,14 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification', 'core/sortable_l
                     if (info.positionChanged) {
                         const fieldid = info.element.data('field-id');
                         const location = info.targetList.closest('[data-location-id]').attr('data-location-id');
-                        var prevfieldid = info.targetNextElement.data('field-id');
+                        var beforeid = info.targetNextElement.data('field-id');
                         var promises = Ajax.call([
                             {
                                 methodname: 'local_syllabus_move_field_to_location',
                                 args: {
                                     fieldid: fieldid,
                                     location: location,
-                                    previousfieldid: prevfieldid
+                                    beforeid: beforeid
                                 },
                             },
                         ]);
@@ -101,6 +102,22 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification', 'core/sortable_l
                         }, 501);
                     }
                 );
+                $("[data-role=removefield]").on('click', function(e) {
+                    const fieldid = $(this).attr('data-id');
+                    Ajax.call([
+                        {
+                            methodname: 'local_syllabus_move_field_to_location',
+                            args: {
+                                fieldid: fieldid,
+                                location: 'none',
+                                beforeid: 0
+                            },
+                        }
+                    ])[0].then(function() {
+                        window.location.reload();
+                    }).fail(Notification.exception);
+                    e.preventDefault();
+                });
             },
         };
     });

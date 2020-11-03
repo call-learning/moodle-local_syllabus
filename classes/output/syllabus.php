@@ -25,7 +25,7 @@
 namespace local_syllabus\output;
 defined('MOODLE_INTERNAL') || die();
 
-use core_customfield\handler;
+use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
 use renderable;
 use templatable;
@@ -42,15 +42,15 @@ class syllabus implements renderable, templatable {
     /**
      * @var $course
      */
-    protected $course;
+    protected $courseid;
 
     /**
      * Syllabus Display constructor.
      *
      * @param $course
      */
-    public function __construct($course) {
-        $this->course = $course;
+    public function __construct($courseid) {
+        $this->courseid = $courseid;
     }
 
     /**
@@ -61,10 +61,21 @@ class syllabus implements renderable, templatable {
      */
     public function export_for_template(\renderer_base $output) {
         $data = new \stdClass();
+        $rawexport = syllabus_field::get_raw_values($this->courseid, $output);
+        $data->courseraw = $rawexport;
 
-        // Get all data from custom fields.
-
-        // Get course exporter
+        foreach (syllabus_location::LOCATION_TYPES as $location) {
+            $allfields = syllabus_location::get_all_fields_by_location($location);
+            $allfieldsvals = ['fields' => []];
+            if ($allfields) {
+                foreach ($allfields as $field) {
+                    $displayclass = $field->get_display_object($this->courseid);
+                    $allfieldsvals['fields'][] = $displayclass->export_for_template($output);
+                }
+            }
+            $data->$location = $allfieldsvals;
+        }
+        return $data;
     }
 
 }
