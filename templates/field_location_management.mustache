@@ -74,9 +74,10 @@
                 <table class="generaltable fullwidth fieldslist">
                     <thead>
                     <tr>
-                        <th scope="col" class="col-5">{{#str}} customfield, core_customfield {{/str}}</th>
-                        <th scope="col" class="col-3">{{#str}} shortname, core_customfield {{/str}}</th>
-                        <th scope="col" class="col-2">{{#str}} type, core_customfield {{/str}}</th>
+                        <th scope="col" class="col-5">{{#str}} field, local_syllabus {{/str}}</th>
+                        <th scope="col" class="col-3">{{#str}} shortname, local_syllabus {{/str}}</th>
+                        <th scope="col" class="col-2">{{#str}} origin, local_syllabus {{/str}}</th>
+                        <th scope="col" class="col-2">{{#str}} type, local_syllabus {{/str}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -84,12 +85,13 @@
                         <tr data-field-name="{{name}}" data-field-id="{{id}}" class="field">
                             <td class="col-5"><span class="movefield">{{> core/drag_handle}}</span>{{{name}}}</td>
                             <td class="col-3">{{{shortname}}}</td>
+                            <td class="col-2">{{{origin}}}</td>
                             <td class="col-2">{{{type}}}</td>
                         </tr>
                     {{/fields}}
                     {{^fields}}
                         <tr class="nofields">
-                            <td colspan="4">{{# str }} therearenofields, core_customfield {{/ str }}</td>
+                            <td colspan="4">{{# str }} therearenofields, local_syllabus {{/ str }}</td>
                         </tr>
                     {{/fields}}
                     </tbody>

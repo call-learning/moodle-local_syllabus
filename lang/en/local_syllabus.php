@@ -25,11 +25,22 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['field'] = 'Field';
+$string['movefield'] = 'Move Field';
+$string['generalsettings'] = 'General Settings';
+$string['origin:course'] = 'Origin : Course';
+$string['origin:customfield'] = 'Origin: Custom Field';
+$string['origin:tag'] = 'Origin: Tag';
+$string['origin'] = 'Origin';
 $string['pluginname'] = 'Syllabus';
+$string['resetallpositions'] = 'Reset all positions';
+$string['resetallpositions:confirmation'] = 'Reset all positions: are you sure?';
+$string['shortname'] = 'Shortname';
 $string['syllabus:customfield_def']= 'Custom Field Definition';
 $string['syllabus:customfield_def:desc']= 'Custom Field Definition '.
     'name|shortname|type|description|sortorder|categoryname|configdata(json)';
-
+$string['syllabuspositions'] = 'Setup Syllabus field positions';
 $string['syllabus_management'] = 'Syllabus Management';
 $string['syllabus_manage_fields'] = 'Syllabus Manage Fields';
-$string['movefield'] = 'Move Field';
+$string['therearenofields'] = 'No fields';
+$string['type'] = 'Type';

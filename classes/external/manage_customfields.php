@@ -24,13 +24,13 @@
 
 namespace local_syllabus\external;
 
-use core_course\customfield\course_handler;
 use external_api;
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
 use invalid_parameter_exception;
+use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
 
 defined('MOODLE_INTERNAL') || die();
@@ -190,12 +190,9 @@ class manage_customfields extends external_api {
      * @throws \moodle_exception
      */
     private static function validate_field_id($fieldid) {
-        $handler = course_handler::get_handler('core_course', 'course');
-        foreach ($handler->get_fields() as $field) {
-            if ($field->get('id') == $fieldid) {
-                return;
-            }
+        if (!syllabus_field::record_exists($fieldid)) {
+            throw new invalid_parameter_exception(
+                'Syllabus field ID ' . $fieldid . ' does not exist.');
         }
-        throw new invalid_parameter_exception('Course field ID ' . $fieldid . ' does not exist.');
     }
 }

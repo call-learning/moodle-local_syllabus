@@ -25,15 +25,37 @@
 
 
 require_once('../../config.php');
-global $CFG, $PAGE;
+global $CFG, $PAGE, $OUTPUT;
 require_once($CFG->libdir . '/adminlib.php');
 admin_externalpage_setup('syllabus_manage_fields');
 
+// Check if we asked to reset the positions.
+$resetallposition = optional_param('resetallposition', false, PARAM_BOOL);
+if ($resetallposition && confirm_sesskey()) {
+    global $DB;
+    $DB->delete_records(\local_syllabus\syllabus_location::TABLE);
+}
+
 $output = $PAGE->get_renderer('local_syllabus');
-$handler = \core_course\customfield\course_handler::create();
-$listmanagement = new \local_syllabus\output\field_location_management($handler);
+$listmanagement = new \local_syllabus\output\field_location_management();
+$form = new \local_syllabus\form\syllabus_management_form();
+if ($data = $form->get_data()) {
+
+}
 
 echo $output->header();
 echo $output->heading(new lang_string('syllabus_management', 'local_syllabus'));
+echo $form->render();
+/* @var core_renderer $OUTPUT */
+echo $OUTPUT->heading(get_string('syllabuspositions', 'local_syllabus'));
+echo $OUTPUT->action_link(
+    new moodle_url($PAGE->url, [
+        'resetallposition'        => true,
+        'sesskey'   => sesskey(),
+    ]),
+    get_string('resetallpositions', 'local_syllabus'),
+    new confirm_action(get_string('resetallpositions:confirmation', 'local_syllabus')),
+    array('class'=>'btn btn-primary float-right')
+);
 echo $output->render($listmanagement);
 echo $output->footer();

@@ -15,20 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Code to be executed after the plugin's database scheme has been installed is defined here.
+ * Event observer to synchronise syllabus fields and customfields
  *
  * @package     local_syllabus
- * @category    upgrade
+ * @category    events
  * @copyright   2020 CALL Learning <contact@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-/**
- * Custom code to be run on installing the plugin.
- */
-function xmldb_local_syllabus_install() {
-    \local_syllabus\local\utils::update_syllabus_fields(); // Create or update syllabus fields.
-    return true;
-}
+$observers = array(
+    array(
+        'eventname' => '\core_customfield\event\field_created',
+        'callback' => '\local_syllabus\observer\customfield_observer::customfield_created',
+    ),
+    array(
+        'eventname' => '\core_customfield\event\field_deleted',
+        'callback' => '\local_syllabus\observer\customfield_observer::customfield_deleted',
+    ),
+);

@@ -1,0 +1,2 @@
+Type de formation|formationtype|select||0|Champs Syllabus|"required":"0"|"uniquevalues":"0"|"options":"Pr\u00e9sentiel\r\nAdistance\r\nBlended","defaultvalue":"Pr\u00e9sentiel"|"locked":"0"|"visibility":"2"'
+Durée|duration|text||0|Champs Syllabus|"required":"0"|"uniquevalues":"0"|"options":"Pr\u00e9sentiel\r\nAdistance\r\nBlended","defaultvalue":"Pr\u00e9sentiel"|"locked":"0"|"visibility":"2"'

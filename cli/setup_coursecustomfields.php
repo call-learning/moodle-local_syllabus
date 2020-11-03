@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CLI script for local_syllabus.
+ * CLI script for local_syllabus, so to setup the course custom fields.
  *
  * @package     local_syllabus
  * @subpackage  cli
@@ -25,34 +25,44 @@
 
 define('CLI_SCRIPT', true);
 global $CFG;
-require(__DIR__.'/../../../config.php');
-require_once($CFG->libdir.'/clilib.php');
+require(__DIR__ . '/../../../config.php');
+require_once($CFG->libdir . '/clilib.php');
 
 // Get the cli options.
-list($options, $unrecognized) = cli_get_params(array(
-    'help' => false
-),
-array(
-    'h' => 'help'
-));
+list($options, $unrecognized) = cli_get_params(
+    array(
+        'help' => false,
+        'fileinput' => false
+    ),
+    array(
+        'h' => 'help',
+        'f' => 'fileinput',
+    )
+);
 
-$help =
-"
-Help message for local_syllabus cli script.
+$help = " 
+php setup_coursecustomfields -f <filedef>
 
-Please include a list of options and associated actions.
-
-Please include an example of usage.
-";
+Will setup all the course custom fields according to a file provivided as field definition. The format is (one per line): 
+ name|shortname|type|description|sortorder|categoryname|configdata(json)
+ 
+Example:
+ Type de formation|formationtype|select||0|Champs Syllabus|\"required\":\"0\"|\"uniquevalues\":\"0\"|\"locked\":\"0\"
+ ";
 
 if ($unrecognized) {
     $unrecognized = implode("\n\t", $unrecognized);
     cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
 }
 
-if ($options['help']) {
+if ($options['help'] || empty($option['configtext'])) {
+    cli_writeln($help);
+    die();
+}
+if (!file_exists($option['configtext'])) {
+    cli_error('filedoesnotexist');
     cli_writeln($help);
     die();
 }
 
-\local_syllabus\local\utils::create_customfields_fromdef();
+\local_syllabus\local\utils::create_customfields_fromdef(file_get_contents($option['configtext']));

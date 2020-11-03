@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/syllabus/db" VERSION="20201102" COMMENT="XMLDB file for Moodle local/syllabus"
+<XMLDB PATH="local/syllabus/db" VERSION="20201103" COMMENT="XMLDB file for Moodle local/syllabus"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -16,7 +16,21 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="fieldid_fk" TYPE="foreign" FIELDS="fieldid" REFTABLE="customfield_field" REFFIELDS="id"/>
+        <KEY NAME="fieldid_fk" TYPE="foreign" FIELDS="fieldid" REFTABLE="local_syllabus_field" REFFIELDS="id"/>
+        <KEY NAME="usermodified" TYPE="foreign" FIELDS="usermodified" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="local_syllabus_field" COMMENT="Syllabus field information">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="origin" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="1" SEQUENCE="false" COMMENT="coursecustomfield=1, coursefield=2, tag=3"/>
+        <FIELD NAME="data" TYPE="char" LENGTH="254" NOTNULL="false" SEQUENCE="false" COMMENT="Data depending on the field type (can be id for custom fields, ...)."/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="usermodified" TYPE="foreign" FIELDS="usermodified" REFTABLE="user" REFFIELDS="id"/>
       </KEYS>
     </TABLE>

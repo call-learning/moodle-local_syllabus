@@ -15,20 +15,43 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Code to be executed after the plugin's database scheme has been installed is defined here.
+ * CLI script for local_syllabus so to setup the syllabus fields
  *
  * @package     local_syllabus
- * @category    upgrade
+ * @subpackage  cli
  * @copyright   2020 CALL Learning <contact@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+define('CLI_SCRIPT', true);
+global $CFG;
+require(__DIR__ . '/../../../config.php');
+require_once($CFG->libdir . '/clilib.php');
 
-/**
- * Custom code to be run on installing the plugin.
- */
-function xmldb_local_syllabus_install() {
-    \local_syllabus\local\utils::update_syllabus_fields(); // Create or update syllabus fields.
-    return true;
+// Get the cli options.
+list($options, $unrecognized) = cli_get_params(
+    array(
+        'help' => false,
+    ),
+    array(
+        'h' => 'help',
+    )
+);
+
+$help = " 
+php setup_syllabusfields
+
+Will setup the syllabus field table according to existing fields. 
+ ";
+
+if ($unrecognized) {
+    $unrecognized = implode("\n\t", $unrecognized);
+    cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
 }
+
+if ($options['help']) {
+    cli_writeln($help);
+    die();
+}
+
+\local_syllabus\local\utils::update_syllabus_fields();

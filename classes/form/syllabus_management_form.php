@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - https://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,20 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Code to be executed after the plugin's database scheme has been installed is defined here.
+ * Syllabus display settings form
  *
- * @package     local_syllabus
- * @category    upgrade
- * @copyright   2020 CALL Learning <contact@call-learning.fr>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_syllabus
+ * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace local_syllabus\form;
+defined('MOODLE_INTERNAL') || die;
 
-defined('MOODLE_INTERNAL') || die();
+class syllabus_management_form extends \moodleform {
 
-/**
- * Custom code to be run on installing the plugin.
- */
-function xmldb_local_syllabus_install() {
-    \local_syllabus\local\utils::update_syllabus_fields(); // Create or update syllabus fields.
-    return true;
+    protected function definition() {
+        $mform = $this->_form;
+        $mform->addElement('header', 'general',get_string('generalsettings', 'local_syllabus'));
+    }
 }

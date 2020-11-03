@@ -25,13 +25,13 @@
 namespace local_syllabus\output;
 defined('MOODLE_INTERNAL') || die();
 
-use core_customfield\handler;
+use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
 use renderable;
 use templatable;
 
 /**
- *  Syllabus management (customfield and general layout)
+ *  Syllabus management (fields (custom field and course field) general layout disposition)
  *
  *  Very similar to custom field management page but used to adjust course syllabus
  *  layout.
@@ -41,86 +41,51 @@ use templatable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class field_location_management implements renderable, templatable {
-
-    /**
-     * @var handler
-     */
-    protected $handler;
-
-    /**
-     * management constructor.
-     *
-     * @param \core_customfield\handler $handler
-     */
-    public function __construct(\core_customfield\handler $handler) {
-        $this->handler = $handler;
-    }
-
     /**
      * Export for template
      *
      * @param \renderer_base $output
      * @return array|object|\stdClass
+     * @throws \coding_exception
+     * @throws \dml_exception
      */
     public function export_for_template(\renderer_base $output) {
+        global $DB;
         $data = new \stdClass();
 
         $data->locations = array();
 
-        $categories = $this->handler->get_categories_with_fields();
-
-        $allfields = [];
-        // Setup references.
-        foreach ($categories as $cat) {
-            foreach ($cat->get_fields() as $f) {
-                $allfields[$f->get('id')] = $f;
-            }
-        }
         foreach (syllabus_location::LOCATION_TYPES as $location) {
             $fieldsbylocation = syllabus_location::get_records(array('location' => $location), 'sortorder');
             $locationobject = ['id' => $location, 'fields' => []];
-            foreach ($fieldsbylocation as $fl) {
-                if (!empty($allfields[$fl->get('fieldid')])) {
-                    $field = $allfields[$fl->get('fieldid')];
-                    $fieldarray = $this->create_field_data($field);
+            // Retrieve all fields in this location.
+            $sql = "SELECT " . syllabus_field::get_sql_fields('f', 'lcf')
+                . " FROM {" . syllabus_field::TABLE . "} as f"
+                . " LEFT JOIN {" . syllabus_location::TABLE . "} fl ON fl.fieldid = f.id"
+                . " WHERE COALESCE(fl.location,:locationnone) = :location";
+            $allfields = $DB->get_records_sql($sql, array('location' => $location, 'locationnone' => syllabus_location::NONE));
+            if ($allfields) {
+                foreach ($allfields as $fl) {
+                    $fieldarray = $this->create_field_data($fl->lcfid);
                     $locationobject['fields'][] = $fieldarray;
-                    unset($allfields[$fl->get('fieldid')]); // Remove the field from the list, so only
-                    // field will no location remains.
                 }
             }
             $data->locations[] = $locationobject;
-        }
-        $locationnone = null;
-        foreach($data->locations as &$location) {
-            $locationnone = &$location;
-            if ($location['id'] == syllabus_location::NONE) {
-                break;
-            }
-        }
-        // Add all field not set to a location into the location "none", at then end.
-        foreach ($categories as $cat) {
-            foreach ($cat->get_fields() as $f) {
-                if (!empty($allfields[$f->get('id')])) {
-                    $locationnone['fields'][] =
-                        $this->create_field_data($allfields[$f->get('id')]);
-                }
-            }
         }
 
         return $data;
     }
 
-    protected function create_field_data($field) {
-        static $fieldtypes = null;
-        if (!$fieldtypes) {
-            $fieldtypes = $this->handler->get_available_field_types();
-        }
+    protected function create_field_data($fieldid) {
         $fieldarray = [];
+        $field = new syllabus_field($fieldid);
+
         $fieldname = $field->get_formatted_name();
-        $fieldarray['type'] = $fieldtypes[$field->get('type')];
-        $fieldarray['id'] = $field->get('id');
+        $fieldarray['type'] = $field->get_type();
+        $fieldarray['origin'] = $field->get_origin_displayname();
+        $fieldarray['id'] = $fieldid;
         $fieldarray['name'] = $fieldname;
-        $fieldarray['shortname'] = $field->get('shortname');
+        $fieldarray['shortname'] = $field->get_shortname();
         $fieldarray['movetitle'] = get_string('movefield', 'local_syllabus', $fieldname);
         return $fieldarray;
     }

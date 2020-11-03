@@ -27,6 +27,7 @@ namespace local_syllabus\local;
 use core_customfield\category;
 use core_customfield\category_controller;
 use core_customfield\field;
+use local_syllabus\syllabus_field;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -51,41 +52,8 @@ class utils {
      *
      *
      */
-    public static function create_customfields_fromdef() {
-        $configtext = get_config('local_syllabus', 'customfield_def');
-
-        $lineparser = function($setting, $index, &$currentobject) {
-            $val = trim($setting[$index]);
-            switch ($index) {
-                case 0:
-                    $currentobject->name = $val;
-                    break;
-                case 1:
-                    $currentobject->shortname = $val;
-                    break;
-                case 2:
-                    $currentobject->type = $val;
-                    break;
-                case 3:
-                    $currentobject->description = $val;
-                    break;
-                case 4:
-                    $currentobject->sortorder = $val;
-                    break;
-                case 5:
-                    $currentobject->catname = $val;
-                    break;
-                default:
-                    if (empty($currentobject->configdata)) {
-                        $currentobject->configdata = new \stdClass();
-                    }
-                    $data = json_decode("{" . trim($val, '{}') . "}", true);
-                    foreach ($data as $fieldname => $fieldvalue) {
-                        $currentobject->configdata->$fieldname = $fieldvalue;
-                    }
-            }
-        };
-        $allfieldsdefs = \theme_clboost\local\utils::convert_from_config($configtext, $lineparser);
+    public static function create_customfields_fromdef($configtext) {
+        $allfieldsdefs = static::parse_customfield_def($configtext);
         foreach ($allfieldsdefs as $field) {
             $category = category::get_record(array('name' => $field->catname, 'component' => 'core_course'));
 
@@ -124,6 +92,77 @@ class utils {
                     $categorycontroller);
                 $rfield->save();
             }
+        }
+    }
+
+    /**
+     * Retrieve customfield definition from text
+     *
+     * @return array
+     * @throws \dml_exception
+     */
+    public static function parse_customfield_def($configtext) {
+        $lineparser = function($setting, $index, &$currentobject) {
+            $val = trim($setting[$index]);
+            switch ($index) {
+                case 0:
+                    $currentobject->name = $val;
+                    break;
+                case 1:
+                    $currentobject->shortname = $val;
+                    break;
+                case 2:
+                    $currentobject->type = $val;
+                    break;
+                case 3:
+                    $currentobject->description = $val;
+                    break;
+                case 4:
+                    $currentobject->sortorder = $val;
+                    break;
+                case 5:
+                    $currentobject->catname = $val;
+                    break;
+                default:
+                    if (empty($currentobject->configdata)) {
+                        $currentobject->configdata = new \stdClass();
+                    }
+                    $data = json_decode("{" . trim($val, '{}') . "}", true);
+                    foreach ($data as $fieldname => $fieldvalue) {
+                        $currentobject->configdata->$fieldname = $fieldvalue;
+                    }
+            }
+        };
+        $lines = explode("\n", $configtext);
+        $results = [];
+        foreach ($lines as $linenumber => $line) {
+            $line = trim($line);
+            if (strlen($line) == 0) {
+                continue;
+            }
+            $settings = explode("|", $line);
+            $currentobject = new \stdClass();
+            foreach ($settings as $i => $setting) {
+                $setting = trim($setting);
+                $lineparser($setting, $i, $currentobject);
+            }
+            if (!empty((array) $currentobject)) {
+                $results[] = $currentobject;
+            }
+        }
+        return $results;
+    }
+
+    public static function update_syllabus_fields() {
+        // Purge unreferenced fields.
+        $orphanfields = syllabus_field::get_records_select('id NOT IN (SELECT fieldid FROM {local_syllabus_location})');
+        foreach ($orphanfields as $of) {
+            $of->delete();
+        }
+
+        $allfields = syllabus_field::get_all_possible_fields();
+        foreach ($allfields as $f) {
+            syllabus_field::create_from_def($f);
         }
     }
 }

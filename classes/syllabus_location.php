@@ -23,6 +23,7 @@
  */
 
 namespace local_syllabus;
+
 use core\persistent;
 
 defined('MOODLE_INTERNAL') || die();
@@ -31,10 +32,16 @@ class syllabus_location extends persistent {
 
     /** The table name. */
     const TABLE = 'local_syllabus_location';
+
     /**
-     * Location type: none set
+     * Location type: none set (do not display the field)
      */
     const NONE = 'none';
+
+    /**
+     * Location type: header
+     */
+    const HEADER = 'header';
 
     /**
      * Location type: on the side
@@ -55,6 +62,7 @@ class syllabus_location extends persistent {
      * Type of locaiton
      */
     const LOCATION_TYPES = [
+        self::HEADER,
         self::SIDE,
         self::AFTER_SUMMARY,
         self::BEFORE_SUMMARY,
