@@ -29,10 +29,10 @@ global $DB, $PAGE, $OUTPUT;
 $courseid          = required_param('id', PARAM_INT);
 $course = $DB->get_record('course', array('id'=>$courseid), '*', MUST_EXIST);
 
+require_login($courseid,true);
 $urlparams = array('id' => $course->id);
 
 $PAGE->set_url('/local/syllabus/view.php', $urlparams);
-
 $PAGE->set_cacheable(false);
 $context = context_course::instance($course->id, MUST_EXIST);
 

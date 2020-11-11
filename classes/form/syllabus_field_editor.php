@@ -26,6 +26,7 @@ namespace local_syllabus\form;
 
 use core\form\persistent;
 use local_syllabus\local\fa_icons;
+use local_syllabus\local\utils;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -40,15 +41,15 @@ class syllabus_field_editor extends persistent {
      * @throws \coding_exception
      */
     protected function definition() {
-        global $OUTPUT;
         $mform = $this->_form;
-        $displayclasses = [
-            '' => get_string('none'),
-            \local_syllabus\display\base::class => get_string('display:base', 'local_syllabus'),
-            \local_syllabus\display\price::class => get_string('display:price', 'local_syllabus'),
-            \local_syllabus\display\image::class => get_string('display:image', 'local_syllabus'),
-            \local_syllabus\display\date::class => get_string('display:date', 'local_syllabus')
-        ];
+        $allclasses = utils::get_all_display_classes();
+        $displayclasses = ['' => get_string('none')];
+
+        foreach ($allclasses as $cname => $cinstance) {
+            list($classcomponent, $other) = explode('\\', trim($cinstance, '\\'));
+            $classcomponent = $classcomponent ? $classcomponent : 'moodle';
+            $displayclasses[$cname] = get_string("display:$cname", $classcomponent);
+        }
         $mform->addElement('select',
             'displayclass',
             get_string('displayclass', 'local_syllabus'),

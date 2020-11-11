@@ -28,6 +28,7 @@ use core_customfield\category;
 use core_customfield\category_controller;
 use core_customfield\field;
 use local_syllabus\syllabus_field;
+use ReflectionClass;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -153,16 +154,23 @@ class utils {
         return $results;
     }
 
+    /**
+     * Update all syllabus fields in the database
+     *
+     * @throws \coding_exception
+     * @throws \core\invalid_persistent_exception
+     * @throws \dml_exception
+     */
     public static function update_syllabus_fields() {
         global $DB;
         $allfields = syllabus_field::get_all_possible_fields();
         $items = array_map(function($item) {
             return $item['iddata'];
         }, $allfields);
-        list($sql, $params) = $DB->get_in_or_equal($items, SQL_PARAMS_NAMED, $prefix='param', $equal=false);
+        list($sql, $params) = $DB->get_in_or_equal($items, SQL_PARAMS_NAMED, $prefix = 'param', $equal = false);
         // Purge unreferenced fields.
         $orphanfields = syllabus_field::get_records_select(
-            'id NOT IN (SELECT fieldid FROM {local_syllabus_location}) OR iddata '.$sql,
+            'id NOT IN (SELECT fieldid FROM {local_syllabus_location}) OR iddata ' . $sql,
             $params
         );
         foreach ($orphanfields as $of) {
@@ -172,4 +180,36 @@ class utils {
             syllabus_field::create_from_def($f);
         }
     }
+
+    /**
+     * Get all syllabus display classes
+     *
+     */
+    public static function get_all_display_classes() {
+        $classes = [];
+        foreach (\core_component::get_plugin_types() as $type => $location) {
+            $plugins = \core_component::get_plugin_list($type);
+            foreach (array_keys($plugins) as $name) {
+                $locationtoscan = "{$location}/{$name}/classes/display";
+                if (is_dir($locationtoscan)) {
+                    $sources = scandir($locationtoscan);
+                    foreach ($sources as $filename) {
+                        if ($filename === 'base.php' || $filename === "." || $filename === ".." ) {
+                            continue;
+                        }
+                        $sourcename = str_replace('.php', '', $filename);
+                        $classname = "\\{$type}_{$name}\\display\\{$sourcename}";
+                        if (class_exists($classname)) {
+                            $reflector = new ReflectionClass($classname);
+                            if ($reflector->isSubclassOf(\local_syllabus\display\base::class)) {
+                                $classes[$sourcename] = $classname;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $classes;
+    }
+
 }

@@ -44,6 +44,14 @@ defined('MOODLE_INTERNAL') || die();
  */
 class local_syllabus_syllabus_testcase extends advanced_testcase {
 
-    // Write the tests here as public funcions.
+    function test_define_custom_field() {
+        $this->resetAfterTest();
+        $generator = $this->getDataGenerator();
+        // Create a couple of custom fields definitions.
+        $catid = $generator->create_custom_field_category([])->get('id');
+        $customfield = $generator->create_custom_field(['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1']);
+        // The call should have been made to the observer and created the relevant field definition.
+        $this->assertTrue(\local_syllabus\syllabus_field::record_exists($customfield->get('id')));
+    }
 
 }

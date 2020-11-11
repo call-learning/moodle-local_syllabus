@@ -48,7 +48,7 @@ class customfield_observer {
     public static function customfield_created($event) {
         $fielddef = [
             'origin' => syllabus_field::ORIGIN_CUSTOM_FIELD,
-            'data' => $event->objectid
+            'iddata' => $event->objectid
         ];
         syllabus_field::create_from_def($fielddef);
     }

@@ -26,6 +26,7 @@ namespace local_syllabus\display;
 
 use local_syllabus\syllabus_field;
 use renderable;
+use renderer_base;
 use templatable;
 
 /**
@@ -44,7 +45,7 @@ class price extends base {
      * @throws \coding_exception
      * @throws \moodle_exception
      */
-    protected function export_raw_value($courserawvals, renderer_base $output) {
+    protected function export_raw_value($courserawvals, renderer_base $output){
         $fielddataid = $this->fieldspec->get('iddata');
         if (!empty($courserawvals->currency)) {
             $currency = $courserawvals->currency;

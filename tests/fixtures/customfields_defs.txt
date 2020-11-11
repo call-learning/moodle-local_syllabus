@@ -1,2 +1,6 @@
-Type de formation|formationtype|select||0|Champs Syllabus|"required":"0"|"uniquevalues":"0"|"options":"Pr\u00e9sentiel\r\nAdistance\r\nBlended","defaultvalue":"Pr\u00e9sentiel"|"locked":"0"|"visibility":"2"'
-Durée|duration|text||0|Champs Syllabus|"required":"0"|"uniquevalues":"0"|"options":"Pr\u00e9sentiel\r\nAdistance\r\nBlended","defaultvalue":"Pr\u00e9sentiel"|"locked":"0"|"visibility":"2"'
+Type de formation|formationtype|select|0|"2"|"4"|{"required":"0","uniquevalues":"0","options":"Pr\u00e9sentiel\r\nAdistance\r\nBlended","defaultvalue":"Pr\u00e9sentiel","locked":"0","visibility":"2"}
+Durée|duree|text|"<p>Durée de la formation en heures</p>"||0|Champs Syllabus|{"required":"0","uniquevalues":"0","defaultvalue":"","displaysize":3,"maxlength":1333,"ispassword":"0","link":"","locked":"0","visibility":"2"}
+Public|public|text||0|Champs Syllabus|{"required":"0","uniquevalues":"0","defaultvalue":"V\u00e9t\u00e9rinaire praticien","displaysize":50,"maxlength":1333,"ispassword":"0","link":"","locked":"0","visibility":"2"}
+Tarif|tarif|text||0|Champs Syllabus|{"required":"0","uniquevalues":"0","defaultvalue":"0","displaysize":50,"maxlength":1333,"ispassword":"0","link":"","locked":"0","visibility":"2"}
+Lieu|lieu|textarea||0|Champs Syllabus|{"required":"0","uniquevalues":"0","locked":"0","visibility":"2","defaultvalue":"","defaultvalueformat":"1"}
+Thèmes|themes|multiselect|"<p>Cours theme</p>"||0|Champs Syllabus|{"required":"0","uniquevalues":"0","options":"Sant\u00e9 animale\r\nAnimaux de compagnie\r\n","defaultvalue":"Sant\u00e9 animale","locked":"0","visibility":"2"}

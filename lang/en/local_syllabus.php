@@ -52,3 +52,5 @@ $string['therearenofields'] = 'No fields';
 $string['type'] = 'Type';
 $string['display:base'] = 'Basic display';
 $string['display:price'] = 'Price display';
+$string['display:date'] = 'Date display (userdate)';
+$string['display:image'] = 'Image display';
