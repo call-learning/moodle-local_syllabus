@@ -46,7 +46,7 @@ if ($hassiteconfig) {
 
     $settings->add('syllabus',
         new admin_externalpage('syllabus_manage_fields',
-            new lang_string('syllabus_manage_fields', 'local_syllabus'),
+            new lang_string('syllabus:managefields', 'local_syllabus'),
             $CFG->wwwroot . '/local/syllabus/manage.php',
             array('local/syllabus:manage')
         )

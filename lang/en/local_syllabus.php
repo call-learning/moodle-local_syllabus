@@ -45,9 +45,9 @@ $string['syllabus:customfield_def']= 'Custom Field Definition';
 $string['syllabus:customfield_def:desc']= 'Custom Field Definition '.
     'name|shortname|type|description|sortorder|categoryname|configdata(json)';
 $string['syllabuspositions'] = 'Setup Syllabus field positions';
-$string['syllabus_management'] = 'Syllabus Management';
-$string['syllabus_edit_field'] = 'Syllabus Edit Additional Parameters for "{$a}"';
-$string['syllabus_manage_fields'] = 'Syllabus Manage Fields';
+$string['syllabus:management'] = 'Syllabus Management';
+$string['syllabus:editfield'] = 'Syllabus Edit Additional Parameters for "{$a}"';
+$string['syllabus:managefields'] = 'Syllabus Manage Fields';
 $string['therearenofields'] = 'No fields';
 $string['type'] = 'Type';
 $string['display:base'] = 'Basic display';

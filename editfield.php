@@ -59,7 +59,7 @@ if ($form->is_cancelled()) {
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(new lang_string('syllabus_edit_field', 'local_syllabus',
+echo $OUTPUT->heading(new lang_string('syllabus:editfield', 'local_syllabus',
     $persistent->get_formatted_name()));
 echo $form->render();
 /* @var core_renderer $OUTPUT */

@@ -132,8 +132,11 @@ class syllabus_field extends persistent {
                 return $this->get('iddata');
             case self::ORIGIN_CUSTOM_FIELD:
                 $cfield = static::get_customfield_from_shortname($this->get('iddata')); // Data should be the id.
-                return $cfield->get_formatted_name();
+                if ($cfield) {
+                    return $cfield->get_formatted_name();
+                }
         }
+        return '';
     }
 
     /**
@@ -162,8 +165,12 @@ class syllabus_field extends persistent {
                 return PARAM_RAW;
             case self::ORIGIN_CUSTOM_FIELD:
                 $cfield = static::get_customfield_from_shortname($this->get('iddata'));// Data should be the id.
-                return $fieldtypes[$cfield->get('type')];
+                if ($cfield) {
+                    return $fieldtypes[$cfield->get('type')];
+                }
+
         }
+        return PARAM_TEXT;
     }
 
     /**
@@ -264,10 +271,13 @@ class syllabus_field extends persistent {
                     $value = $exportresults->$fieldname;
                     break;
                 case self::ORIGIN_CUSTOM_FIELD:
-                    $coursefield = self::get_customfield_from_shortname($field->get('iddata'));
+
                     try {
-                        $cfielddata = data_controller::create($courseid, null, $coursefield); // Data should be the id.
-                        $value = $cfielddata->display();
+                        $coursefield = self::get_customfield_from_shortname($field->get('iddata'));
+                        if ($coursefield) {
+                            $cfielddata = data_controller::create($courseid, null, $coursefield); // Data should be the id.
+                            $value = $cfielddata->display();
+                        }
                     } catch (\moodle_exception $e) {
                         $value = '';
                     }
@@ -344,13 +354,16 @@ class syllabus_field extends persistent {
 
     /**
      * @param $shortname
-     * @return field_controller
+     * @return field_controller | null returns null if the field has not been found
      * @throws \coding_exception
      * @throws \moodle_exception
      */
     protected static function get_customfield_from_shortname($shortname) {
         $field = field::get_record(array('shortname' => $shortname));
-        return field_controller::create($field->get('id'));
+        if ($field) {
+            return field_controller::create($field->get('id'));
+        }
+        return null;
     }
 
 }

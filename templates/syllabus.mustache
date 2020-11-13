@@ -62,50 +62,32 @@
             {{/title}}
         </section>
     </div>
-    <div class="row">
-        <div class="col">
-            <section class="syllabus-head">
-                {{#header}}
-                    {{#fields}}
-                        <div class="field">
-                            <span class="label">{{label}}</span>
-                            <span class="content"> {{{html}}}</span>
-                        </div>
-                    {{/fields}}
-                {{/header}}
-            </section>
-
-            <section class="syllabus-content">
-                {{#content}}
-                    {{#fields}}
-                        <div class="field">
-                            <h4 >{{label}}</h4>
-                            <span class="content">{{{html}}}</span>
-                        </div>
-                    {{/fields}}
-                {{/content}}
-            </section>
-        </div>
-        <div class="col">
+    <div class="container-fluid">
+        <div class="float-lg-right">
             <aside class="syllabus-side">
                 <ul class="list-group">
                     {{#side}}
                         {{#fields}}
-                            <li class="field list-group-item">
-                                <h4>
-                                    {{#iconhtml}}<span class="icon">{{{iconhtml}}}{{/iconhtml}}</span>{{label}}</h4>
-                                <span class="content">{{{html}}}</span>
-                            </li>
+                            {{> local_syllabus/syllabus_field_side }}
                         {{/fields}}
                     {{/side}}
                 </ul>
             </aside>
         </div>
+        <section class="syllabus-head">
+            {{#header}}
+                {{#fields}}
+                    {{> local_syllabus/syllabus_field_head }}
+                {{/fields}}
+            {{/header}}
+        </section>
+
+        <section class="syllabus-content">
+            {{#content}}
+                {{#fields}}
+                    {{> local_syllabus/syllabus_field_content }}
+                {{/fields}}
+            {{/content}}
+        </section>
     </div>
 </section>
-
-{{#js}}
-    require(['local_syllabus/syllabus_management'], function(s) {
-    s.init();
-    });
-{{/js}}

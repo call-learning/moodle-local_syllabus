@@ -47,7 +47,11 @@ class image extends base {
      */
     protected function export_raw_value($courserawvals, renderer_base $output) {
         $fielddataid = $this->fieldspec->get('iddata');
-        return \html_writer::img($courserawvals->$fielddataid, parent::get_label($output));
+        return \html_writer::img(
+            $courserawvals->$fielddataid,
+            parent::get_label($output),
+            array('class'=>'img-fluid')
+        );
     }
 
     /**

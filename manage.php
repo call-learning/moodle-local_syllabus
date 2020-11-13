@@ -42,11 +42,11 @@ $output = $PAGE->get_renderer('local_syllabus');
 $listmanagement = new \local_syllabus\output\field_location_management();
 $form = new \local_syllabus\form\syllabus_management_form();
 if ($data = $form->get_data()) {
-
+    // Nothing for now.
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(new lang_string('syllabus_management', 'local_syllabus'));
+echo $OUTPUT->heading(new lang_string('syllabus:management', 'local_syllabus'));
 echo $form->render();
 /* @var core_renderer $OUTPUT */
 echo $OUTPUT->heading(get_string('syllabuspositions', 'local_syllabus'));

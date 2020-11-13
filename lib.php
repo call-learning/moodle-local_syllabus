@@ -15,35 +15,35 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Syllabus view page
+ * Main library
+ *
+ * Used mainly to extend navigation
  *
  * @package     local_syllabus
- * @category    view
  * @copyright   2020 CALL Learning <contact@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
 
-require_once('../../config.php');
-global $DB, $PAGE, $OUTPUT;
-$courseid          = required_param('id', PARAM_INT);
-$course = $DB->get_record('course', array('id'=>$courseid), '*', MUST_EXIST);
-
-require_login($courseid,true);
-$urlparams = array('id' => $course->id);
-
-$PAGE->set_url('/local/syllabus/view.php', $urlparams);
-$PAGE->set_cacheable(true);
-$context = context_course::instance($course->id, MUST_EXIST);
-
-// Must set layout before gettting section info. See MDL-47555.
-$PAGE->set_pagelayout('standard');
-$PAGE->set_pagetype('syllabus-view');
-$PAGE->set_context($context);
-$PAGE->set_heading($course->fullname);
-$output = $PAGE->get_renderer('local_syllabus');
-$syllabus = new \local_syllabus\output\syllabus($course->id);
-
-echo $OUTPUT->header();
-echo $output->render($syllabus);
-echo $OUTPUT->footer();
+/**
+ * Extends settings for course navigation
+ *
+ * @param settings_navigation $nav
+ * @param context $context
+ * @return settings_navigation
+ * @throws coding_exception
+ */
+function local_syllabus_extend_navigation_course(navigation_node $parentnode, stdClass $course, context_course $context) {
+    global $PAGE;
+    if ($PAGE->pagetype === 'syllabus-view') {
+        $parentnode->add(
+            get_string('syllabus:managefields', 'local_syllabus'),
+            new moodle_url('/local/syllabus/manage.php'),
+            navigation_node::TYPE_SETTING,
+            null,
+            'syllabusmanage',
+            new pix_icon('t/editstring',get_string('edit'))
+        );
+    }
+}

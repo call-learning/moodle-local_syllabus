@@ -70,10 +70,11 @@ class base implements renderable, templatable {
      * @throws \coding_exception
      * @throws \moodle_exception
      */
-    protected function get_icon_html(\renderer_base $output) {
+    protected function get_icon(\renderer_base $output) {
         if ($this->additionaldata && !empty($this->additionaldata->icon)) {
-            return \html_writer::tag('i', '', array('class' => 'fa ' . $this->additionaldata->icon));
+            return $this->additionaldata->icon;
         }
+        return '';
     }
 
     /**
@@ -99,18 +100,24 @@ class base implements renderable, templatable {
      * Export the field
      *
      * @param renderer_base $output
-     * @return array|stdClass|void
+     * @return stdClass|void
      */
     public function export_for_template(renderer_base $output) {
         static $courserawvalues = null;
         $data = new stdClass();
-
-        $data->iconhtml = $this->get_icon_html($output);
-        $data->label = $this->get_label($output);
-        if (!$courserawvalues) {
-            $courserawvalues = syllabus_field::get_raw_values($this->courseid, $output);
+        $data->label = '';
+        $data->html = '';
+        if ($this->fieldspec) {
+            $icon = $this->get_icon($output);
+            if ($icon) {
+                $data->icon = $icon;
+            }
+            $data->label = $this->get_label($output);
+            if (!$courserawvalues) {
+                $courserawvalues = syllabus_field::get_raw_values($this->courseid, $output);
+            }
+            $data->html = $this->export_raw_value($courserawvalues, $output);
         }
-        $data->html = $this->export_raw_value($courserawvalues, $output);
         return $data;
     }
 
