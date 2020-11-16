@@ -86,6 +86,12 @@ class base implements renderable, templatable {
      * @throws \moodle_exception
      */
     protected function get_label(\renderer_base $output) {
+        $displaylabel = empty($this->additionaldata) || !isset($this->additionaldata->displaylabel)
+             || $this->additionaldata->displaylabel;
+        // If label is defined and set to true by default.
+        if (!$displaylabel) {
+            return '';
+        }
         if ($this->additionaldata && !empty($this->additionaldata->labells)) {
             $stringm = get_string_manager();
             list($sname, $module) = explode(',', $this->additionaldata->labells);
@@ -104,18 +110,21 @@ class base implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         static $courserawvalues = null;
+        if (!$courserawvalues) {
+            $courserawvalues = syllabus_field::get_raw_values($this->courseid, $output);
+        }
         $data = new stdClass();
         $data->label = '';
         $data->html = '';
-        if ($this->fieldspec) {
+        $data->display = $this->should_display_field($courserawvalues);
+        $data->shortname = $this->fieldspec->get('iddata');
+        if ($data->display) {
+            $data->display = true;
             $icon = $this->get_icon($output);
             if ($icon) {
                 $data->icon = $icon;
             }
             $data->label = $this->get_label($output);
-            if (!$courserawvalues) {
-                $courserawvalues = syllabus_field::get_raw_values($this->courseid, $output);
-            }
             $data->html = $this->export_raw_value($courserawvalues, $output);
         }
         return $data;
@@ -134,5 +143,17 @@ class base implements renderable, templatable {
     protected function export_raw_value($courserawvals, renderer_base $output) {
         $fielddataid = $this->fieldspec->get('iddata');
         return $courserawvals->$fielddataid;
+    }
+
+    /**
+     * Can display field ?
+     *
+     * @param stdClass $courserawvals array with all fields values for this course in a raw format
+     * This allows to combine values for display if needed.
+     *
+     * @return bool
+     */
+    protected function should_display_field($courserawvals) {
+        return !empty($this->fieldspec);
     }
 }

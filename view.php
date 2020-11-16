@@ -29,7 +29,7 @@ global $DB, $PAGE, $OUTPUT;
 $courseid          = required_param('id', PARAM_INT);
 $course = $DB->get_record('course', array('id'=>$courseid), '*', MUST_EXIST);
 
-require_login($courseid,true);
+require_login();
 $urlparams = array('id' => $course->id);
 
 $PAGE->set_url('/local/syllabus/view.php', $urlparams);
@@ -41,6 +41,7 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_pagetype('syllabus-view');
 $PAGE->set_context($context);
 $PAGE->set_heading($course->fullname);
+$PAGE->set_course($course);
 $output = $PAGE->get_renderer('local_syllabus');
 $syllabus = new \local_syllabus\output\syllabus($course->id);
 

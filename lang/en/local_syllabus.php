@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['action'] = 'Action';
 $string['displayclass'] = 'Display class';
+$string['displaylabel'] = 'Display label';
 $string['editfield'] = 'Additional fields parameters';
 $string['field'] = 'Field';
 $string['icon'] = 'Icon';
@@ -38,16 +39,19 @@ $string['origin:customfield'] = 'Origin: Custom Field';
 $string['origin:tag'] = 'Origin: Tag';
 $string['origin'] = 'Origin';
 $string['pluginname'] = 'Syllabus';
+$string['price:free'] = 'Free';
 $string['resetallpositions'] = 'Reset all positions';
 $string['resetallpositions:confirmation'] = 'Reset all positions: are you sure?';
 $string['shortname'] = 'Shortname';
-$string['syllabus:customfield_def']= 'Custom Field Definition';
-$string['syllabus:customfield_def:desc']= 'Custom Field Definition '.
+$string['syllabus:customfielddef']= 'Custom Field Definition';
+$string['syllabus:customfielddef:desc']= 'Custom Field Definition '.
     'name|shortname|type|description|sortorder|categoryname|configdata(json)';
 $string['syllabuspositions'] = 'Setup Syllabus field positions';
 $string['syllabus:management'] = 'Syllabus Management';
 $string['syllabus:editfield'] = 'Syllabus Edit Additional Parameters for "{$a}"';
 $string['syllabus:managefields'] = 'Syllabus Manage Fields';
+$string['syllabus:syllabuscategoryname'] = 'Syllabus Category name';
+$string['syllabus:syllabuscategoryname:desc'] = 'Custom Field course category that will receive all the syllabus field';
 $string['therearenofields'] = 'No fields';
 $string['type'] = 'Type';
 $string['display:base'] = 'Basic display';

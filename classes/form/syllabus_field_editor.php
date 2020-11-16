@@ -25,15 +25,15 @@
 namespace local_syllabus\form;
 
 use core\form\persistent;
-use local_syllabus\local\fa_icons;
-use local_syllabus\local\utils;
+use local_syllabus\locallib\fa_icons;
+use local_syllabus\locallib\utils;
 
 defined('MOODLE_INTERNAL') || die;
 
 class syllabus_field_editor extends persistent {
     protected static $persistentclass = \local_syllabus\syllabus_field::class;
     protected static $fieldstoremove = array('id', 'submitbutton');
-    protected static $foreignfields = array('icon', 'labells', 'displayclass', 'submitbutton');
+    protected static $foreignfields = array('icon', 'labells', 'displayclass', 'displaylabel', 'submitbutton');
 
     /**
      * Add further settings to each field.
@@ -42,13 +42,15 @@ class syllabus_field_editor extends persistent {
      */
     protected function definition() {
         $mform = $this->_form;
+
+        // Display class. If not default class.
         $allclasses = utils::get_all_display_classes();
         $displayclasses = ['' => get_string('none')];
 
         foreach ($allclasses as $cname => $cinstance) {
             list($classcomponent, $other) = explode('\\', trim($cinstance, '\\'));
             $classcomponent = $classcomponent ? $classcomponent : 'moodle';
-            $displayclasses[$cname] = get_string("display:$cname", $classcomponent);
+            $displayclasses[$cinstance] = get_string("display:$cname", $classcomponent);
         }
         $mform->addElement('select',
             'displayclass',
@@ -58,6 +60,7 @@ class syllabus_field_editor extends persistent {
         $mform->setType('displayclass', PARAM_RAW);
         $icons = ['' => get_string('none')];
 
+        // Icon attached to this field.
         foreach (fa_icons::FA_LIST as $icon) {
             $icons[$icon] = $icon;
         }
@@ -75,16 +78,26 @@ class syllabus_field_editor extends persistent {
             ]
         );
         $mform->setType('icon', PARAM_RAW);
-        $mform->setDefault('', PARAM_RAW);
-        $mform->setType('labells', PARAM_RAW);
+        $mform->setDefault('icon', '');
+
+        // Should we display a label ?
+        $mform->addElement('advcheckbox',
+            'displaylabel', get_string('displaylabel', 'local_syllabus'));
+        $mform->setType('displaylabel', PARAM_BOOL);
+        $mform->setDefault('displaylabel', true);
+
+        // Label language string.
         $mform->addElement('text',
             'labells',
             get_string('labells', 'local_syllabus'),
             ''
         );
         $mform->setType('labells', PARAM_RAW);
+        $mform->setDefault('labells', '');
+        // ID hidden field.
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
+
         $this->add_action_buttons();
     }
 

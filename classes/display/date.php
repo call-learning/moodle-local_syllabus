@@ -30,7 +30,7 @@ use renderer_base;
 use templatable;
 
 /**
- * Class image : display this field as an image
+ * Class date : display this field as an image
  *
  * @package local_syllabus\display
  */
@@ -49,5 +49,14 @@ class date extends base {
         $dateformat = get_string('strftimedatefullshort');
         $fielddataid = $this->fieldspec->get('iddata');
         return userdate($courserawvals->$fielddataid, $dateformat);
+    }
+    /**
+     * Can display field ?
+     *
+     * @return bool
+     */
+    protected function should_display_field($courserawvals) {
+        $fielddataid = $this->fieldspec->get('iddata');
+        return !empty($courserawvals->$fielddataid);
     }
 }

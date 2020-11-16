@@ -27,22 +27,29 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
     global $CFG;
-    $settings= new admin_category('syllabus',
+    $settings = new admin_category('syllabus',
         get_string('pluginname', 'local_syllabus'));
 
-    $settingspage= new admin_settingpage('customfieldsdefinition',
-        get_string('syllabus:customfield_def', 'local_syllabus'));
+    $settingspage = new admin_settingpage('customfieldsdefinition',
+        get_string('syllabus:customfielddef', 'local_syllabus'));
 
     $settingspage->add(
-        new admin_setting_configtextarea('local_syllabus/customfield_def',
-        get_string('syllabus:customfield_def', 'local_syllabus'),
-        get_string('syllabus:customfield_def:desc', 'local_syllabus'),
-        'Type de formation|formationtype|select||0|Champs Syllabus
-        |"required":"0"|"uniquevalues":"0"
-        |"options":"Pr\u00e9sentiel\r\nAdistance\r\nBlended","defaultvalue":"Pr\u00e9sentiel"
-        |"locked":"0"|"visibility":"2"')
+        new admin_setting_configtextarea('local_syllabus/customfielddef',
+            get_string('syllabus:customfielddef', 'local_syllabus'),
+            get_string('syllabus:customfielddef:desc', 'local_syllabus'),
+            'Training Type|trainingtype|select|"<p>Type of training</p>"|0|Syllabus Fields|'
+            . '{"required":"0","uniquevalues":"0","options":"OnSite\r\nDistance\r\nBlended",'
+            . '"defaultvalue":"OnSite","locked":"0","visibility":"2"}')
+    );
+
+    $settingspage->add(
+        new admin_setting_configtext('local_syllabus/syllabuscategoryname',
+            get_string('syllabus:syllabuscategoryname', 'local_syllabus'),
+            get_string('syllabus:syllabuscategoryname:desc', 'local_syllabus'),
+            'Syllabus Fields')
     );
     $settings->add('syllabus', $settingspage);
+
 
     $settings->add('syllabus',
         new admin_externalpage('syllabus_manage_fields',

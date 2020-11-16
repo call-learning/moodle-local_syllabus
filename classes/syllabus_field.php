@@ -271,12 +271,11 @@ class syllabus_field extends persistent {
                     $value = $exportresults->$fieldname;
                     break;
                 case self::ORIGIN_CUSTOM_FIELD:
-
                     try {
-                        $coursefield = self::get_customfield_from_shortname($field->get('iddata'));
-                        if ($coursefield) {
-                            $cfielddata = data_controller::create($courseid, null, $coursefield); // Data should be the id.
-                            $value = $cfielddata->display();
+                        $cfshortname = $field->get('iddata');
+                        $data = \core_course\customfield\course_handler::create()->export_instance_data_object($courseid);
+                        if ($data) {
+                            $value = !empty($data->$cfshortname) ? $data->$cfshortname : '';
                         }
                     } catch (\moodle_exception $e) {
                         $value = '';

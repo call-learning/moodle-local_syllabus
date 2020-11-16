@@ -24,7 +24,7 @@
 
 namespace local_syllabus\observer;
 
-use local_syllabus\local\utils;
+use local_syllabus\locallib\utils;
 use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
 
@@ -62,8 +62,8 @@ class customfield_observer {
     public static function customfield_deleted($event) {
         $field = syllabus_field::get_record(
             array(
-                'type' => syllabus_field::ORIGIN_CUSTOM_FIELD,
-                'data' => $event->objectid)
+                'origin' => syllabus_field::ORIGIN_CUSTOM_FIELD,
+                'iddata' => $event->objectid)
         );
         if ($field) {
             $orphanlocations = syllabus_location::get_records(array('fieldid' => $field->get('id')));

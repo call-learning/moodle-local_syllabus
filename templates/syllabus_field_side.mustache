@@ -27,7 +27,7 @@
      "html": html content representing the field data
   }
 }}
-<li class="field list-group-item">
-    <h4>{{label}}</h4>
-    {{#icon}}<i class="icon fa fa-{{icon}}"> </i>{{/icon}} <span class="content">{{{html}}}</span>
+<li class="sfield list-group-item sfield-{{shortname}}">
+    {{#label}}<h4>{{label}}</h4>{{/label}}
+    {{#icon}}<i class="icon fa {{icon}}"> </i>{{/icon}} <span class="content">{{{html}}}</span>
 </li>

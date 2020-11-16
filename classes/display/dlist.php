@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Syllabus field display class
+ * Syllabus image field display class
  *
  * @package    local_syllabus
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
@@ -30,11 +30,11 @@ use renderer_base;
 use templatable;
 
 /**
- * Class base : display a field
+ * Class dlist: display this fields as a list of values
  *
  * @package local_syllabus\display
  */
-class price extends base {
+class dlist extends base {
     /**
      * This will be overriden by subclasses
      *
@@ -45,17 +45,15 @@ class price extends base {
      * @throws \coding_exception
      * @throws \moodle_exception
      */
-    protected function export_raw_value($courserawvals, renderer_base $output){
+    protected function export_raw_value($courserawvals, renderer_base $output) {
+
+        $dateformat = get_string('strftimedatefullshort');
         $fielddataid = $this->fieldspec->get('iddata');
-        if (!empty($courserawvals->currency)) {
-            $currency = $courserawvals->currency;
-        } else {
-            $currency = "€";
+        $list = explode(',', $courserawvals->$fielddataid);
+        $displaylist = '';
+        foreach ($list as $e) {
+            $displaylist .= \html_writer::span($e, 'dlist');
         }
-        if (empty($courserawvals->$fielddataid) || intval($courserawvals->$fielddataid))
-        {
-            return get_string('price:free', 'local_syllabus');
-        }
-        return $courserawvals->$fielddataid . $currency;
+        return $displaylist;
     }
 }

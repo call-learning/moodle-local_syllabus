@@ -54,4 +54,4 @@ if ($options['help']) {
     die();
 }
 
-\local_syllabus\local\utils::update_syllabus_fields();
+\local_syllabus\locallib\utils::update_syllabus_fields();

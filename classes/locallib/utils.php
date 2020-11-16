@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_syllabus\local;
+namespace local_syllabus\locallib;
 
 use core_customfield\category;
 use core_customfield\category_controller;
@@ -41,8 +41,9 @@ defined('MOODLE_INTERNAL') || die;
  */
 class utils {
     /**
-     * Convert the setting customfield_def into an array of custom field that will
-     * then be created
+     * Convert the setting customfield_def into an array of custom field.
+     *
+     * The relevant custom fields will be created or updated.
      * Structure:
      *     name|shortname|type|description|sortorder|categoryname|configdata(json)
      *
@@ -51,48 +52,71 @@ class utils {
      *    |"uniquevalues":"0"|"options":"Pr\u00e9sentiel\r\nAdistance\r\nBlended","defaultvalue":"Pr\u00e9sentiel"
      *    |"locked":"0"|"visibility":"2"
      *
-     *
+     * @param string $configtext can be null, in this case we take its value from
+     *  the local_syllabus/customfielddef value
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
-    public static function create_customfields_fromdef($configtext) {
-        $allfieldsdefs = static::parse_customfield_def($configtext);
-        foreach ($allfieldsdefs as $field) {
-            $category = category::get_record(array('name' => $field->catname, 'component' => 'core_course'));
 
-            if (!$category) {
-                // Create it.
-                $categoryrecord = (object) [
-                    'name' => $field->catname,
-                    'component' => 'core_course',
-                    'area' => 'course',
-                    'itemid' => '0',
-                    'sortorder' => category::count_records() + 1,
-                    'contextid' => \context_system::instance()->id,
-                ];
-                $category = category_controller::create(0, $categoryrecord);
-                $category->save();
-            }
-            $categorycontroller = category_controller::create($category->get('id'));
-            if ($rfield = field::get_record(array('categoryid' => $category->get('id'), 'shortname' => $field->shortname))) {
-                unset($field->catname);
-                foreach ($field as $fname => $fvalue) {
-                    if ($fvalue instanceof \stdClass) {
-                        $fvalue = json_encode($fvalue);
-                    }
-                    $rfield->set($fname, $fvalue);
+    /**
+     * @param string $configtext
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public static function create_customfields_fromdef($configtext="") {
+        if (!$configtext) {
+            $configtext = get_config('local_syllabus', 'customfielddef');
+        }
+        $syllabuscategoryname = get_config('local_syllabus', 'syllabuscategoryname');
+        // Still no value ?
+        if ($configtext) {
+            $allfieldsdefs = static::parse_customfield_def($configtext);
+            foreach ($allfieldsdefs as $field) {
+                if ($field->catname != $syllabuscategoryname) {
+                    debugging('create_customfields_fromdef: The category name of the field "'. $field->name.'"" should
+                    be "'.$syllabuscategoryname.'"', DEBUG_NORMAL);
+                    continue;
                 }
-                $rfield->save();
-            } else {
-                $rfield = \core_customfield\field_controller::create(0, (object) [
-                    'name' => $field->name,
-                    'shortname' => $field->shortname,
-                    'type' => $field->type,
-                    'description' => $field->description,
-                    'sortorder' => $field->sortorder,
-                    'configdata' => json_encode($field->configdata)
-                ],
-                    $categorycontroller);
-                $rfield->save();
+                $category = category::get_record(array('name' => $field->catname, 'component' => 'core_course'));
+                if (!$category) {
+                    // Create it.
+                    $categoryrecord = (object) [
+                        'name' => $field->catname,
+                        'component' => 'core_course',
+                        'area' => 'course',
+                        'itemid' => '0',
+                        'sortorder' => category::count_records() + 1,
+                        'contextid' => \context_system::instance()->id,
+                    ];
+                    $category = category_controller::create(0, $categoryrecord);
+                    $category->save();
+                }
+                $categorycontroller = category_controller::create($category->get('id'));
+                if ($rfield = field::get_record(array('categoryid' => $category->get('id'), 'shortname' => $field->shortname))) {
+                    unset($field->catname);
+                    foreach ($field as $fname => $fvalue) {
+                        if ($fvalue instanceof \stdClass) {
+                            $fvalue = json_encode($fvalue);
+                        }
+                        $rfield->set($fname, $fvalue);
+                    }
+                    $rfield->save();
+                } else {
+                    $rfield = \core_customfield\field_controller::create(0, (object) [
+                        'name' => $field->name,
+                        'shortname' => $field->shortname,
+                        'type' => $field->type,
+                        'description' => $field->description,
+                        'sortorder' => $field->sortorder,
+                        'configdata' => json_encode($field->configdata)
+                    ],
+                        $categorycontroller);
+                    $rfield->save();
+                }
             }
+            self::update_syllabus_fields(); // Make sure we update the field definition.
         }
     }
 
@@ -104,7 +128,7 @@ class utils {
      */
     public static function parse_customfield_def($configtext) {
         $lineparser = function($setting, $index, &$currentobject) {
-            $val = trim($setting[$index]);
+            $val = trim($setting);
             switch ($index) {
                 case 0:
                     $currentobject->name = $val;
@@ -116,7 +140,7 @@ class utils {
                     $currentobject->type = $val;
                     break;
                 case 3:
-                    $currentobject->description = $val;
+                    $currentobject->description = trim($val, '"');
                     break;
                 case 4:
                     $currentobject->sortorder = $val;
@@ -129,8 +153,10 @@ class utils {
                         $currentobject->configdata = new \stdClass();
                     }
                     $data = json_decode("{" . trim($val, '{}') . "}", true);
-                    foreach ($data as $fieldname => $fieldvalue) {
-                        $currentobject->configdata->$fieldname = $fieldvalue;
+                    if ($data) {
+                        foreach ($data as $fieldname => $fieldvalue) {
+                            $currentobject->configdata->$fieldname = $fieldvalue;
+                        }
                     }
             }
         };
