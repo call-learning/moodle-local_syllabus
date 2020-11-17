@@ -28,6 +28,8 @@ use core_customfield\category;
 use core_customfield\category_controller;
 use core_customfield\field;
 use local_syllabus\syllabus_field;
+use moodle_url;
+use navigation_node;
 use ReflectionClass;
 
 defined('MOODLE_INTERNAL') || die;
@@ -236,6 +238,29 @@ class utils {
             }
         }
         return $classes;
+    }
+
+    /**
+     * Replace navigation nodes so to get them onto the syllabus page
+     * instead of the course view page.
+     *
+     * @param $coursesnode
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     */
+    public static function replace_nav_courses_url(&$coursesnode) {
+        if ($coursesnode) {
+            foreach ($coursesnode->children as $child) {
+                /** @var navigation_node $child */
+                if ($child->type == navigation_node::TYPE_COURSE) {
+                    $currentaction = $child->action;
+                    /** @var moodle_url $currentaction */
+                    $child->action = new moodle_url('/local/syllabus/view.php', $currentaction->params());
+                    $child->remove();
+                    $coursesnode->add_node($child);
+                }
+            }
+        }
     }
 
 }

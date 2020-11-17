@@ -15,15 +15,12 @@ cache:
 
 php:
   - 7.2
-  - 7.3
   - 7.4
 
 env:
   matrix:
-    - DB=mysqli MOODLE_BRANCH=MOODLE_37_STABLE
     - DB=mysqli MOODLE_BRANCH=MOODLE_38_STABLE
     - DB=mysqli MOODLE_BRANCH=MOODLE_39_STABLE
-    - DB=pgsql MOODLE_BRANCH=MOODLE_38_STABLE
     - DB=pgsql MOODLE_BRANCH=MOODLE_39_STABLE
 
 before_install:

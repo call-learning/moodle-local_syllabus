@@ -29,6 +29,7 @@ $string['action'] = 'Action';
 $string['displayclass'] = 'Display class';
 $string['displaylabel'] = 'Display label';
 $string['editfield'] = 'Additional fields parameters';
+$string['enablesyllabus'] = 'Enable Syllabus';
 $string['field'] = 'Field';
 $string['icon'] = 'Icon';
 $string['labells'] = 'Label language string';

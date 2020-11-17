@@ -59,4 +59,13 @@ if ($hassiteconfig) {
         )
     );
     $ADMIN->add('courses', $settings);
+
+    // Create a global Advanced Feature Toggle.
+    $enableoption = new admin_setting_configcheckbox('enablesyllabus',
+        new lang_string('enablesyllabus', 'local_syllabus'),
+        new lang_string('enablesyllabus', 'local_syllabus'),
+        1);
+    $enableoption->set_updatedcallback('local_syllabus_enable_disable_plugin_callback');
+    $optionalsubsystems = $ADMIN->locate('optionalsubsystems');
+    $optionalsubsystems->add($enableoption);
 }

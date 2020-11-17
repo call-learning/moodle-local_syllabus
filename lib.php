@@ -36,14 +36,43 @@ defined('MOODLE_INTERNAL') || die();
  */
 function local_syllabus_extend_navigation_course(navigation_node $parentnode, stdClass $course, context_course $context) {
     global $PAGE;
-    if ($PAGE->pagetype === 'syllabus-view') {
+    if ($PAGE->pagetype === 'syllabus-view' && has_capability('local/syllabus:manage', $context)) {
         $parentnode->add(
             get_string('syllabus:managefields', 'local_syllabus'),
             new moodle_url('/local/syllabus/manage.php'),
             navigation_node::TYPE_SETTING,
             null,
             'syllabusmanage',
-            new pix_icon('t/editstring',get_string('edit'))
+            new pix_icon('t/editstring', get_string('edit'))
         );
     }
+}
+
+/**
+ * Extends navigation so we fallback on the course syllabus if we are not in a course page.
+ *
+ * @param global_navigation $nav
+ * @throws coding_exception
+ * @throws dml_exception
+ * @throws moodle_exception
+ */
+function local_syllabus_extend_navigation(global_navigation $nav) {
+    global $CFG, $PAGE;
+    if (empty($CFG->enablesyllabus)) {
+        return;
+    }
+    if ($PAGE->context->contextlevel == CONTEXT_COURSE) {
+        $mycoursesnode = $nav->find('mycourses', null);
+        \local_syllabus\locallib\utils::replace_nav_courses_url($mycoursesnode);
+        $coursesnode = $nav->find('courses', null);
+        \local_syllabus\locallib\utils::replace_nav_courses_url($coursesnode);
+    }
+}
+
+
+/**
+ * Nothing for now
+ */
+function local_syllabus_enable_disable_plugin_callback() {
+    // Nothing for now.
 }
