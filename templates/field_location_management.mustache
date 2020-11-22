@@ -65,10 +65,10 @@
 <div data-region="list-page" id="syllabus-management">
     <div class="location-list">
         {{#locations}}
-            <div data-location-id="{{id}}" id="location-{{id}}" class="mt-2">
+            <div data-location-id="{{id}}" id="location-{{id}}" class="mt-2" data-label="{{ name }}">
                 <div class="row justify-content-between align-items-end">
                     <div class="col">
-                        <h3>{{id}}</h3>
+                        <h3>{{name}}</h3>
                     </div>
                 </div>
                 <table class="generaltable fullwidth fieldslist">

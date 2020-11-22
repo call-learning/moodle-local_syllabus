@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['action'] = 'Action';
+$string['afterfield'] = 'After field {$a}';
 $string['displayclass'] = 'Display class';
 $string['displaylabel'] = 'Display label';
 $string['editfield'] = 'Additional fields parameters';
@@ -33,6 +34,11 @@ $string['enablesyllabus'] = 'Enable Syllabus';
 $string['field'] = 'Field';
 $string['icon'] = 'Icon';
 $string['labells'] = 'Label language string';
+$string['location:title'] = 'Title area';
+$string['location:header'] = 'Header area';
+$string['location:side'] = 'Side area';
+$string['location:content'] = 'Content area';
+$string['location:none'] = 'No area defined';
 $string['movefield'] = 'Move Field';
 $string['generalsettings'] = 'General Settings';
 $string['origin:course'] = 'Origin : Course';
@@ -44,8 +50,8 @@ $string['price:free'] = 'Free';
 $string['resetallpositions'] = 'Reset all positions';
 $string['resetallpositions:confirmation'] = 'Reset all positions: are you sure?';
 $string['shortname'] = 'Shortname';
-$string['syllabus:customfielddef']= 'Custom Field Definition';
-$string['syllabus:customfielddef:desc']= 'Custom Field Definition '.
+$string['syllabus:customfielddef'] = 'Custom Field Definition';
+$string['syllabus:customfielddef:desc'] = 'Custom Field Definition ' .
     'name|shortname|type|description|sortorder|categoryname|configdata(json)';
 $string['syllabuspositions'] = 'Setup Syllabus field positions';
 $string['syllabus:management'] = 'Syllabus Management';
@@ -59,3 +65,4 @@ $string['display:base'] = 'Basic display';
 $string['display:price'] = 'Price display';
 $string['display:date'] = 'Date display (userdate)';
 $string['display:image'] = 'Image display';
+$string['totopoflocation'] = 'To the top of location {$a}';

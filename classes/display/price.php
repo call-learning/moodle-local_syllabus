@@ -24,9 +24,12 @@
 
 namespace local_syllabus\display;
 
+use coding_exception;
 use local_syllabus\syllabus_field;
+use moodle_exception;
 use renderable;
 use renderer_base;
+use stdClass;
 use templatable;
 
 /**
@@ -38,22 +41,21 @@ class price extends base {
     /**
      * This will be overriden by subclasses
      *
-     * @param \stdClass $courserawvals array with all fields values for this course in a raw format
+     * @param stdClass $courserawvals array with all fields values for this course in a raw format
      * This allows to combine values for display if needed.
      * @param renderer_base $output
      * @return mixed|string|null
-     * @throws \coding_exception
-     * @throws \moodle_exception
+     * @throws coding_exception
+     * @throws moodle_exception
      */
-    protected function export_raw_value($courserawvals, renderer_base $output){
+    protected function export_raw_value($courserawvals, renderer_base $output) {
         $fielddataid = $this->fieldspec->get('iddata');
         if (!empty($courserawvals->currency)) {
             $currency = $courserawvals->currency;
         } else {
             $currency = "€";
         }
-        if (empty($courserawvals->$fielddataid) || intval($courserawvals->$fielddataid))
-        {
+        if (empty($courserawvals->$fielddataid) || intval($courserawvals->$fielddataid)) {
             return get_string('price:free', 'local_syllabus');
         }
         return $courserawvals->$fielddataid . $currency;

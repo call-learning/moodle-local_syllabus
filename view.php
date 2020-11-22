@@ -23,11 +23,10 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 require_once('../../config.php');
 global $DB, $PAGE, $OUTPUT;
-$courseid          = required_param('id', PARAM_INT);
-$course = $DB->get_record('course', array('id'=>$courseid), '*', MUST_EXIST);
+$courseid = required_param('id', PARAM_INT);
+$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 
 require_login();
 $urlparams = array('id' => $course->id);

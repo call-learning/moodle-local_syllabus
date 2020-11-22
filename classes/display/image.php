@@ -24,9 +24,14 @@
 
 namespace local_syllabus\display;
 
+use coding_exception;
+use html_writer;
+use lang_string;
 use local_syllabus\syllabus_field;
+use moodle_exception;
 use renderable;
 use renderer_base;
+use stdClass;
 use templatable;
 
 /**
@@ -38,19 +43,19 @@ class image extends base {
     /**
      * This will be overriden by subclasses
      *
-     * @param \stdClass $courserawvals array with all fields values for this course in a raw format
+     * @param stdClass $courserawvals array with all fields values for this course in a raw format
      * This allows to combine values for display if needed.
      * @param renderer_base $output
      * @return mixed|string|null
-     * @throws \coding_exception
-     * @throws \moodle_exception
+     * @throws coding_exception
+     * @throws moodle_exception
      */
     protected function export_raw_value($courserawvals, renderer_base $output) {
         $fielddataid = $this->fieldspec->get('iddata');
-        return \html_writer::img(
+        return html_writer::img(
             $courserawvals->$fielddataid,
             parent::get_label($output),
-            array('class'=>'img-fluid')
+            array('class' => 'img-fluid')
         );
     }
 
@@ -58,9 +63,9 @@ class image extends base {
      * No label for image
      *
      * @param renderer_base $output
-     * @return \lang_string|string
+     * @return lang_string|string
      */
-    protected function get_label(\renderer_base $output) {
+    protected function get_label(renderer_base $output) {
         return '';
     }
 }

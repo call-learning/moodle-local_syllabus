@@ -23,7 +23,6 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 require_once('../../config.php');
 global $CFG, $PAGE, $OUTPUT;
 require_once($CFG->libdir . '/adminlib.php');
@@ -42,22 +41,21 @@ $output = $PAGE->get_renderer('local_syllabus');
 $listmanagement = new \local_syllabus\output\field_location_management();
 $form = new \local_syllabus\form\syllabus_management_form();
 if ($data = $form->get_data()) {
-    // Nothing for now.
+    debugging('To be implemented');
 }
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(new lang_string('syllabus:management', 'local_syllabus'));
 echo $form->render();
-/* @var core_renderer $OUTPUT */
 echo $OUTPUT->heading(get_string('syllabuspositions', 'local_syllabus'));
 echo $OUTPUT->action_link(
     new moodle_url($PAGE->url, [
-        'resetallposition'        => true,
-        'sesskey'   => sesskey(),
+        'resetallposition' => true,
+        'sesskey' => sesskey(),
     ]),
     get_string('resetallpositions', 'local_syllabus'),
     new confirm_action(get_string('resetallpositions:confirmation', 'local_syllabus')),
-    array('class'=>'btn btn-primary float-right')
+    array('class' => 'btn btn-primary float-right')
 );
 echo $output->render($listmanagement);
 echo $OUTPUT->footer();

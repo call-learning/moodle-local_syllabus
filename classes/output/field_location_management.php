@@ -54,9 +54,13 @@ class field_location_management implements renderable, templatable {
         $data = new \stdClass();
 
         $data->locations = array();
-
+        $sm = get_string_manager();
         foreach (syllabus_location::LOCATION_TYPES as $location) {
-            $locationobject = ['id' => $location, 'fields' => []];
+            $categoryname = $location;
+            if ($sm->string_exists('location:' . $location, 'local_syllabus')) {
+                $categoryname = get_string('location:' . $location, 'local_syllabus');
+            }
+            $locationobject = ['id' => $location, 'name' => $categoryname, 'fields' => []];
             $allfields = syllabus_location::get_all_fields_by_location($location);
             if ($allfields) {
                 foreach ($allfields as $fl) {
@@ -81,7 +85,7 @@ class field_location_management implements renderable, templatable {
         $fieldarray['name'] = $fieldname;
         $fieldarray['shortname'] = $field->get_shortname();
         $fieldarray['movetitle'] = get_string('movefield', 'local_syllabus', $fieldname);
-        $fieldarray['editfieldurl'] = new \moodle_url($CFG->wwwroot.'/local/syllabus/editfield.php', array('id'=>$fieldid));
+        $fieldarray['editfieldurl'] = new \moodle_url($CFG->wwwroot . '/local/syllabus/editfield.php', array('id' => $fieldid));
         return $fieldarray;
     }
 

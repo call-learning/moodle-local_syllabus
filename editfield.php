@@ -23,17 +23,18 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 require_once('../../config.php');
 global $CFG, $PAGE, $OUTPUT;
 require_once($CFG->libdir . '/adminlib.php');
+require_login();
+require_capability('local/syllabus:manage');
 $fieldid = required_param('id', PARAM_INT);
 
 $action = get_string('editfield', 'local_syllabus');
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title($action);
 $PAGE->set_heading($action);
-$editpageurl = new moodle_url('/local/syllabus/editfield.php', array('id'=>$fieldid));
+$editpageurl = new moodle_url('/local/syllabus/editfield.php', array('id' => $fieldid));
 $listpageurl = new moodle_url('/local/syllabus/manage.php');
 $PAGE->set_url($editpageurl);
 $output = $PAGE->get_renderer('local_syllabus');
@@ -62,5 +63,4 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(new lang_string('syllabus:editfield', 'local_syllabus',
     $persistent->get_formatted_name()));
 echo $form->render();
-/* @var core_renderer $OUTPUT */
 echo $OUTPUT->footer();

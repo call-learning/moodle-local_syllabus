@@ -56,19 +56,16 @@ class course_syllabus_exporter extends course_summary_exporter {
         $coursecategory = \core_course_category::get($this->data->category, MUST_EXIST, true);
 
         $modules = [];
-        $isenrolled = !is_enrolled($this->related['context']);
+        $isenrolled = is_enrolled($this->related['context']);
         $viewurl = (new moodle_url('/course/view.php', array('id' => $this->data->id)))->out(false);
         $action = \html_writer::link($viewurl, get_string('view'),
             array('class' => 'btn btn-primary'));
-        if (empty($isenrolled) && !is_primary_admin($USER->id)) {
-            $enrols = enrol_get_plugins(true);
+        if (!$isenrolled && !is_primary_admin($USER->id)) {
             $enrolinstances = enrol_get_instances($this->data->id, true);
-            foreach ($enrolinstances as $instance) {
-                if (!isset($enrols[$instance->enrol])
-                    || !$enrols[$instance->enrol]->can_self_enrol($instance)) {
-                    continue;
-                }
-                $action .= $enrols[$instance->enrol]->enrol_page_hook($instance);;
+            if ($enrolinstances) {
+                $viewurl = (new moodle_url('/enrol/index.php', array('id' => $this->data->id)))->out(false);
+                $action = \html_writer::link($viewurl, get_string('enrol', 'enrol'),
+                    array('class' => 'btn btn-primary'));
             }
         }
         return array(

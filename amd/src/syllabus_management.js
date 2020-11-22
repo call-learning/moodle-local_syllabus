@@ -37,7 +37,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification', 'core/sortable_l
                 var locationName = function (element) {
                     return element
                         .closest('[data-location-id]')
-                        .attr('data-value');
+                        .attr('data-label');
                 };
                 var displayNoElementIfNeeded = function (evt) {
                     evt.stopPropagation(); // Important for nested lists to prevent multiple targets.
@@ -81,7 +81,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification', 'core/sortable_l
 
                 sortwloc.getDestinationName = function (parentElement, afterElement) {
                     if (!afterElement.length) {
-                        return Str.get_string('totopofcategory', 'local_syllabus', locationName(parentElement));
+                        return Str.get_string('totopoflocation', 'local_syllabus', locationName(parentElement));
                     } else if (afterElement.attr('data-field-name')) {
                         return Str.get_string('afterfield', 'local_syllabus', afterElement.attr('data-field-name'));
                     } else {

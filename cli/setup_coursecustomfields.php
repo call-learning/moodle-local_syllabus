@@ -24,8 +24,8 @@
  */
 
 define('CLI_SCRIPT', true);
-global $CFG;
 require(__DIR__ . '/../../../config.php');
+global $CFG;
 require_once($CFG->libdir . '/clilib.php');
 
 // Get the cli options.
@@ -40,15 +40,14 @@ list($options, $unrecognized) = cli_get_params(
     )
 );
 
-$help = " 
+$help = "
 php setup_coursecustomfields -f <filedef>
 
-Will setup all the course custom fields according to a file provivided as field definition. The format is (one per line): 
+Will setup all the course custom fields according to a file provivided as field definition. The format is (one per line):
  name|shortname|type|description|sortorder|categoryname|configdata(json)
- 
+
 Example:
- Type de formation|formationtype|select||0|Champs Syllabus|\"required\":\"0\"|\"uniquevalues\":\"0\"|\"locked\":\"0\"
- ";
+ Type de formation|formationtype|select||0|Champs Syllabus|\"required\":\"0\"|\"uniquevalues\":\"0\"|\"locked\":\"0\"";
 
 if ($unrecognized) {
     $unrecognized = implode("\n\t", $unrecognized);

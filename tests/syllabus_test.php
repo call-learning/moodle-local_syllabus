@@ -25,16 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// For installation and usage of PHPUnit within Moodle please read:
-// https://docs.moodle.org/dev/PHPUnit
-//
-// Documentation for writing PHPUnit tests for Moodle can be found here:
-// https://docs.moodle.org/dev/PHPUnit_integration
-// https://docs.moodle.org/dev/Writing_PHPUnit_tests
-//
-// The official PHPUnit homepage is at:
-// https://phpunit.de
-
 /**
  * The syllabus test class.
  *
@@ -44,12 +34,19 @@ defined('MOODLE_INTERNAL') || die();
  */
 class local_syllabus_syllabus_testcase extends advanced_testcase {
 
-    function test_define_custom_field() {
+    /**
+     * Custom field definition
+     *
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public function test_define_custom_field() {
         $this->resetAfterTest();
         $generator = $this->getDataGenerator();
         $syllabuscategoryname = get_config('local_syllabus', 'syllabuscategoryname');
         // Create a couple of custom fields definitions.
-        $catid = $generator->create_custom_field_category(['name'=>'$syllabuscategoryname'])->get('id');
+        $catid = $generator->create_custom_field_category(['name' => '$syllabuscategoryname'])->get('id');
         $customfield = $generator->create_custom_field(
             ['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1']
         );
@@ -61,7 +58,14 @@ class local_syllabus_syllabus_testcase extends advanced_testcase {
         );
     }
 
-    function test_create_customfield_from_text() {
+    /**
+     * Create customfield from text
+     *
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public function test_create_customfield_from_text() {
         $this->resetAfterTest();
         \local_syllabus\locallib\utils::create_customfields_fromdef(file_get_contents(
             __DIR__ . '/fixtures/customfields_defs.txt'
@@ -76,8 +80,8 @@ class local_syllabus_syllabus_testcase extends advanced_testcase {
             }
         }
         $this->assertNotEmpty($syllabusfields);
-        foreach($syllabusfields as $field) {
-            switch($field->get('shortname')) {
+        foreach ($syllabusfields as $field) {
+            switch ($field->get('shortname')) {
                 case 'formationtype':
                     $this->assertEquals('Training Type', $field->get('name'));
                     $this->assertEquals('text', $field->get('type'));

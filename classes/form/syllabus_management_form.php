@@ -21,6 +21,7 @@
  * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace local_syllabus\form;
 defined('MOODLE_INTERNAL') || die;
 
@@ -28,6 +29,6 @@ class syllabus_management_form extends \moodleform {
 
     protected function definition() {
         $mform = $this->_form;
-        $mform->addElement('header', 'general',get_string('generalsettings', 'local_syllabus'));
+        $mform->addElement('header', 'general', get_string('generalsettings', 'local_syllabus'));
     }
 }

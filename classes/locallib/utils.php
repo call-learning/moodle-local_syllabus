@@ -67,7 +67,7 @@ class utils {
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public static function create_customfields_fromdef($configtext="") {
+    public static function create_customfields_fromdef($configtext = "") {
         if (!$configtext) {
             $configtext = get_config('local_syllabus', 'customfielddef');
         }
@@ -77,8 +77,8 @@ class utils {
             $allfieldsdefs = static::parse_customfield_def($configtext);
             foreach ($allfieldsdefs as $field) {
                 if ($field->catname != $syllabuscategoryname) {
-                    debugging('create_customfields_fromdef: The category name of the field "'. $field->name.'"" should
-                    be "'.$syllabuscategoryname.'"', DEBUG_NORMAL);
+                    debugging('create_customfields_fromdef: The category name of the field "' . $field->name . '"" should
+                    be "' . $syllabuscategoryname . '"', DEBUG_NORMAL);
                     continue;
                 }
                 $category = category::get_record(array('name' => $field->catname, 'component' => 'core_course'));
@@ -222,7 +222,7 @@ class utils {
                 if (is_dir($locationtoscan)) {
                     $sources = scandir($locationtoscan);
                     foreach ($sources as $filename) {
-                        if ($filename === 'base.php' || $filename === "." || $filename === ".." ) {
+                        if ($filename === 'base.php' || $filename === "." || $filename === "..") {
                             continue;
                         }
                         $sourcename = str_replace('.php', '', $filename);
@@ -251,16 +251,25 @@ class utils {
     public static function replace_nav_courses_url(&$coursesnode) {
         if ($coursesnode) {
             foreach ($coursesnode->children as $child) {
-                /** @var navigation_node $child */
                 if ($child->type == navigation_node::TYPE_COURSE) {
                     $currentaction = $child->action;
-                    /** @var moodle_url $currentaction */
-                    $child->action = new moodle_url('/local/syllabus/view.php', $currentaction->params());
+                    $child->action = static::get_syllabus_page_url($currentaction->params());
                     $child->remove();
                     $coursesnode->add_node($child);
                 }
             }
         }
+    }
+
+    /**
+     * Used to get the Syllabus URL
+     *
+     * @param $params
+     * @return moodle_url
+     * @throws \moodle_exception
+     */
+    public static function get_syllabus_page_url($params) {
+        return new moodle_url('/local/syllabus/view.php', $params);
     }
 
 }

@@ -30,6 +30,13 @@ use local_syllabus\locallib\utils;
 
 defined('MOODLE_INTERNAL') || die;
 
+/**
+ * Class syllabus_field_editor
+ *
+ * @package   local_syllabus
+ * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class syllabus_field_editor extends persistent {
     protected static $persistentclass = \local_syllabus\syllabus_field::class;
     protected static $fieldstoremove = array('id', 'submitbutton');

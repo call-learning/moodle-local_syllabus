@@ -25,7 +25,6 @@
 namespace local_syllabus;
 
 use core\persistent;
-use core_customfield\data_controller;
 use core_customfield\field;
 use core_customfield\field_controller;
 use local_syllabus\display\base;
@@ -229,7 +228,7 @@ class syllabus_field extends persistent {
             if ($additionaldata) {
                 return json_decode($additionaldata);
             }
-        } catch (JsonException $e) {
+        } catch (\Exception $e) {
             debug('Error decoding additionnal data' . $e->getMessage());
             return null;
         }

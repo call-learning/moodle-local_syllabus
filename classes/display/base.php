@@ -24,7 +24,10 @@
 
 namespace local_syllabus\display;
 
+use coding_exception;
+use lang_string;
 use local_syllabus\syllabus_field;
+use moodle_exception;
 use renderable;
 use renderer_base;
 use stdClass;
@@ -63,46 +66,6 @@ class base implements renderable, templatable {
     }
 
     /**
-     * Get icon. Can be overriden.
-     *
-     * @param renderer_base $output
-     * @return mixed
-     * @throws \coding_exception
-     * @throws \moodle_exception
-     */
-    protected function get_icon(\renderer_base $output) {
-        if ($this->additionaldata && !empty($this->additionaldata->icon)) {
-            return $this->additionaldata->icon;
-        }
-        return '';
-    }
-
-    /**
-     * Get label. Can be overriden.
-     *
-     * @param renderer_base $output
-     * @return \lang_string|string
-     * @throws \coding_exception
-     * @throws \moodle_exception
-     */
-    protected function get_label(\renderer_base $output) {
-        $displaylabel = empty($this->additionaldata) || !isset($this->additionaldata->displaylabel)
-             || $this->additionaldata->displaylabel;
-        // If label is defined and set to true by default.
-        if (!$displaylabel) {
-            return '';
-        }
-        if ($this->additionaldata && !empty($this->additionaldata->labells)) {
-            $stringm = get_string_manager();
-            list($sname, $module) = explode(',', $this->additionaldata->labells);
-            if (!$stringm->string_exists($sname, $module)) {
-                return get_string($sname, $module, $this->fieldspec->get_formatted_name());
-            }
-        }
-        return $this->fieldspec->get_formatted_name();
-    }
-
-    /**
      * Export the field
      *
      * @param renderer_base $output
@@ -131,21 +94,6 @@ class base implements renderable, templatable {
     }
 
     /**
-     * This will be overriden by subclasses
-     *
-     * @param stdClass $courserawvals array with all fields values for this course in a raw format
-     * This allows to combine values for display if needed.
-     * @param renderer_base $output
-     * @return mixed|string|null
-     * @throws \coding_exception
-     * @throws \moodle_exception
-     */
-    protected function export_raw_value($courserawvals, renderer_base $output) {
-        $fielddataid = $this->fieldspec->get('iddata');
-        return $courserawvals->$fielddataid;
-    }
-
-    /**
      * Can display field ?
      *
      * @param stdClass $courserawvals array with all fields values for this course in a raw format
@@ -155,5 +103,60 @@ class base implements renderable, templatable {
      */
     protected function should_display_field($courserawvals) {
         return !empty($this->fieldspec);
+    }
+
+    /**
+     * Get icon. Can be overriden.
+     *
+     * @param renderer_base $output
+     * @return mixed
+     * @throws coding_exception
+     * @throws moodle_exception
+     */
+    protected function get_icon(renderer_base $output) {
+        if ($this->additionaldata && !empty($this->additionaldata->icon)) {
+            return $this->additionaldata->icon;
+        }
+        return '';
+    }
+
+    /**
+     * Get label. Can be overriden.
+     *
+     * @param renderer_base $output
+     * @return lang_string|string
+     * @throws coding_exception
+     * @throws moodle_exception
+     */
+    protected function get_label(renderer_base $output) {
+        $displaylabel = empty($this->additionaldata) || !isset($this->additionaldata->displaylabel)
+            || $this->additionaldata->displaylabel;
+        // If label is defined and set to true by default.
+        if (!$displaylabel) {
+            return '';
+        }
+        if ($this->additionaldata && !empty($this->additionaldata->labells)) {
+            $stringm = get_string_manager();
+            list($sname, $module) = explode(',', $this->additionaldata->labells);
+            if (!$stringm->string_exists($sname, $module)) {
+                return get_string($sname, $module, $this->fieldspec->get_formatted_name());
+            }
+        }
+        return $this->fieldspec->get_formatted_name();
+    }
+
+    /**
+     * This will be overriden by subclasses
+     *
+     * @param stdClass $courserawvals array with all fields values for this course in a raw format
+     * This allows to combine values for display if needed.
+     * @param renderer_base $output
+     * @return mixed|string|null
+     * @throws coding_exception
+     * @throws moodle_exception
+     */
+    protected function export_raw_value($courserawvals, renderer_base $output) {
+        $fielddataid = $this->fieldspec->get('iddata');
+        return $courserawvals->$fielddataid;
     }
 }

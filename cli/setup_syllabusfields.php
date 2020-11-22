@@ -24,8 +24,8 @@
  */
 
 define('CLI_SCRIPT', true);
-global $CFG;
 require(__DIR__ . '/../../../config.php');
+global $CFG;
 require_once($CFG->libdir . '/clilib.php');
 
 // Get the cli options.
@@ -38,11 +38,10 @@ list($options, $unrecognized) = cli_get_params(
     )
 );
 
-$help = " 
+$help = "
 php setup_syllabusfields
 
-Will setup the syllabus field table according to existing fields. 
- ";
+Will setup the syllabus field table according to existing fields.";
 
 if ($unrecognized) {
     $unrecognized = implode("\n\t", $unrecognized);

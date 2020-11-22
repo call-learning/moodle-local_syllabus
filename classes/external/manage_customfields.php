@@ -98,8 +98,8 @@ class manage_customfields extends external_api {
             new external_multiple_structure(
                 new external_single_structure(
                     array(
-                        'location' => new external_value(PARAM_ALPHANUM, 'Location shortname 
-                        on the syllabus page (mostly side, content, ....)'),
+                        'location' => new external_value(PARAM_ALPHANUM, 'Location shortname'
+                            .' on the syllabus page (mostly side, content, ....)'),
                     )
                 )
             );
