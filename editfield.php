@@ -27,7 +27,7 @@ require_once('../../config.php');
 global $CFG, $PAGE, $OUTPUT;
 require_once($CFG->libdir . '/adminlib.php');
 require_login();
-require_capability('local/syllabus:manage');
+require_capability('local/syllabus:manage', context_system::instance());
 $fieldid = required_param('id', PARAM_INT);
 
 $action = get_string('editfield', 'local_syllabus');
