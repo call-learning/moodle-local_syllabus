@@ -27,21 +27,34 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
     global $CFG;
+
     $settings = new admin_category('syllabus',
         get_string('pluginname', 'local_syllabus'));
 
     $settingspage = new admin_settingpage('customfieldsdefinition',
         get_string('syllabus:customfielddef', 'local_syllabus'));
 
-    $settingspage->add(
-        new admin_setting_configtextarea('local_syllabus/customfielddef',
-            get_string('syllabus:customfielddef', 'local_syllabus'),
-            get_string('syllabus:customfielddef:desc', 'local_syllabus'),
-            'Training Type|trainingtype|select|"<p>Type of training</p>"|0|Syllabus Fields|'
-            . '{"required":"0","uniquevalues":"0","options":"OnSite\r\nDistance\r\nBlended",'
-            . '"defaultvalue":"OnSite","locked":"0","visibility":"2"}')
-    );
-
+    $customfielddef = new admin_setting_configtextarea('local_syllabus/customfielddef',
+        get_string('syllabus:customfielddef', 'local_syllabus'),
+        get_string('syllabus:customfielddef:desc', 'local_syllabus'),
+        'Training Type|trainingtype|select|"<p>Type of training</p>"|0|Syllabus Fields|'
+        . '{"required":"0","uniquevalues":"0","options":"OnSite\r\nDistance\r\nBlended",'
+        . '"defaultvalue":"OnSite","locked":"0","visibility":"2"}');
+    /**
+     * Change syllabus field
+     *
+     * @throws \core\invalid_persistent_exception
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    function local_syllabus_customfielddef_change_plugin_callback() {
+        $newdef = get_config('local_syllabus', 'customfielddef');
+        \local_syllabus\locallib\utils::create_customfields_fromdef($newdef);
+        \local_syllabus\locallib\utils::update_syllabus_fields();
+    }
+    $customfielddef->set_updatedcallback('local_syllabus_customfielddef_change_plugin_callback');
+    $settingspage->add($customfielddef);
     $settingspage->add(
         new admin_setting_configtext('local_syllabus/syllabuscategoryname',
             get_string('syllabus:syllabuscategoryname', 'local_syllabus'),
@@ -65,6 +78,13 @@ if ($hassiteconfig) {
         new lang_string('enablesyllabus', 'local_syllabus'),
         new lang_string('enablesyllabus', 'local_syllabus'),
         1);
+    /**
+     * Nothing for now
+     */
+    function local_syllabus_enable_disable_plugin_callback() {
+        // Nothing for now.
+    }
+
     $enableoption->set_updatedcallback('local_syllabus_enable_disable_plugin_callback');
     $optionalsubsystems = $ADMIN->locate('optionalsubsystems');
     $optionalsubsystems->add($enableoption);

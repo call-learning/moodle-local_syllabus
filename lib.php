@@ -68,11 +68,3 @@ function local_syllabus_extend_navigation(global_navigation $nav) {
         \local_syllabus\locallib\utils::replace_nav_courses_url($coursesnode);
     }
 }
-
-
-/**
- * Nothing for now
- */
-function local_syllabus_enable_disable_plugin_callback() {
-    // Nothing for now.
-}
