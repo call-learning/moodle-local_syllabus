@@ -55,16 +55,38 @@
         <section class="col syllabus-title">
             {{#title}}
                 {{#fields}}
-                    <div class="field">
-                        <h3 class="content">{{{html}}}</h3>
-                    </div>
+                    {{#display}}
+                        {{> local_syllabus/syllabus_field_title }}
+                    {{/display}}
                 {{/fields}}
             {{/title}}
         </section>
     </div>
     <div class="container-fluid">
-        <div class="float-lg-right">
-            <aside class="syllabus-side p-3">
+
+        <section class="syllabus-head d-flex justify-content-center mb-4">
+            {{#header}}
+                {{#fields}}
+                    {{#display}}
+                        {{> local_syllabus/syllabus_field_head }}
+                    {{/display}}
+                {{/fields}}
+            {{/header}}
+        </section>
+
+        <div class="d-lg-flex">
+
+        <section class="syllabus-content">
+            {{#content}}
+                {{#fields}}
+                    {{#display}}
+                        {{> local_syllabus/syllabus_field_content }}
+                    {{/display}}
+                {{/fields}}
+            {{/content}}
+        </section>
+
+            <aside class="syllabus-side">
                 <ul class="list-group">
                     {{#side}}
                         {{#fields}}
@@ -76,24 +98,5 @@
                 </ul>
             </aside>
         </div>
-        <section class="syllabus-head">
-            {{#header}}
-                {{#fields}}
-                    {{#display}}
-                        {{> local_syllabus/syllabus_field_head }}
-                    {{/display}}
-                {{/fields}}
-            {{/header}}
-        </section>
-
-        <section class="syllabus-content">
-            {{#content}}
-                {{#fields}}
-                    {{#display}}
-                        {{> local_syllabus/syllabus_field_content }}
-                    {{/display}}
-                {{/fields}}
-            {{/content}}
-        </section>
     </div>
 </section>
