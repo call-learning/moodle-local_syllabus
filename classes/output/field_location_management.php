@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
+use moodle_url;
 use renderable;
 use templatable;
 
@@ -52,7 +53,6 @@ class field_location_management implements renderable, templatable {
     public function export_for_template(\renderer_base $output) {
         global $DB;
         $data = new \stdClass();
-
         $data->locations = array();
         $sm = get_string_manager();
         foreach (syllabus_location::LOCATION_TYPES as $location) {
@@ -76,6 +76,7 @@ class field_location_management implements renderable, templatable {
 
     protected function create_field_data($field) {
         global $CFG;
+        global $PAGE;
         $fieldarray = [];
         $fieldid = $field->get('id');
         $fieldname = $field->get_formatted_name();
@@ -85,7 +86,14 @@ class field_location_management implements renderable, templatable {
         $fieldarray['name'] = $fieldname;
         $fieldarray['shortname'] = $field->get_shortname();
         $fieldarray['movetitle'] = get_string('movefield', 'local_syllabus', $fieldname);
-        $fieldarray['editfieldurl'] = new \moodle_url($CFG->wwwroot . '/local/syllabus/editfield.php', array('id' => $fieldid));
+        $params = [];
+        $pageurl = $PAGE->url; // Beware : empty($PAGE->url) is always false.
+        if (!empty($pageurl)) {
+            $params = $PAGE->url->params();
+        }
+        $params['id'] = $fieldid;
+        $editurl =  new moodle_url($CFG->wwwroot . '/local/syllabus/editfield.php', $params);
+        $fieldarray['editfieldurl'] = $editurl->out(false);
         return $fieldarray;
     }
 

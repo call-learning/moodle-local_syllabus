@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_syllabus\display;
+namespace local_syllabus\local\syllabus_display;
 
 use coding_exception;
 use lang_string;
@@ -36,7 +36,7 @@ use templatable;
 /**
  * Class base : display a field
  *
- * @package local_syllabus\display
+ * @package local_syllabus\local\syllabus_display
  */
 class base implements renderable, templatable {
     /**

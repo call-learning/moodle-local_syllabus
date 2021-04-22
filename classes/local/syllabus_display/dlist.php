@@ -22,9 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_syllabus\display;
+namespace local_syllabus\local\syllabus_display;
 
 use coding_exception;
+use html_writer;
 use local_syllabus\syllabus_field;
 use moodle_exception;
 use renderable;
@@ -33,11 +34,11 @@ use stdClass;
 use templatable;
 
 /**
- * Class date : display this field as an image
+ * Class dlist: display this fields as a list of values
  *
- * @package local_syllabus\display
+ * @package local_syllabus\local\syllabus_display
  */
-class date extends base {
+class dlist extends base {
     /**
      * This will be overriden by subclasses
      *
@@ -49,18 +50,14 @@ class date extends base {
      * @throws moodle_exception
      */
     protected function export_raw_value($courserawvals, renderer_base $output) {
+
         $dateformat = get_string('strftimedatefullshort');
         $fielddataid = $this->fieldspec->get('iddata');
-        return userdate($courserawvals->$fielddataid, $dateformat);
-    }
-
-    /**
-     * Can display field ?
-     *
-     * @return bool
-     */
-    protected function should_display_field($courserawvals) {
-        $fielddataid = $this->fieldspec->get('iddata');
-        return !empty($courserawvals->$fielddataid);
+        $list = explode(',', $courserawvals->$fielddataid);
+        $displaylist = '';
+        foreach ($list as $e) {
+            $displaylist .= html_writer::span($e, 'dlist');
+        }
+        return $displaylist;
     }
 }

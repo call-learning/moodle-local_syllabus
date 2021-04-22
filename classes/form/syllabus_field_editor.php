@@ -40,7 +40,7 @@ defined('MOODLE_INTERNAL') || die;
 class syllabus_field_editor extends persistent {
     protected static $persistentclass = \local_syllabus\syllabus_field::class;
     protected static $fieldstoremove = array('id', 'submitbutton');
-    protected static $foreignfields = array('icon', 'labells', 'displayclass', 'displaylabel', 'submitbutton');
+    protected static $foreignfields = array('icon', 'labells', 'displayclass', 'displaylabel', 'submitbutton', 'returnurl');
 
     /**
      * Add further settings to each field.
@@ -49,7 +49,12 @@ class syllabus_field_editor extends persistent {
      */
     protected function definition() {
         $mform = $this->_form;
+        $returnurl = empty($this->_customdata['returnurl'])? null: $this->_customdata['returnurl'];
 
+        if ($returnurl) {
+            $mform->addElement('hidden', 'returnurl', $returnurl);
+            $mform->setType('returnurl', PARAM_URL);
+        }
         // Display class. If not default class.
         $allclasses = utils::get_all_display_classes();
         $displayclasses = ['' => get_string('none')];

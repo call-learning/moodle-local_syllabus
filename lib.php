@@ -39,7 +39,10 @@ function local_syllabus_extend_navigation_course(navigation_node $parentnode, st
     if ($PAGE->pagetype === 'syllabus-view' && has_capability('local/syllabus:manage', $context)) {
         $parentnode->add(
             get_string('syllabus:managefields', 'local_syllabus'),
-            new moodle_url('/local/syllabus/manage.php'),
+            new moodle_url(
+                '/local/syllabus/manage.php',
+                array('returnurl'=> $PAGE->url->out())
+            ),
             navigation_node::TYPE_SETTING,
             null,
             'syllabusmanage',

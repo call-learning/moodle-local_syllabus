@@ -23,12 +23,16 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_syllabus\form\syllabus_field_editor;
+use local_syllabus\syllabus_field;
+
 require_once('../../config.php');
 global $CFG, $PAGE, $OUTPUT;
 require_once($CFG->libdir . '/adminlib.php');
 require_login();
 require_capability('local/syllabus:manage', context_system::instance());
 $fieldid = required_param('id', PARAM_INT);
+$returnurl = optional_param('returnurl', null, PARAM_RAW);
 
 $action = get_string('editfield', 'local_syllabus');
 $PAGE->set_context(\context_system::instance());
@@ -36,14 +40,23 @@ $PAGE->set_title($action);
 $PAGE->set_heading($action);
 $editpageurl = new moodle_url('/local/syllabus/editfield.php', array('id' => $fieldid));
 $listpageurl = new moodle_url('/local/syllabus/manage.php');
+if ($returnurl) {
+    $editpageurl->param('returnurl', $returnurl);
+    $listpageurl->param('returnurl', $returnurl);
+}
+
 $PAGE->set_url($editpageurl);
 $output = $PAGE->get_renderer('local_syllabus');
+$persistent = new syllabus_field($fieldid);
 
-$persistent = new \local_syllabus\syllabus_field($fieldid);
-
-$form = new \local_syllabus\form\syllabus_field_editor(null, [
+$params = [
     'persistent' => $persistent,  // An instance, or null.
-]);
+];
+if ($returnurl) {
+    $params['returnurl'] = $returnurl;
+}
+
+$form = new syllabus_field_editor(null, $params);
 $jsondata = array();
 if ($additionaldata = $persistent->get('data')) {
     $jsondata = json_decode($additionaldata);
@@ -51,8 +64,12 @@ if ($additionaldata = $persistent->get('data')) {
 $form->set_data($jsondata);
 if ($data = $form->get_data()) {
 
+    if (!isset($data->returnurl) && $data->returnurl) {
+        $listpageurl->param('returnurl', $data->returnurl);
+    }
     $persistent->set('data', json_encode($data));
     $persistent->save();
+
     redirect($listpageurl);
 }
 if ($form->is_cancelled()) {

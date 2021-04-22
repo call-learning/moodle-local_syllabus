@@ -27,7 +27,7 @@ namespace local_syllabus;
 use core\persistent;
 use core_customfield\field;
 use core_customfield\field_controller;
-use local_syllabus\display\base;
+use local_syllabus\local\syllabus_display\base;
 use local_syllabus\external\course_syllabus_exporter;
 
 defined('MOODLE_INTERNAL') || die();

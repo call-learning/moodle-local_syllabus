@@ -22,11 +22,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_syllabus\display;
+namespace local_syllabus\local\syllabus_display;
 
 use coding_exception;
-use html_writer;
-use lang_string;
 use local_syllabus\syllabus_field;
 use moodle_exception;
 use renderable;
@@ -35,11 +33,11 @@ use stdClass;
 use templatable;
 
 /**
- * Class image : display this field as an image
+ * Class date : display this field as an image
  *
- * @package local_syllabus\display
+ * @package local_syllabus\local\syllabus_display
  */
-class image extends base {
+class date extends base {
     /**
      * This will be overriden by subclasses
      *
@@ -51,21 +49,18 @@ class image extends base {
      * @throws moodle_exception
      */
     protected function export_raw_value($courserawvals, renderer_base $output) {
+        $dateformat = get_string('strftimedatefullshort');
         $fielddataid = $this->fieldspec->get('iddata');
-        return html_writer::img(
-            $courserawvals->$fielddataid,
-            parent::get_label($output),
-            array('class' => 'img-fluid')
-        );
+        return userdate($courserawvals->$fielddataid, $dateformat);
     }
 
     /**
-     * No label for image
+     * Can display field ?
      *
-     * @param renderer_base $output
-     * @return lang_string|string
+     * @return bool
      */
-    protected function get_label(renderer_base $output) {
-        return '';
+    protected function should_display_field($courserawvals) {
+        $fielddataid = $this->fieldspec->get('iddata');
+        return !empty($courserawvals->$fielddataid);
     }
 }

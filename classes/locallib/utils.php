@@ -218,7 +218,7 @@ class utils {
         foreach (\core_component::get_plugin_types() as $type => $location) {
             $plugins = \core_component::get_plugin_list($type);
             foreach (array_keys($plugins) as $name) {
-                $locationtoscan = "{$location}/{$name}/classes/display";
+                $locationtoscan = "{$location}/{$name}/classes/local/syllabus_display";
                 if (is_dir($locationtoscan)) {
                     $sources = scandir($locationtoscan);
                     foreach ($sources as $filename) {
@@ -226,10 +226,10 @@ class utils {
                             continue;
                         }
                         $sourcename = str_replace('.php', '', $filename);
-                        $classname = "\\{$type}_{$name}\\display\\{$sourcename}";
+                        $classname = "\\{$type}_{$name}\\local\\syllabus_display\\{$sourcename}";
                         if (class_exists($classname)) {
                             $reflector = new ReflectionClass($classname);
-                            if ($reflector->isSubclassOf(\local_syllabus\display\base::class)) {
+                            if ($reflector->isSubclassOf(\local_syllabus\local\syllabus_display\base::class)) {
                                 $classes[$sourcename] = $classname;
                             }
                         }

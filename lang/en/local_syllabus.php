@@ -65,4 +65,5 @@ $string['display:base'] = 'Basic display';
 $string['display:price'] = 'Price display';
 $string['display:date'] = 'Date display (userdate)';
 $string['display:image'] = 'Image display';
+$string['display:dlist'] = 'List display';
 $string['totopoflocation'] = 'To the top of location {$a}';

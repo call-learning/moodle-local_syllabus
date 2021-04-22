@@ -22,10 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_syllabus\display;
+namespace local_syllabus\local\syllabus_display;
 
 use coding_exception;
 use html_writer;
+use lang_string;
 use local_syllabus\syllabus_field;
 use moodle_exception;
 use renderable;
@@ -34,11 +35,11 @@ use stdClass;
 use templatable;
 
 /**
- * Class dlist: display this fields as a list of values
+ * Class image : display this field as an image
  *
- * @package local_syllabus\display
+ * @package local_syllabus\local\syllabus_display
  */
-class dlist extends base {
+class image extends base {
     /**
      * This will be overriden by subclasses
      *
@@ -50,14 +51,21 @@ class dlist extends base {
      * @throws moodle_exception
      */
     protected function export_raw_value($courserawvals, renderer_base $output) {
-
-        $dateformat = get_string('strftimedatefullshort');
         $fielddataid = $this->fieldspec->get('iddata');
-        $list = explode(',', $courserawvals->$fielddataid);
-        $displaylist = '';
-        foreach ($list as $e) {
-            $displaylist .= html_writer::span($e, 'dlist');
-        }
-        return $displaylist;
+        return html_writer::img(
+            $courserawvals->$fielddataid,
+            parent::get_label($output),
+            array('class' => 'img-fluid')
+        );
+    }
+
+    /**
+     * No label for image
+     *
+     * @param renderer_base $output
+     * @return lang_string|string
+     */
+    protected function get_label(renderer_base $output) {
+        return '';
     }
 }
