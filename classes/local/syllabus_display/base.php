@@ -25,6 +25,7 @@
 namespace local_syllabus\local\syllabus_display;
 
 use coding_exception;
+use core_tests\event\static_info_viewing;
 use lang_string;
 use local_syllabus\syllabus_field;
 use moodle_exception;
@@ -72,10 +73,7 @@ class base implements renderable, templatable {
      * @return stdClass|void
      */
     public function export_for_template(renderer_base $output) {
-        static $courserawvalues = null;
-        if (!$courserawvalues) {
-            $courserawvalues = syllabus_field::get_raw_values($this->courseid, $output);
-        }
+        $courserawvalues = syllabus_field::get_raw_values($this->courseid, $output);
         $data = new stdClass();
         $data->label = '';
         $data->html = '';

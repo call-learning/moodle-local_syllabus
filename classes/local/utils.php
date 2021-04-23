@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_syllabus\locallib;
+namespace local_syllabus\local;
 
 use core_customfield\category;
 use core_customfield\category_controller;

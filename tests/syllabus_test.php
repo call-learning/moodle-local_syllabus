@@ -67,7 +67,7 @@ class local_syllabus_syllabus_testcase extends advanced_testcase {
      */
     public function test_create_customfield_from_text() {
         $this->resetAfterTest();
-        \local_syllabus\locallib\utils::create_customfields_fromdef(file_get_contents(
+        \local_syllabus\local\utils::create_customfields_fromdef(file_get_contents(
             __DIR__ . '/fixtures/customfields_defs.txt'
         ));
         $allcategories = \core_customfield\api::get_categories_with_fields('core_course', 'course', 0);

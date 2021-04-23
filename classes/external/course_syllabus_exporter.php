@@ -48,34 +48,58 @@ class course_syllabus_exporter extends course_summary_exporter {
     }
 
     protected function get_other_values(renderer_base $output) {
-        global $USER;
         $courseimage = self::get_course_image($this->data);
         if (!$courseimage) {
             $courseimage = $output->get_generated_image_for_id($this->data->id);
         }
         $coursecategory = \core_course_category::get($this->data->category, MUST_EXIST, true);
 
-        $modules = [];
-        $isenrolled = is_enrolled($this->related['context']);
-        $viewurl = (new moodle_url('/course/view.php', array('id' => $this->data->id)))->out(false);
-        $action = \html_writer::link($viewurl, get_string('view'),
-            array('class' => 'btn btn-primary'));
-        if (!$isenrolled && !is_primary_admin($USER->id)) {
-            $enrolinstances = enrol_get_instances($this->data->id, true);
-            if ($enrolinstances) {
-                $viewurl = (new moodle_url('/enrol/index.php', array('id' => $this->data->id)))->out(false);
-                $action = \html_writer::link($viewurl, get_string('enrol', 'enrol'),
-                    array('class' => 'btn btn-primary'));
-            }
-        }
-        return array(
+        $courseactions = static::get_course_actions($this->related['context'], $this->data->id);
+
+        $otherfields = [
             'fullnamehtml' => \html_writer::tag('h3', get_course_display_name_for_list($this->data)),
-            'viewurl' => $viewurl,
             'courseimage' => $courseimage,
             'coursecategory' => $coursecategory->name,
-            'action' => $action,
             'isenrolled' => !is_enrolled($this->related['context'])
-        );
+        ];
+        return array_merge($courseactions, $otherfields);
+    }
+
+    public static function get_course_actions($context, $courseid) {
+        $isenrolled = is_enrolled($context);
+        $action = \html_writer::start_div('syllabus-action');
+        if ($isenrolled || has_capability('moodle/course:view', $context)) {
+            $viewurl = (new moodle_url('/course/view.php', array('id' => $courseid)))->out(false);
+            $action .= \html_writer::link($viewurl, get_string('view'),
+                array('class' => 'btn btn-primary'));
+        } else {
+            $enrolinstances = enrol_get_instances($courseid, true);
+            $hasenrolforms = false;
+            if ($enrolinstances) {
+                $enrols = enrol_get_plugins(true);
+                foreach ($enrolinstances as $instance) {
+                    if (!isset($enrols[$instance->enrol])) {
+                        continue;
+                    }
+                    $enrolform = $enrols[$instance->enrol]->enrol_page_hook($instance);
+                    if ($enrolform) {
+                        $action .= str_replace('collapsible', '', $enrolform);
+                        $hasenrolforms = true;
+                    }
+                }
+            }
+            if (!$hasenrolforms) {
+                if (isguestuser()) {
+                    $message = get_string('noguestaccess', 'enrol');
+                } else {
+                    $message = get_string('notenrollable', 'enrol');
+                }
+                $action .= \html_writer::span($message);
+            }
+        }
+        $action .= \html_writer::end_div();
+
+        return array('action' => $action, 'viewurl' => $viewurl);
     }
 
     public static function define_properties() {

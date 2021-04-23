@@ -25,6 +25,7 @@
 namespace local_syllabus;
 
 use core\persistent;
+use core_course\customfield\course_handler;
 use core_customfield\field;
 use core_customfield\field_controller;
 use local_syllabus\local\syllabus_display\base;
@@ -148,7 +149,7 @@ class syllabus_field extends persistent {
     public function get_type() {
         static $fieldtypes = null;
         if (!$fieldtypes) {
-            $coursehandler = \core_course\customfield\course_handler::create();
+            $coursehandler = course_handler::create();
             $fieldtypes = $coursehandler->get_available_field_types();
         }
         switch ($this->get('origin')) {
@@ -194,7 +195,6 @@ class syllabus_field extends persistent {
             case self::ORIGIN_TAG:
                 return 'tag';
             case self::ORIGIN_COURSE_FIELD:
-                return $this->get('iddata');
             case self::ORIGIN_CUSTOM_FIELD:
                 return $this->get('iddata');
         }
@@ -203,7 +203,7 @@ class syllabus_field extends persistent {
     /**
      * Get display class to display the field
      *
-     * @return string
+     * @return base
      * @throws \coding_exception
      */
     public function get_display_object($courseid) {
@@ -247,6 +247,14 @@ class syllabus_field extends persistent {
      */
     public static function get_raw_values($courseid, \renderer_base $output) {
         global $DB;
+        static $courserawvalues = [];
+        // Make sure we call it once per page load (especially for enrolment plugins
+        // as we don't really control what's included (we had for example the issue of the form and js controling
+        // submit button being included although the button did not exist (as the user was enrolled in the process and
+        // the button to enroll no longer displayed.
+        if (!empty($courserawvalues[$courseid])) {
+            return $courserawvalues[$courseid];
+        }
         $exporterclass = static::get_course_syllabus_exporter_class();
         $course = $DB->get_record('course', array('id' => $courseid));
         $exporter = new $exporterclass($course);
@@ -272,7 +280,7 @@ class syllabus_field extends persistent {
                 case self::ORIGIN_CUSTOM_FIELD:
                     try {
                         $cfshortname = $field->get('iddata');
-                        $data = \core_course\customfield\course_handler::create()->export_instance_data_object($courseid);
+                        $data = course_handler::create()->export_instance_data_object($courseid);
                         if ($data) {
                             $value = !empty($data->$cfshortname) ? $data->$cfshortname : '';
                         }
@@ -286,6 +294,7 @@ class syllabus_field extends persistent {
             }
             $rawvalue->$fieldiddata = $value;
         }
+        $courserawvalues[$courseid] = $rawvalue;
         return $rawvalue;
     }
 
@@ -323,7 +332,7 @@ class syllabus_field extends persistent {
         $tagfields = [['origin' => self::ORIGIN_TAG, 'iddata' => 'coursetags']];
 
         // Retrieve all course custom field and add them.
-        $handler = \core_course\customfield\course_handler::create();
+        $handler = course_handler::create();
         $categories = $handler->get_categories_with_fields();
 
         $customfields = [];

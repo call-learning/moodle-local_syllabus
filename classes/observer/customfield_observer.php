@@ -24,7 +24,7 @@
 
 namespace local_syllabus\observer;
 
-use local_syllabus\locallib\utils;
+use local_syllabus\local\utils;
 use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
 

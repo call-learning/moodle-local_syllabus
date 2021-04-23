@@ -43,6 +43,6 @@ function local_syllabus_enable_disable_plugin_callback() {
  */
 function local_syllabus_customfielddef_change_plugin_callback() {
     $newdef = get_config('local_syllabus', 'customfielddef');
-    \local_syllabus\locallib\utils::create_customfields_fromdef($newdef);
-    \local_syllabus\locallib\utils::update_syllabus_fields();
+    \local_syllabus\local\utils::create_customfields_fromdef($newdef);
+    \local_syllabus\local\utils::update_syllabus_fields();
 }

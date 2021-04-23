@@ -66,8 +66,8 @@ function local_syllabus_extend_navigation(global_navigation $nav) {
     }
     if ($PAGE->context->contextlevel == CONTEXT_COURSE) {
         $mycoursesnode = $nav->find('mycourses', null);
-        \local_syllabus\locallib\utils::replace_nav_courses_url($mycoursesnode);
+        \local_syllabus\local\utils::replace_nav_courses_url($mycoursesnode);
         $coursesnode = $nav->find('courses', null);
-        \local_syllabus\locallib\utils::replace_nav_courses_url($coursesnode);
+        \local_syllabus\local\utils::replace_nav_courses_url($coursesnode);
     }
 }

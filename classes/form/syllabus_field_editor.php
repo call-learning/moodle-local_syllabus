@@ -25,8 +25,8 @@
 namespace local_syllabus\form;
 
 use core\form\persistent;
-use local_syllabus\locallib\fa_icons;
-use local_syllabus\locallib\utils;
+use local_syllabus\local\fa_icons;
+use local_syllabus\local\utils;
 
 defined('MOODLE_INTERNAL') || die;
 

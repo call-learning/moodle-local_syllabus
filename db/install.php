@@ -29,6 +29,6 @@ defined('MOODLE_INTERNAL') || die();
  * Custom code to be run on installing the plugin.
  */
 function xmldb_local_syllabus_install() {
-    \local_syllabus\locallib\utils::update_syllabus_fields(); // Create or update syllabus fields.
+    \local_syllabus\local\utils::update_syllabus_fields(); // Create or update syllabus fields.
     return true;
 }

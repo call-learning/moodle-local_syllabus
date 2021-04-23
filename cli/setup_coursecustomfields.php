@@ -64,4 +64,4 @@ if (!file_exists($option['configtext'])) {
     die();
 }
 
-\local_syllabus\locallib\utils::create_customfields_fromdef(file_get_contents($option['configtext']));
+\local_syllabus\local\utils::create_customfields_fromdef(file_get_contents($option['configtext']));
