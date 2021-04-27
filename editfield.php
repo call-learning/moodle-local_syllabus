@@ -66,7 +66,7 @@ if ($additionaldata = $persistent->get('data')) {
 $form->set_data($jsondata);
 if ($data = $form->get_data()) {
 
-    if (!isset($data->returnurl) && $data->returnurl) {
+    if (isset($data->returnurl) && $data->returnurl) {
         $listpageurl->param('returnurl', $data->returnurl);
     }
     $data = syllabus_field_editor::filter_persistent_additional_data($data);
