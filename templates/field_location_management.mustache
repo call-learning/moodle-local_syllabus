@@ -45,8 +45,7 @@
                 { "id": 0, "name": "Another field", "shortname": "checkme", "type": "Checkbox" }
             ]
           },
-          { "id": "after-summary",
-            "fields": [] }
+          { "id": "after-summary", "fields": [] }
       ],
       "otherfields": [
           { "id": "0",
@@ -56,10 +55,8 @@
                 { "id": 0, "name": "Another field", "shortname": "checkme", "type": "Checkbox" }
             ]
           },
-          { "id": "1",
-            "name": "Category name 2",
-            "fields": [] }
-      ],
+          { "id": "1",  "name": "Category name 2", "fields": [] }
+      ]
   }
 }}
 <div data-region="list-page" id="syllabus-management">
@@ -78,6 +75,7 @@
                         <th scope="col" class="col-3">{{#str}} shortname, local_syllabus {{/str}}</th>
                         <th scope="col" class="col-2">{{#str}} origin, local_syllabus {{/str}}</th>
                         <th scope="col" class="col-2">{{#str}} type, local_syllabus {{/str}}</th>
+                        <th scope="col" class="col-2">{{#str}} displayclass, local_syllabus {{/str}}</th>
                         <th scope="col" class="col-2">{{#str}} action, local_syllabus {{/str}}</th>
                     </tr>
                     </thead>
@@ -88,6 +86,7 @@
                             <td class="col-3">{{{shortname}}}</td>
                             <td class="col-2">{{{origin}}}</td>
                             <td class="col-2">{{{type}}}</td>
+                            <td class="col-2">{{{displayclass}}}</td>
                             <td class="col-2">
                                 <a href="{{editfieldurl}}" data-role="editfield">{{#pix}}
                                     t/edit, core, {{#str}} edit, moodle {{/str}} {{/pix}}</a>

@@ -28,6 +28,13 @@ use core\persistent;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class syllabus_location
+ *
+ * @package    local_syllabus
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class syllabus_location extends persistent {
 
     /** The table name. */
@@ -37,8 +44,6 @@ class syllabus_location extends persistent {
      * Location type: none set (do not display the field)
      */
     const NONE = 'none';
-
-
     /**
      * Location type: title area
      */
@@ -95,7 +100,7 @@ class syllabus_location extends persistent {
     /**
      * Get all fields for this location (none is dealt differently)
      *
-     * @param $location
+     * @param string $location
      * @return array of syllabus location
      * @throws \coding_exception
      * @throws \dml_exception

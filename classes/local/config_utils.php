@@ -15,31 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Syllabus display settings form
+ * Local Syllabus utilities
  *
  * @package   local_syllabus
  * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_syllabus\form;
+namespace local_syllabus\local;
+
+use core_customfield\category;
+use core_customfield\category_controller;
+use core_customfield\field;
+use local_syllabus\external\course_syllabus_exporter;
+use local_syllabus\syllabus_field;
+use moodle_url;
+use navigation_node;
+use ReflectionClass;
+
 defined('MOODLE_INTERNAL') || die;
 
 /**
- * Class syllabus_management_form
+ * Syllabus config utilities
  *
  * @package   local_syllabus
  * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class syllabus_management_form extends \moodleform {
+class config_utils {
 
-    /**
-     * Definition of the form (empty for now)
-     * @throws \coding_exception
-     */
-    protected function definition() {
-        $mform = $this->_form;
-        $mform->addElement('header', 'general', get_string('generalsettings', 'local_syllabus'));
-    }
 }

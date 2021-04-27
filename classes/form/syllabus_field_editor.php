@@ -38,9 +38,19 @@ defined('MOODLE_INTERNAL') || die;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class syllabus_field_editor extends persistent {
+    /**
+     * @var string persistent class for this persistent
+     */
     protected static $persistentclass = \local_syllabus\syllabus_field::class;
+    /**
+     * @var string[] Fields to remove in the form
+     */
     protected static $fieldstoremove = array('id', 'submitbutton');
-    protected static $foreignfields = array('icon', 'labells', 'displayclass', 'displaylabel', 'submitbutton', 'returnurl');
+    /**
+     * @var string[] Fields to remove when submitting the form to persistent
+     */
+    protected static $foreignfields = array('icon', 'labells', 'displayclass', 'displaylabel', 'hideifempty',
+        'submitbutton', 'returnurl');
 
     /**
      * Add further settings to each field.
@@ -49,7 +59,7 @@ class syllabus_field_editor extends persistent {
      */
     protected function definition() {
         $mform = $this->_form;
-        $returnurl = empty($this->_customdata['returnurl'])? null: $this->_customdata['returnurl'];
+        $returnurl = empty($this->_customdata['returnurl']) ? null : $this->_customdata['returnurl'];
 
         if ($returnurl) {
             $mform->addElement('hidden', 'returnurl', $returnurl);
@@ -98,6 +108,12 @@ class syllabus_field_editor extends persistent {
         $mform->setType('displaylabel', PARAM_BOOL);
         $mform->setDefault('displaylabel', true);
 
+        // Should we display if empty ?
+        $mform->addElement('advcheckbox',
+            'hideifempty', get_string('hideifempty', 'local_syllabus'));
+        $mform->setType('hideifempty', PARAM_BOOL);
+        $mform->setDefault('hideifempty', false); // False by default as not present.
+
         // Label language string.
         $mform->addElement('text',
             'labells',
@@ -128,11 +144,28 @@ class syllabus_field_editor extends persistent {
         parent::extra_validation($data, $files, $errors);
         if (!empty($data->labells)) {
             $stringm = get_string_manager();
-            list($sname, $module) = explode(',', $data->labells);
-            if (!$stringm->string_exists($sname, $module)) {
-                $errors['labells'] = get_string('stringsnotset', $module);
+            list($smodule, $sname) = explode(',', $data->labells);
+            if (empty($sname)) {
+                $sname = $smodule;
+                $smodule = '';
+            }
+            if (!$stringm->string_exists($sname, $smodule)) {
+                $errors['labells'] = get_string('stringsnotset', $smodule);
             }
         }
         return $errors;
+    }
+
+    /**
+     * Filter data so it can be added to the data field of the syllabus_field data
+     * (once json encoded)
+     * @param object $data
+     * @return object
+     */
+    public static function filter_persistent_additional_data($data) {
+        $additionaldatafields = array_fill_keys([
+            'icon', 'labells', 'displayclass', 'displaylabel', 'hideifempty',
+        ], true);
+        return (object) array_intersect_key((array) $data, $additionaldatafields);
     }
 }

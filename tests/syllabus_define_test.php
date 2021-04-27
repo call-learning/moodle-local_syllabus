@@ -29,10 +29,10 @@ defined('MOODLE_INTERNAL') || die();
  * The syllabus test class.
  *
  * @package    local_syllabus
- * @copyright  2020 Your Name <you@example.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright   2020 CALL Learning <contact@call-learning.fr>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_syllabus_syllabus_testcase extends advanced_testcase {
+class local_syllabus_define_testcase extends advanced_testcase {
 
     /**
      * Custom field definition
@@ -44,9 +44,8 @@ class local_syllabus_syllabus_testcase extends advanced_testcase {
     public function test_define_custom_field() {
         $this->resetAfterTest();
         $generator = $this->getDataGenerator();
-        $syllabuscategoryname = get_config('local_syllabus', 'syllabuscategoryname');
         // Create a couple of custom fields definitions.
-        $catid = $generator->create_custom_field_category(['name' => '$syllabuscategoryname'])->get('id');
+        $catid = $generator->create_custom_field_category(['name' => 'syllabuscategory'])->get('id');
         $customfield = $generator->create_custom_field(
             ['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1']
         );
@@ -94,6 +93,10 @@ class local_syllabus_syllabus_testcase extends advanced_testcase {
                     break;
             }
         }
+
+    }
+
+    public function test_update_syllabus_fields() {
 
     }
 

@@ -27,13 +27,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Nothing for now
- */
-function local_syllabus_enable_disable_plugin_callback() {
-    // Nothing for now.
-}
-
-/**
  * Change syllabus field
  *
  * @throws \core\invalid_persistent_exception

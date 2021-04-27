@@ -36,7 +36,9 @@ use templatable;
 /**
  * Class dlist: display this fields as a list of values
  *
- * @package local_syllabus\local\syllabus_display
+ * @package    local_syllabus
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class dlist extends base {
     /**

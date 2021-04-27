@@ -1,5 +1,7 @@
 # Syllabus #
 
+![buildstatus](https://github.com/call-learning/moodle-local_syllabus/actions/workflows/main.yml/badge.svg)
+
 A Syllabus page for course. This will allow to display a syllabus page per course
 using a couple of predefined zones in which we will display the information.
 

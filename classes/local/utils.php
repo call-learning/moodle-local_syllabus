@@ -27,6 +27,7 @@ namespace local_syllabus\local;
 use core_customfield\category;
 use core_customfield\category_controller;
 use core_customfield\field;
+use local_syllabus\external\course_syllabus_exporter;
 use local_syllabus\syllabus_field;
 use moodle_url;
 use navigation_node;
@@ -35,7 +36,7 @@ use ReflectionClass;
 defined('MOODLE_INTERNAL') || die;
 
 /**
- * Theme utilities.
+ * Syllabus utilities
  *
  * @package   local_syllabus
  * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
@@ -60,27 +61,14 @@ class utils {
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-
-    /**
-     * @param string $configtext
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     */
     public static function create_customfields_fromdef($configtext = "") {
         if (!$configtext) {
             $configtext = get_config('local_syllabus', 'customfielddef');
         }
-        $syllabuscategoryname = get_config('local_syllabus', 'syllabuscategoryname');
         // Still no value ?
         if ($configtext) {
             $allfieldsdefs = static::parse_customfield_def($configtext);
             foreach ($allfieldsdefs as $field) {
-                if ($field->catname != $syllabuscategoryname) {
-                    debugging('create_customfields_fromdef: The category name of the field "' . $field->name . '"" should
-                    be "' . $syllabuscategoryname . '"', DEBUG_NORMAL);
-                    continue;
-                }
                 $category = category::get_record(array('name' => $field->catname, 'component' => 'core_course'));
                 if (!$category) {
                     // Create it.
@@ -125,6 +113,7 @@ class utils {
     /**
      * Retrieve customfield definition from text
      *
+     * @param string $configtext
      * @return array
      * @throws \dml_exception
      */
@@ -244,7 +233,7 @@ class utils {
      * Replace navigation nodes so to get them onto the syllabus page
      * instead of the course view page.
      *
-     * @param $coursesnode
+     * @param navigation_node $coursesnode
      * @throws \coding_exception
      * @throws \moodle_exception
      */
@@ -264,7 +253,7 @@ class utils {
     /**
      * Used to get the Syllabus URL
      *
-     * @param $params
+     * @param array $params
      * @return moodle_url
      * @throws \moodle_exception
      */
@@ -272,4 +261,31 @@ class utils {
         return new moodle_url('/local/syllabus/view.php', $params);
     }
 
+
+    /**
+     * Get class for exporting course.
+     *
+     * This can be globally overridden by the $CFG->syllabus_course_exporterclass value
+     * @return string
+     */
+    public static function get_course_syllabus_exporter_class() {
+        global $CFG;
+        $exportclass = course_syllabus_exporter::class;
+        if (!empty($CFG->syllabus_course_exporterclass) && class_exists($CFG->syllabus_course_exporterclass)) {
+            $exportclass = $CFG->syllabus_course_exporterclass;
+        }
+        return $exportclass;
+    }
+
+    /**
+     * Retrieve all course field types
+     *
+     * @return array|array[]
+     */
+    public static function get_all_native_course_fields() {
+        $exporterclass = self::get_course_syllabus_exporter_class();
+        return array_merge(
+            $exporterclass::define_other_properties(),
+            $exporterclass::define_properties());
+    }
 }

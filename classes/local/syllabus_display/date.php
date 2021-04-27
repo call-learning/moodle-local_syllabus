@@ -35,7 +35,9 @@ use templatable;
 /**
  * Class date : display this field as an image
  *
- * @package local_syllabus\local\syllabus_display
+ * @package    local_syllabus
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class date extends base {
     /**
@@ -57,10 +59,15 @@ class date extends base {
     /**
      * Can display field ?
      *
+     * @param stdClass $courserawvals array with all fields values for this course in a raw format
+     * This allows to combine values for display if needed.
+     * @param stdClass $exportedvalue the value that is exported. Checked for emptiness
+     *
      * @return bool
      */
-    protected function should_display_field($courserawvals) {
+    protected function should_display_field($courserawvals, $exportedvalue) {
+        $shoudldisplay = parent::should_display_field($courserawvals, $exportedvalue);
         $fielddataid = $this->fieldspec->get('iddata');
-        return !empty($courserawvals->$fielddataid);
+        return $shoudldisplay  && !empty($courserawvals->$fielddataid);
     }
 }

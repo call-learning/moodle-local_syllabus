@@ -25,6 +25,7 @@
 namespace local_syllabus\external;
 defined('MOODLE_INTERNAL') || die();
 
+use context;
 use core_course\external\course_summary_exporter;
 use moodle_url;
 use renderer_base;
@@ -47,6 +48,13 @@ class course_syllabus_exporter extends course_summary_exporter {
         parent::__construct($data, ['context' => \context_course::instance($data->id)]);
     }
 
+    /**
+     * Get additional values
+     *
+     * @param renderer_base $output
+     * @return array
+     * @throws \moodle_exception
+     */
     protected function get_other_values(renderer_base $output) {
         $courseimage = self::get_course_image($this->data);
         if (!$courseimage) {
@@ -65,11 +73,20 @@ class course_syllabus_exporter extends course_summary_exporter {
         return array_merge($courseactions, $otherfields);
     }
 
+    /**
+     * Get course actions (additional field)
+     *
+     * @param context $context
+     * @param int $courseid
+     * @return array
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     */
     public static function get_course_actions($context, $courseid) {
         $isenrolled = is_enrolled($context);
         $action = \html_writer::start_div('syllabus-action');
+        $viewurl = (new moodle_url('/course/view.php', array('id' => $courseid)))->out(false);
         if ($isenrolled || has_capability('moodle/course:view', $context)) {
-            $viewurl = (new moodle_url('/course/view.php', array('id' => $courseid)))->out(false);
             $action .= \html_writer::link($viewurl, get_string('view'),
                 array('class' => 'btn btn-primary'));
         } else {
@@ -102,6 +119,11 @@ class course_syllabus_exporter extends course_summary_exporter {
         return array('action' => $action, 'viewurl' => $viewurl);
     }
 
+    /**
+     * Define exported properties
+     *
+     * @return array[]
+     */
     public static function define_properties() {
         return array(
             'id' => array(
@@ -144,6 +166,11 @@ class course_syllabus_exporter extends course_summary_exporter {
         ];
     }
 
+    /**
+     * Define additional properties
+     *
+     * @return array[]
+     */
     public static function define_other_properties() {
         return array(
             'fullnamehtml' => array(

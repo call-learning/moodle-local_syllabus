@@ -25,6 +25,7 @@
 namespace local_syllabus\output;
 defined('MOODLE_INTERNAL') || die();
 
+use local_syllabus\local\field_origin\base as field_origin_base;
 use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
 use moodle_url;
@@ -48,10 +49,9 @@ class field_location_management implements renderable, templatable {
      * @param \renderer_base $output
      * @return array|object|\stdClass
      * @throws \coding_exception
-     * @throws \dml_exception
+     * @throws \dml_exception|\moodle_exception
      */
     public function export_for_template(\renderer_base $output) {
-        global $DB;
         $data = new \stdClass();
         $data->locations = array();
         $sm = get_string_manager();
@@ -74,17 +74,29 @@ class field_location_management implements renderable, templatable {
         return $data;
     }
 
+    /**
+     * Create field data from a field definition
+     *
+     * @param syllabus_field $field
+     * @return array
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     */
     protected function create_field_data($field) {
         global $CFG;
         global $PAGE;
+        $fieldorigin = field_origin_base::build($field);
+        $displayclass = explode("\\", $field->get_display_class());
+        $displayclass = end($displayclass);
         $fieldarray = [];
         $fieldid = $field->get('id');
-        $fieldname = $field->get_formatted_name();
-        $fieldarray['type'] = $field->get_type();
-        $fieldarray['origin'] = $field->get_origin_displayname();
+        $fieldname = $fieldorigin->get_formatted_name();
+        $fieldarray['type'] = $fieldorigin->get_type();
+        $fieldarray['origin'] = $fieldorigin->get_origin_displayname();
         $fieldarray['id'] = $fieldid;
         $fieldarray['name'] = $fieldname;
         $fieldarray['shortname'] = $field->get_shortname();
+        $fieldarray['displayclass'] = $displayclass;
         $fieldarray['movetitle'] = get_string('movefield', 'local_syllabus', $fieldname);
         $params = [];
         $pageurl = $PAGE->url; // Beware : empty($PAGE->url) is always false.
@@ -92,7 +104,7 @@ class field_location_management implements renderable, templatable {
             $params = $PAGE->url->params();
         }
         $params['id'] = $fieldid;
-        $editurl =  new moodle_url($CFG->wwwroot . '/local/syllabus/editfield.php', $params);
+        $editurl = new moodle_url($CFG->wwwroot . '/local/syllabus/editfield.php', $params);
         $fieldarray['editfieldurl'] = $editurl->out(false);
         return $fieldarray;
     }

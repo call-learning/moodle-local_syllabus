@@ -24,8 +24,17 @@
 
 namespace local_syllabus\local;
 
-
+/**
+ * Class fa_icons
+ *
+ * @package   local_syllabus
+ * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class fa_icons {
+    /**
+     * List of possible FA icon
+     */
     const FA_LIST = array(
         'fa-glass',
         'fa-music',

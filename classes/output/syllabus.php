@@ -47,7 +47,7 @@ class syllabus implements renderable, templatable {
     /**
      * Syllabus Display constructor.
      *
-     * @param $course
+     * @param int $courseid
      */
     public function __construct($courseid) {
         $this->courseid = $courseid;
@@ -58,6 +58,9 @@ class syllabus implements renderable, templatable {
      *
      * @param \renderer_base $output
      * @return array|object|\stdClass
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function export_for_template(\renderer_base $output) {
         $data = new \stdClass();

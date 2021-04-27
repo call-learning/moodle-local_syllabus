@@ -18,7 +18,6 @@
  * Event observer to synchronise syllabus fields and customfields
  *
  * @package     local_syllabus
- * @category    events
  * @copyright   2020 CALL Learning <contact@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

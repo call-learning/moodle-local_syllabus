@@ -1,13 +1,14 @@
 /* Default stylesheet for Syllabus, will be overridden if necessary in theme */
-.syllabus-pres .syllabus-content .label {
-}
 .syllabus-action fieldset.clearfix {
     margin-left: auto;
     border-bottom: initial;
 }
-.syllabus-action .mform>.form-group {
+
+.syllabus-action .mform > .form-group {
     margin-left: auto;
 }
+/* stylelint-disable declaration-no-important */
 .syllabus-action .femptylabel .col-form-label {
     display: none !important;
 }
+/* stylelint-enable  declaration-no-important */

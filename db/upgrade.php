@@ -34,10 +34,6 @@ require_once(__DIR__.'/upgradelib.php');
  * @return bool
  */
 function xmldb_local_syllabus_upgrade($oldversion) {
-    global $DB;
-
-    $dbman = $DB->get_manager();
-
     // For further information please read the Upgrade API documentation:
     // https://docs.moodle.org/dev/Upgrade_API
     //

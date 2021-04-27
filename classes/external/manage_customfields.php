@@ -40,8 +40,9 @@ require_once("$CFG->libdir/externallib.php");
 /**
  * Course custom field manager so to get and set their location on the syllabus page
  *
- * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_syllabus
+ * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class manage_customfields extends external_api {
 
@@ -64,11 +65,10 @@ class manage_customfields extends external_api {
     /**
      * Get the field location on the syllabus page
      *
-     * @param int $fieldid
+     * @param string $fieldid
      * @return mixed
-     * @throws \coding_exception
-     * @throws \invalid_parameter_exception
      * @throws \moodle_exception
+     * @throws invalid_parameter_exception
      */
     public static function get_field_location(string $fieldid) {
         // Validate parameters.
@@ -133,11 +133,13 @@ class manage_customfields extends external_api {
     /**
      * Move field to a given location on the syllabus page
      *
-     * @param int $fieldid
+     * @param string $fieldid
+     * @param string $location
+     * @param int $beforeid
      * @return mixed
      * @throws \coding_exception
-     * @throws \invalid_parameter_exception
      * @throws \moodle_exception
+     * @throws invalid_parameter_exception
      */
     public static function move_field_to_location(string $fieldid, string $location, int $beforeid = 0) {
         // Validate parameters.
@@ -185,10 +187,10 @@ class manage_customfields extends external_api {
     /**
      * Check if the field id exists in the course field table
      *
-     * @param $fieldid
+     * @param int $fieldid
      * @throws \moodle_exception
      */
-    private static function validate_field_id($fieldid) {
+    private static function validate_field_id(int $fieldid) {
         if (!syllabus_field::record_exists($fieldid)) {
             throw new invalid_parameter_exception(
                 'Syllabus field ID ' . $fieldid . ' does not exist.');

@@ -37,7 +37,9 @@ use templatable;
 /**
  * Class base : display a field
  *
- * @package local_syllabus\local\syllabus_display
+ * @package    local_syllabus
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class base implements renderable, templatable {
     /**
@@ -58,7 +60,9 @@ class base implements renderable, templatable {
     /**
      * Base constructor.
      *
-     * @param $fieldspec
+     * @param syllabus_field $fieldspec
+     * @param int $courseid
+     * @throws coding_exception
      */
     public function __construct(syllabus_field $fieldspec, $courseid) {
         $this->fieldspec = $fieldspec;
@@ -71,13 +75,16 @@ class base implements renderable, templatable {
      *
      * @param renderer_base $output
      * @return stdClass|void
+     * @throws coding_exception
+     * @throws moodle_exception
      */
     public function export_for_template(renderer_base $output) {
         $courserawvalues = syllabus_field::get_raw_values($this->courseid, $output);
         $data = new stdClass();
         $data->label = '';
         $data->html = '';
-        $data->display = $this->should_display_field($courserawvalues);
+        $exportedvalue = $this->export_raw_value($courserawvalues, $output);
+        $data->display = $this->should_display_field($courserawvalues, $exportedvalue);
         $data->shortname = $this->fieldspec->get('iddata');
         if ($data->display) {
             $data->display = true;
@@ -86,7 +93,7 @@ class base implements renderable, templatable {
                 $data->icon = $icon;
             }
             $data->label = $this->get_label($output);
-            $data->html = $this->export_raw_value($courserawvalues, $output);
+            $data->html = $exportedvalue;
         }
         return $data;
     }
@@ -96,11 +103,19 @@ class base implements renderable, templatable {
      *
      * @param stdClass $courserawvals array with all fields values for this course in a raw format
      * This allows to combine values for display if needed.
+     * @param stdClass $exportedvalue the value that is exported. Checked for emptiness
      *
      * @return bool
      */
-    protected function should_display_field($courserawvals) {
-        return !empty($this->fieldspec);
+    protected function should_display_field($courserawvals, $exportedvalue) {
+        $shoulddisplay = !empty($this->fieldspec);
+        if (!empty($this->additionaldata->hideifempty)) {
+            global $PAGE;
+            if (empty(trim($exportedvalue))) {
+                $shoulddisplay = false;
+            }
+        }
+        return $shoulddisplay;
     }
 
     /**
@@ -111,7 +126,7 @@ class base implements renderable, templatable {
      * @throws coding_exception
      * @throws moodle_exception
      */
-    protected function get_icon(renderer_base $output) {
+    public function get_icon(renderer_base $output) {
         if ($this->additionaldata && !empty($this->additionaldata->icon)) {
             return $this->additionaldata->icon;
         }
@@ -126,7 +141,7 @@ class base implements renderable, templatable {
      * @throws coding_exception
      * @throws moodle_exception
      */
-    protected function get_label(renderer_base $output) {
+    public function get_label(renderer_base $output) {
         $displaylabel = empty($this->additionaldata) || !isset($this->additionaldata->displaylabel)
             || $this->additionaldata->displaylabel;
         // If label is defined and set to true by default.
@@ -135,9 +150,13 @@ class base implements renderable, templatable {
         }
         if ($this->additionaldata && !empty($this->additionaldata->labells)) {
             $stringm = get_string_manager();
-            list($sname, $module) = explode(',', $this->additionaldata->labells);
-            if (!$stringm->string_exists($sname, $module)) {
-                return get_string($sname, $module, $this->fieldspec->get_formatted_name());
+            list($smodule, $sname) = explode(',', $this->additionaldata->labells);
+            if (empty($sname)) {
+                $sname = $smodule;
+                $smodule = '';
+            }
+            if ($stringm->string_exists($sname, $smodule)) {
+                return get_string($sname, $smodule, $this->fieldspec->get_formatted_name());
             }
         }
         return $this->fieldspec->get_formatted_name();

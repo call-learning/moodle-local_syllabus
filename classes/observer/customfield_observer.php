@@ -24,7 +24,7 @@
 
 namespace local_syllabus\observer;
 
-use local_syllabus\local\utils;
+use local_syllabus\local\field_origin\custom_field;
 use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
 
@@ -35,35 +35,32 @@ defined('MOODLE_INTERNAL') || die();
  *
  * Keep syllabus field in sync with custom fields.
  *
- * @package local_syllabus\observer
+ * @package    local_syllabus
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class customfield_observer {
     /**
      * Create related field definition in syllabus
      *
-     * @param $event
+     * @param object $event
      * @throws \coding_exception
      * @throws \core\invalid_persistent_exception
      */
     public static function customfield_created($event) {
-        $fielddef = [
-            'origin' => syllabus_field::ORIGIN_CUSTOM_FIELD,
-            'iddata' => $event->objectid
-        ];
+        $fielddef = custom_field::get_definition($event->objectid);
         syllabus_field::create_from_def($fielddef);
     }
 
     /**
      * Delete related location in syllabus.
      *
-     * @param $event
+     * @param object $event
      * @throws \coding_exception
      */
     public static function customfield_deleted($event) {
         $field = syllabus_field::get_record(
-            array(
-                'origin' => syllabus_field::ORIGIN_CUSTOM_FIELD,
-                'iddata' => $event->objectid)
+            custom_field::get_definition($event->objectid)
         );
         if ($field) {
             $orphanlocations = syllabus_location::get_records(array('fieldid' => $field->get('id')));

@@ -35,24 +35,34 @@ admin_externalpage_setup('syllabus_manage_fields');
 $resetallposition = optional_param('resetallposition', false, PARAM_BOOL);
 $returnurl = optional_param('returnurl', null, PARAM_URL);
 $url = new moodle_url(qualified_me());
-if ($returnurl ) {
+if ($returnurl) {
     $url->param('returnurl', $returnurl);
 }
 
-if ($resetallposition && confirm_sesskey()) {
-    global $DB;
-    $DB->delete_records(\local_syllabus\syllabus_location::TABLE);
-}
 $PAGE->set_url($url);
 
+$additionalbuttons = '';
 if ($returnurl) {
     /* @var core_renderer $OUTPUT */
     $returnbutton = $OUTPUT->single_button(
         new moodle_url($returnurl),
         get_string('back')
     );
-    $PAGE->set_button($PAGE->button . $returnbutton);
+    $additionalbuttons .= $returnbutton;
 }
+
+$reset = $OUTPUT->action_link(
+    new moodle_url($PAGE->url, [
+        'resetallposition' => true,
+        'sesskey' => sesskey(),
+    ]),
+    get_string('resetallpositions', 'local_syllabus'),
+    new confirm_action(get_string('resetallpositions:confirmation', 'local_syllabus')),
+    array('class' => 'btn btn-danger mb-auto mt-0 ml-2')
+);
+$additionalbuttons .= $reset;
+$PAGE->set_button($PAGE->button . $additionalbuttons);
+
 $output = $PAGE->get_renderer('local_syllabus');
 $listmanagement = new field_location_management();
 $formparams = [];
@@ -65,20 +75,16 @@ if ($data = $form->get_data()) {
 }
 
 echo $OUTPUT->header();
+if ($resetallposition && confirm_sesskey()) {
+    global $DB;
+    $DB->delete_records(\local_syllabus\syllabus_location::TABLE);
+    echo $OUTPUT->notification(get_string('positions:deleted', 'local_syllabus'));
+}
 echo $OUTPUT->heading(new lang_string('syllabus:management', 'local_syllabus'));
 echo $form->render();
 echo $OUTPUT->heading(get_string('syllabuspositions', 'local_syllabus'));
 echo $OUTPUT->box_start('float-right');
 
-echo $OUTPUT->action_link(
-    new moodle_url($PAGE->url, [
-        'resetallposition' => true,
-        'sesskey' => sesskey(),
-    ]),
-    get_string('resetallpositions', 'local_syllabus'),
-    new confirm_action(get_string('resetallpositions:confirmation', 'local_syllabus')),
-    array('class' => 'btn btn-primary')
-);
 echo $OUTPUT->box_end();
 echo $output->render($listmanagement);
 echo $OUTPUT->footer();

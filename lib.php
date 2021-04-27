@@ -29,10 +29,12 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Extends settings for course navigation
  *
- * @param settings_navigation $nav
- * @param context $context
+ * @param navigation_node $parentnode
+ * @param stdClass $course
+ * @param context_course $context $context
  * @return settings_navigation
  * @throws coding_exception
+ * @throws moodle_exception
  */
 function local_syllabus_extend_navigation_course(navigation_node $parentnode, stdClass $course, context_course $context) {
     global $PAGE;
@@ -41,7 +43,7 @@ function local_syllabus_extend_navigation_course(navigation_node $parentnode, st
             get_string('syllabus:managefields', 'local_syllabus'),
             new moodle_url(
                 '/local/syllabus/manage.php',
-                array('returnurl'=> $PAGE->url->out())
+                array('returnurl' => $PAGE->url->out())
             ),
             navigation_node::TYPE_SETTING,
             null,

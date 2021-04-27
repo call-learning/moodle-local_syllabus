@@ -43,13 +43,6 @@ if ($hassiteconfig) {
 
     $customfielddef->set_updatedcallback('local_syllabus_customfielddef_change_plugin_callback');
     $settingspage->add($customfielddef);
-    $settingspage->add(
-        new admin_setting_configtext('local_syllabus/syllabuscategoryname',
-            get_string('syllabus:syllabuscategoryname', 'local_syllabus'),
-            get_string('syllabus:syllabuscategoryname:desc', 'local_syllabus'),
-            'Syllabus Fields')
-    );
-    $settings->add('syllabus', $settingspage);
 
     $settings->add('syllabus',
         new admin_externalpage('syllabus_manage_fields',

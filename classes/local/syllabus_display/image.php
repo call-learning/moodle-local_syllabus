@@ -37,7 +37,9 @@ use templatable;
 /**
  * Class image : display this field as an image
  *
- * @package local_syllabus\local\syllabus_display
+ * @package    local_syllabus
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class image extends base {
     /**
@@ -65,7 +67,7 @@ class image extends base {
      * @param renderer_base $output
      * @return lang_string|string
      */
-    protected function get_label(renderer_base $output) {
+    public function get_label(renderer_base $output) {
         return '';
     }
 }

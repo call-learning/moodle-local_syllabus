@@ -35,19 +35,18 @@
   Example context (json):
   {
       "courserawfields": {
-        <exported course raw fields> (see course_syllabus_exporter)
+        "fullnamehtml": "content"
       },
-      "head": [
+      "head": {
             "fields": [
-                { "label" :"label", "iconhtml": iconhtml, "html": "contenthtml"},
+                { "label" :"label", "iconhtml": "iconhtml", "html": "contenthtml"}
             ]
-          }],
-      "side": [
+          },
+      "side": {
             "fields": [
-                { "label" :"label", "icon": iconhtml, "html": "contenthtml"},
+                { "label" :"label", "icon": "iconhtml", "html": "contenthtml"}
             ]
-          }],
-      ]
+          }
   }
 }}
 <section class="syllabus-pres" id="course-{{#courseraw}}{{id}}{{/courseraw}}">

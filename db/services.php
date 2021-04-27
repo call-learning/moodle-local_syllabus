@@ -17,7 +17,6 @@
  * Resource Library functions and service definitions.
  *
  * @package     local_syllabus
- * @category    webservices
  * @copyright   2020 CALL Learning <contact@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
