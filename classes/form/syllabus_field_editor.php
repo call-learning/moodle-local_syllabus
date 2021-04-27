@@ -122,6 +122,7 @@ class syllabus_field_editor extends persistent {
         );
         $mform->setType('labells', PARAM_RAW);
         $mform->setDefault('labells', '');
+        $mform->addHelpButton('labells', 'labells', 'local_syllabus');
         // ID hidden field.
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);

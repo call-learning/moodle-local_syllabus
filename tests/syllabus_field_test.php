@@ -224,7 +224,7 @@ class local_syllabus_field_testcase extends advanced_testcase {
         $fielddata->save();
         $rawvalues = syllabus_field::get_raw_values($course->id, $PAGE->get_renderer('core'));
         $this->assertEquals('<h3>Test course 1</h3>', $rawvalues->fullnamehtml);
-        $this->assertEquals('<div class="syllabus-action"><span>You cannot enrol yourself in this course.</span></div>',
+        $this->assertContains('not enrol yourself in this course',
             $rawvalues->action);
         $this->assertEquals('Test course 1',
             $rawvalues->fullname);

@@ -23,6 +23,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_syllabus\local\config_utils;
+
 define('CLI_SCRIPT', true);
 require(__DIR__ . '/../../../config.php');
 global $CFG;
@@ -41,14 +43,14 @@ list($options, $unrecognized) = cli_get_params(
 );
 
 $help = "
-php setup_coursecustomfields -f <filedef>
+php setup_syllabus -f <filedef>
 
-Will setup all the course custom fields according to a file provivided as field definition. The format is (one per line):
- name|shortname|type|description|sortorder|categoryname|configdata(json)
+Setup syllabus fields and positions from a csv definition
 
 Example:
- Type de formation|formationtype|select||0|Champs Syllabus|\"required\":\"0\"|\"uniquevalues\":\"0\"|\"locked\":\"0\"";
-
+\"origin\",\"location\",\"shortname\",\"contextinfo\",\"sortorder\"
+\"custom_field\",\"title\",\"trainingtype\",\"Syllabus Fields\",1\";
+";
 if ($unrecognized) {
     $unrecognized = implode("\n\t", $unrecognized);
     cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
@@ -64,4 +66,4 @@ if (!file_exists($option['configtext'])) {
     die();
 }
 
-\local_syllabus\local\utils::create_customfields_fromdef(file_get_contents($option['configtext']));
+config_utils::import_syllabus(file_get_contents($option['configtext']));

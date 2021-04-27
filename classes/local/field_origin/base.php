@@ -24,6 +24,7 @@
 
 namespace local_syllabus\local\field_origin;
 
+use core_customfield\field_controller;
 use local_syllabus\syllabus_field;
 
 defined('MOODLE_INTERNAL') || die;
@@ -111,6 +112,18 @@ abstract class base {
      */
     abstract public function get_origin_displayname();
 
+
+    /**
+     * Get field origin as a short string
+     * @return string
+     */
+    public function get_origin_shortname() {
+        $classname = get_class($this);
+        $classbasename = explode("\\", $classname);
+        $classbasename = end($classbasename);
+        return $classbasename;
+    }
+
     /**
      * Build relevant customfield
      *
@@ -128,5 +141,18 @@ abstract class base {
                 return new custom_field($syllabusfield);
         }
         return null;
+    }
+
+    /**
+     * Get the field context
+     *
+     * (mostly parent category name for custom field)
+     *
+     * @return mixed|string|null
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     */
+    public function get_contextinfo() {
+        return '';
     }
 }

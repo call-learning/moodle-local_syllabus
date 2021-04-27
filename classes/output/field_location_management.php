@@ -56,11 +56,11 @@ class field_location_management implements renderable, templatable {
         $data->locations = array();
         $sm = get_string_manager();
         foreach (syllabus_location::LOCATION_TYPES as $location) {
-            $categoryname = $location;
+            $locationfullname = $location;
             if ($sm->string_exists('location:' . $location, 'local_syllabus')) {
-                $categoryname = get_string('location:' . $location, 'local_syllabus');
+                $locationfullname = get_string('location:' . $location, 'local_syllabus');
             }
-            $locationobject = ['id' => $location, 'name' => $categoryname, 'fields' => []];
+            $locationobject = ['id' => $location, 'name' => $locationfullname, 'fields' => []];
             $allfields = syllabus_location::get_all_fields_by_location($location);
             if ($allfields) {
                 foreach ($allfields as $fl) {

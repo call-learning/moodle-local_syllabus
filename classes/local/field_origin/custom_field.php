@@ -124,4 +124,17 @@ class custom_field extends base {
     public function get_origin_displayname() {
         return get_string('origin:customfield', 'local_syllabus');
     }
+
+    /**
+     * Get the parent category of this field
+     *
+     * @return mixed|string|null
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     */
+    public function get_contextinfo() {
+        $cfield = field_controller::create($this->syllabusfield->get('iddata'));
+        return $cfield->get_category()->get('name');
+    }
+
 }

@@ -24,6 +24,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_syllabus\local\config_utils;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -36,6 +38,6 @@ defined('MOODLE_INTERNAL') || die();
  */
 function local_syllabus_customfielddef_change_plugin_callback() {
     $newdef = get_config('local_syllabus', 'customfielddef');
-    \local_syllabus\local\utils::create_customfields_fromdef($newdef);
+    config_utils::import_syllabus($newdef);
     \local_syllabus\local\utils::update_syllabus_fields();
 }

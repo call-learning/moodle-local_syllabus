@@ -1,2 +1,0 @@
-Training Type|trainingtype|select|"<p>Type of training</p>"|0|Syllabus Fields|{"required":"0","uniquevalues":"0","options":"OnSite\r\nDistance\r\nBlended","defaultvalue":"OnSite","locked":"0","visibility":"2"}
-Duration|duration|text|"<p>Duration in hours</p>"|1|Syllabus Fields|{"required":"0","uniquevalues":"0","defaultvalue":"","displaysize":3,"maxlength":1333,"ispassword":"0","link":"","locked":"0","visibility":"2"}

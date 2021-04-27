@@ -23,6 +23,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_syllabus\local\config_utils;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -33,6 +35,32 @@ defined('MOODLE_INTERNAL') || die();
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_syllabus_define_testcase extends advanced_testcase {
+    /**
+     * @var array $customfields
+     */
+    protected $customfields = [];
+
+    /**
+     * Setup a couple of customfields
+     */
+    public function setUp(): void {
+        parent::setUp();
+        $this->resetAfterTest();
+        $generator = $this->getDataGenerator();
+        // Create a couple of custom fields definitions.
+        $catid = $generator->create_custom_field_category(['name' => 'Syllabus Fields'])->get('id');
+        $catid2 = $generator->create_custom_field_category(['name' => 'Syllabus Fields bis'])->get('id');
+        $this->customfields[] = $generator->create_custom_field(
+            ['categoryid' => $catid, 'type' => 'text', 'shortname' => 'trainingtype', 'name' => 'Training Type']
+        );
+        $this->customfields[] = $generator->create_custom_field(
+            ['categoryid' => $catid, 'type' => 'text', 'shortname' => 'duration', 'name' => 'Duration']
+        );
+        // A third custom field with same name and another category.
+        $this->customfields[] = $generator->create_custom_field(
+            ['categoryid' => $catid2, 'type' => 'text', 'shortname' => 'duration', 'name' => 'Duration 2']
+        );
+    }
 
     /**
      * Custom field definition
@@ -43,16 +71,10 @@ class local_syllabus_define_testcase extends advanced_testcase {
      */
     public function test_define_custom_field() {
         $this->resetAfterTest();
-        $generator = $this->getDataGenerator();
-        // Create a couple of custom fields definitions.
-        $catid = $generator->create_custom_field_category(['name' => 'syllabuscategory'])->get('id');
-        $customfield = $generator->create_custom_field(
-            ['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1']
-        );
         // The call should have been made to the observer and created the relevant field definition.
         $this->assertTrue(\local_syllabus\syllabus_field::record_exists_select(
             "origin=:origin AND iddata=:iddata",
-            array('origin' => 3, 'iddata' => $customfield->get('id'))
+            array('origin' => 3, 'iddata' => $this->customfields[0]->get('id'))
         )
         );
     }
@@ -64,10 +86,10 @@ class local_syllabus_define_testcase extends advanced_testcase {
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function test_create_customfield_from_text() {
+    public function test_syllabus_from_text() {
         $this->resetAfterTest();
-        \local_syllabus\local\utils::create_customfields_fromdef(file_get_contents(
-            __DIR__ . '/fixtures/customfields_defs.txt'
+        config_utils::import_syllabus(file_get_contents(
+            __DIR__ . '/fixtures/syllabus_import.csv'
         ));
         $allcategories = \core_customfield\api::get_categories_with_fields('core_course', 'course', 0);
         $syllabusfields = [];
@@ -84,20 +106,13 @@ class local_syllabus_define_testcase extends advanced_testcase {
                 case 'formationtype':
                     $this->assertEquals('Training Type', $field->get('name'));
                     $this->assertEquals('text', $field->get('type'));
-                    $this->assertEquals('<p>Type of training</p>', $field->get('description'));
                     break;
                 case 'duration':
                     $this->assertEquals('Duration', $field->get('name'));
                     $this->assertEquals('text', $field->get('type'));
-                    $this->assertEquals('<p>Duration in hours</p>', $field->get('description'));
                     break;
             }
         }
 
     }
-
-    public function test_update_syllabus_fields() {
-
-    }
-
 }

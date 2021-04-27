@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
     global $CFG;
-    require_once($CFG->dirroot.'/local/syllabus/locallib.php');
+    require_once($CFG->dirroot . '/local/syllabus/locallib.php');
     $settings = new admin_category('syllabus',
         get_string('pluginname', 'local_syllabus'));
 
@@ -37,13 +37,13 @@ if ($hassiteconfig) {
     $customfielddef = new admin_setting_configtextarea('local_syllabus/customfielddef',
         get_string('syllabus:customfielddef', 'local_syllabus'),
         get_string('syllabus:customfielddef:desc', 'local_syllabus'),
-        'Training Type|trainingtype|select|"<p>Type of training</p>"|0|Syllabus Fields|'
-        . '{"required":"0","uniquevalues":"0","options":"OnSite\r\nDistance\r\nBlended",'
-        . '"defaultvalue":"OnSite","locked":"0","visibility":"2"}');
+        '"origin","location","shortname","contextinfo","sortorder"
+                    "custom_field","title","trainingtype","Syllabus Fields",1');
 
     $customfielddef->set_updatedcallback('local_syllabus_customfielddef_change_plugin_callback');
     $settingspage->add($customfielddef);
 
+    $settings->add('syllabus', $settingspage);
     $settings->add('syllabus',
         new admin_externalpage('syllabus_manage_fields',
             new lang_string('syllabus:managefields', 'local_syllabus'),

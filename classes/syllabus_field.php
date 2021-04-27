@@ -26,8 +26,6 @@ namespace local_syllabus;
 
 use core\persistent;
 use core_course\customfield\course_handler;
-use core_customfield\field;
-use core_customfield\field_controller;
 use local_syllabus\local\field_origin\course_field;
 use local_syllabus\local\field_origin\custom_field;
 use local_syllabus\local\field_origin\tag_field;

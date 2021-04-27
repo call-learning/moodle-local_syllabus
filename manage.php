@@ -41,6 +41,15 @@ if ($returnurl) {
 
 $PAGE->set_url($url);
 
+// Manage syllabus export
+
+$export = optional_param('export', false, PARAM_BOOL);
+$dataformat = optional_param('dataformat', '', PARAM_ALPHA);
+if ($export && !empty($dataformat)) {
+    \local_syllabus\local\config_utils::export_syllabus($dataformat);
+    die();
+}
+
 $additionalbuttons = '';
 if ($returnurl) {
     /* @var core_renderer $OUTPUT */
@@ -75,13 +84,20 @@ if ($data = $form->get_data()) {
 }
 
 echo $OUTPUT->header();
+
+echo $OUTPUT->heading(new lang_string('syllabus:management', 'local_syllabus'));
+echo $form->render();
+sesskey();
+echo $OUTPUT->download_dataformat_selector(
+    get_string('export:syllabus', 'local_syllabus'),
+    $url,
+    'dataformat',
+    ['export' => true]);
 if ($resetallposition && confirm_sesskey()) {
     global $DB;
     $DB->delete_records(\local_syllabus\syllabus_location::TABLE);
     echo $OUTPUT->notification(get_string('positions:deleted', 'local_syllabus'));
 }
-echo $OUTPUT->heading(new lang_string('syllabus:management', 'local_syllabus'));
-echo $form->render();
 echo $OUTPUT->heading(get_string('syllabuspositions', 'local_syllabus'));
 echo $OUTPUT->box_start('float-right');
 
