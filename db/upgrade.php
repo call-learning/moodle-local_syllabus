@@ -25,8 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__.'/upgradelib.php');
-
 /**
  * Execute local_syllabus upgrade from the given old version.
  *
