@@ -78,8 +78,8 @@ class tag_field extends base {
         $value = '';
         $tags = \core_tag_tag::get_item_tags_array('core', 'course', $exportedvalue->id);
         if ($tags) {
-            foreach ($tags as $tag) {
-                $value .= \html_writer::span($tag->name, 'badge badge-primary');
+            foreach ($tags as $tagid => $tagname) {
+                $value .= \html_writer::span($tagname, 'badge badge-primary p-1 m-1');
             }
         }
         return $value;
