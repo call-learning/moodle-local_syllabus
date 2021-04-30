@@ -79,11 +79,12 @@ class config_utils {
      *
      * @param string $configtext can be null, in this case we take its value from
      *  the local_syllabus/customfielddef value
+     * @param string $separator separator string
      * @throws \coding_exception
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public static function import_syllabus($configtext = "") {
+    public static function import_syllabus($configtext = "", $separator = ",") {
         if (!$configtext) {
             $configtext = get_config('local_syllabus', 'customfielddef');
         }
@@ -94,43 +95,53 @@ class config_utils {
             $DB->delete_records(syllabus_field::TABLE);
             $DB->delete_records(syllabus_location::TABLE);
             // Then import.
-            require_once($CFG->libdir . '/csvlib.class.php');
-            $importid = csv_import_reader::get_new_iid('syllabusfielddef');
-            $reader = new csv_import_reader($importid, 'syllabusfielddef');
-            $reader->load_csv_content($configtext, 'utf-8', 'comma');
-            foreach ($reader as $row) {
-                $row = array_intersect_key($row, array_fill_keys(self::COLUMN_FIELDS, true));
-                $category = null;
-                $originalinfodata = $row['shortname']; // Shortname for tag + course field.
-                if ($row['origin'] == 'custom_field') {
-                    if (empty($row['catname'])) {
-                        $categories = category::get_records(array('component' => 'core_course'));
-                        $category = reset($categories); // Get the first category.
-                    } else {
-                        $category = category::get_record(array('name' => $row['catname'], 'component' => 'core_course'));
-                    }
+            $rows = explode("\n", $configtext);
+            if (!empty($rows)) {
+                $headersstring = array_shift($rows);
+                $headers = str_getcsv($headersstring, $separator);
+                foreach ($rows as $rowstring) {
+                    $row = str_getcsv($rowstring, $separator);
+                    // Make sure we have enough columns.
+                    $row = array_replace(array_fill(0, count($headers), ''), $row);
+                    $row = array_combine($headers, $row);
+                    // Make sure we have the right columns.
+                    $row = array_intersect_key($row, array_fill_keys(self::COLUMN_FIELDS, true));
+                    $category = null;
+                    $originalinfodata = $row['shortname']; // Shortname for tag + course field.
+                    if ($row['origin'] == 'custom_field') {
+                        if (empty($row['contextinfo'])) {
+                            $categories = category::get_records(array('component' => 'core_course'));
+                            $category = reset($categories); // Get the first category.
+                        } else {
+                            $category = category::get_record(array('name' => $row['contextinfo'], 'component' => 'core_course'));
+                        }
 
-                    if (empty($category)) {
-                        continue; // Skip.
+                        if (empty($category)) {
+                            continue; // Skip.
+                        }
+                        $cfield = field::get_record(array('shortname' => $row['shortname'], 'categoryid' => $category->get('id')));
+                        if (empty($cfield)) {
+                            continue;
+                        }
+                        $originalinfodata = $cfield->get('id');
                     }
-                    $cfield = field::get_record(array('shortname' => $row['shortname'], 'categoryid' => $category->get('id')));
-                    $originalinfodata = $cfield->get('id');
+                    $location = $row['location'];
+                    $sortorder = intval($row['sortorder']);
+                    $fieldoriginclass = "\\local_syllabus\\local\\field_origin\\{$row['origin']}";
+                    if (class_exists($fieldoriginclass)) {
+                        $syllabusfield = syllabus_field::create_from_def($fieldoriginclass::get_definition($originalinfodata));
+                        if (!empty($row['additionaldata'])) {
+                            $syllabusfield->set('data', json_encode($row['additionaldata']));
+                            $syllabusfield->save();
+                        }
+                        $locationentity = new syllabus_location(0, (object) [
+                            'fieldid' => $syllabusfield->get('id'),
+                            'location' => $location,
+                            'sortorder' => $sortorder
+                        ]);
+                        $locationentity->create();
+                    }
                 }
-                $location = $row['location'];
-                $sortorder = intval($row['sortorder']);
-                $fieldoriginclass = "\\local_syllabus\\local\\field_origin\\{$row['origin']}";
-
-                $syllabusfield = syllabus_field::create_from_def($fieldoriginclass::get_definition($originalinfodata));
-                if (!empty($row['additionaldata'])) {
-                    $syllabusfield->set('data', json_encode($row['additionaldata']));
-                    $syllabusfield->save();
-                }
-                $locationentity = new syllabus_location(0, (object) [
-                    'fieldid' => $syllabusfield->get('id'),
-                    'location' => $location,
-                    'sortorder' => $sortorder
-                ]);
-                $locationentity->create();
             }
             utils::update_syllabus_fields(); // Make sure we update the field definition.
         }

@@ -41,7 +41,7 @@ if ($returnurl) {
 
 $PAGE->set_url($url);
 
-// Manage syllabus export
+// Manage syllabus export.
 
 $export = optional_param('export', false, PARAM_BOOL);
 $dataformat = optional_param('dataformat', '', PARAM_ALPHA);

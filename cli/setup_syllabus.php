@@ -48,8 +48,8 @@ php setup_syllabus -f <filedef>
 Setup syllabus fields and positions from a csv definition
 
 Example:
-\"origin\",\"location\",\"shortname\",\"contextinfo\",\"sortorder\"
-\"custom_field\",\"title\",\"trainingtype\",\"Syllabus Fields\",1\";
+origin,location,shortname,contextinfo,sortorder,additionaldata
+custom_field,title,etabdesc,\"Syllabus Fields\",1,
 ";
 if ($unrecognized) {
     $unrecognized = implode("\n\t", $unrecognized);

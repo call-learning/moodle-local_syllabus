@@ -38,6 +38,6 @@ defined('MOODLE_INTERNAL') || die();
  */
 function local_syllabus_customfielddef_change_plugin_callback() {
     $newdef = get_config('local_syllabus', 'customfielddef');
-    config_utils::import_syllabus($newdef);
+    config_utils::import_syllabus($newdef, "\t");
     \local_syllabus\local\utils::update_syllabus_fields();
 }

@@ -112,6 +112,12 @@ abstract class base {
      */
     abstract public function get_origin_displayname();
 
+    /**
+     * Create a definition array for this field
+     * @param string $tag
+     * @return array
+     */
+    abstract public static function get_definition($tag);
 
     /**
      * Get field origin as a short string

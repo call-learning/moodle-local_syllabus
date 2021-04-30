@@ -1,0 +1,8 @@
+origin	location	shortname	contextinfo	sortorder	additionaldata
+course_field	side	action		0
+course_field	title	fullnamehtml		0
+custom_field	title	trainingtype	Syllabus Fields	1
+custom_field	title	duration	Syllabus Fields	2
+custom_field	title	randomfield	Syllabus Fields	3
+custom_field	side	duration	Syllabus Fields bis	0
+course_field	header	courseimage		0	{"displayclass":"\\local_syllabus\\local\\syllabus_display\\image","icon":"","displaylabel":1,"hideifempty":0,"labells":""}

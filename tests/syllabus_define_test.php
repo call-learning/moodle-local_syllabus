@@ -23,6 +23,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_customfield\api;
 use local_syllabus\local\config_utils;
 
 defined('MOODLE_INTERNAL') || die();
@@ -82,37 +83,64 @@ class local_syllabus_define_testcase extends advanced_testcase {
     /**
      * Create customfield from text
      *
+     * @dataProvider importfile_parameters
      * @throws coding_exception
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function test_syllabus_from_text() {
+    public function test_syllabus_from_text($importfile, $separator) {
         $this->resetAfterTest();
         config_utils::import_syllabus(file_get_contents(
-            __DIR__ . '/fixtures/syllabus_import.csv'
+            __DIR__ . $importfile
+        ), $separator);
+
+        $fieldlocationside = \local_syllabus\syllabus_location::get_all_fields_by_location('side');
+        $fieldlocationtitle = \local_syllabus\syllabus_location::get_all_fields_by_location('title');
+        $fieldlocationheader = \local_syllabus\syllabus_location::get_all_fields_by_location('header');
+
+        $this->assertEquals([
+            (object) ['origin' => 2, 'iddata' => 'action', 'data' => ''],
+            (object) ['origin' => 3, 'iddata' => $this->customfields[2]->get('id'), 'data' => ''],
+        ], array_map(function($sf) {
+            return (object) [
+                'origin' => intval($sf->get('origin')), 'iddata' => $sf->get('iddata'), 'data' => $sf->get('data')
+            ];
+        },
+            $fieldlocationside
         ));
-        $allcategories = \core_customfield\api::get_categories_with_fields('core_course', 'course', 0);
-        $syllabusfields = [];
+        $this->assertEquals([
+            (object) ['origin' => 2, 'iddata' => 'fullnamehtml', 'data' => ''],
+            (object) ['origin' => 3, 'iddata' => $this->customfields[0]->get('id'), 'data' => ''],
+            (object) ['origin' => 3, 'iddata' => $this->customfields[1]->get('id'), 'data' => ''],
+        ], array_map(function($sf) {
+            return (object) [
+                'origin' => intval($sf->get('origin')), 'iddata' => $sf->get('iddata'), 'data' => $sf->get('data')
+            ];
+        },
+            $fieldlocationtitle
+        ));
+        $this->assertEquals([
+            (object) ['origin' => 2, 'iddata' => 'courseimage', 'data' =>
+                '"{\"displayclass\":\"\\\\\\\\local_syllabus\\\\\\\\local\\\\\\\\syllabus_display\\\\\\\\image\",\"icon\":\"\",' .
+                '\"displaylabel\":1,\"hideifempty\":0,\"labells\":\"\"}"'
+            ],
+        ], array_map(function($sf) {
+            return (object) [
+                'origin' => intval($sf->get('origin')), 'iddata' => $sf->get('iddata'), 'data' => $sf->get('data')
+            ];
+        },
+            $fieldlocationheader
+        ));
+    }
 
-        foreach ($allcategories as $cat) {
-            if ($cat->get('name') == 'Syllabus Fields') {
-                $syllabusfields = $cat->get_fields();
-                break;
-            }
-        }
-        $this->assertNotEmpty($syllabusfields);
-        foreach ($syllabusfields as $field) {
-            switch ($field->get('shortname')) {
-                case 'formationtype':
-                    $this->assertEquals('Training Type', $field->get('name'));
-                    $this->assertEquals('text', $field->get('type'));
-                    break;
-                case 'duration':
-                    $this->assertEquals('Duration', $field->get('name'));
-                    $this->assertEquals('text', $field->get('type'));
-                    break;
-            }
-        }
-
+    /**
+     * Parameter for testing import
+     * @return string[][]
+     */
+    public function importfile_parameters() {
+        return array(
+            array('/fixtures/syllabus_import.csv', ","),
+            array('/fixtures/syllabus_import.tsv', "\t")
+        );
     }
 }

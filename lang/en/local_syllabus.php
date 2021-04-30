@@ -62,8 +62,8 @@ $string['resetallpositions:confirmation'] = 'Reset all positions: are you sure?'
 $string['resetallpositions'] = 'Reset all positions';
 $string['shortname'] = 'Shortname';
 $string['syllabus:customfielddef'] = 'Custom Field Definition';
-$string['syllabus:customfielddef:desc'] = 'Custom Field Definition ' .
-        '"origin","location","shortname","contextinfo","sortorder"';
+$string['syllabus:customfielddef:desc'] = 'Custom Field Definition as tab separated values (tsv) :' .
+        'origin	location	shortname	contextinfo	sortorder	additionaldata';
 $string['syllabus:editfield'] = 'Syllabus Edit Additional Parameters for "{$a}"';
 $string['syllabus:managefields'] = 'Syllabus Manage Fields';
 $string['syllabus:management'] = 'Syllabus Management';

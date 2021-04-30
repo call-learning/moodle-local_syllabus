@@ -37,8 +37,8 @@ if ($hassiteconfig) {
     $customfielddef = new admin_setting_configtextarea('local_syllabus/customfielddef',
         get_string('syllabus:customfielddef', 'local_syllabus'),
         get_string('syllabus:customfielddef:desc', 'local_syllabus'),
-        '"origin","location","shortname","contextinfo","sortorder"
-                    "custom_field","title","trainingtype","Syllabus Fields",1');
+        'origin	location	shortname	contextinfo	sortorder	additionaldata"
+                    custom_field	title	etabdesc	Autres champs	1');
 
     $customfielddef->set_updatedcallback('local_syllabus_customfielddef_change_plugin_callback');
     $settingspage->add($customfielddef);
