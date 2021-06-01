@@ -83,7 +83,7 @@ class course_syllabus_exporter extends course_summary_exporter {
      * @throws \moodle_exception
      */
     public static function get_course_actions($context, $courseid) {
-        $isenrolled = is_enrolled($context);
+        $isenrolled = is_enrolled($context, null, '', true);
         $action = \html_writer::start_div('syllabus-action');
         $viewurl = (new moodle_url('/course/view.php', array('id' => $courseid)))->out(false);
         if ($isenrolled || has_capability('moodle/course:view', $context)) {

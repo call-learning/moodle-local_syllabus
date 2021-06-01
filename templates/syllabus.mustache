@@ -64,26 +64,30 @@
     <div class="container-fluid">
 
         <section class="syllabus-head d-flex justify-content-center mb-4">
-            {{#header}}
-                {{#fields}}
-                    {{#display}}
-                        {{> local_syllabus/syllabus_field_head }}
-                    {{/display}}
-                {{/fields}}
-            {{/header}}
+            <div class="row">
+                {{#header}}
+                    {{#fields}}
+                        {{#display}}
+                            <div class="col-sm-1 col-md m-2">
+                                {{> local_syllabus/syllabus_field_head }}
+                            </div>
+                        {{/display}}
+                    {{/fields}}
+                {{/header}}
+            </div>
         </section>
 
         <div class="d-lg-flex">
 
-        <section class="syllabus-content">
-            {{#content}}
-                {{#fields}}
-                    {{#display}}
-                        {{> local_syllabus/syllabus_field_content }}
-                    {{/display}}
-                {{/fields}}
-            {{/content}}
-        </section>
+            <section class="syllabus-content">
+                {{#content}}
+                    {{#fields}}
+                        {{#display}}
+                            {{> local_syllabus/syllabus_field_content }}
+                        {{/display}}
+                    {{/fields}}
+                {{/content}}
+            </section>
 
             <aside class="syllabus-side">
                 <ul class="list-group">
