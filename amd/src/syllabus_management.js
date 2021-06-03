@@ -16,7 +16,7 @@
 /**
  * A javascript module to retrieve a course list from the server.
  *
- * @package    local_resourcelibrary
+ * @package    local_syllabus
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

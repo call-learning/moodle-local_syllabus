@@ -111,7 +111,6 @@ class base implements renderable, templatable {
     protected function should_display_field($courserawvals, $exportedvalue) {
         $shoulddisplay = !empty($this->fieldspec);
         if (!empty($this->additionaldata->hideifempty)) {
-            global $PAGE;
             if (empty(trim($exportedvalue))) {
                 $shoulddisplay = false;
             }

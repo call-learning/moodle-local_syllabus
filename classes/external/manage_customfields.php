@@ -136,12 +136,13 @@ class manage_customfields extends external_api {
      * @param string $fieldid
      * @param string $location
      * @param int $beforeid
+     * @param int $forcesortorder
      * @return mixed
      * @throws \coding_exception
      * @throws \moodle_exception
      * @throws invalid_parameter_exception
      */
-    public static function move_field_to_location(string $fieldid, string $location, int $beforeid = 0) {
+    public static function move_field_to_location(string $fieldid, string $location, int $beforeid = 0, int $forcesortorder=-1) {
         // Validate parameters.
         $inparams = compact(array('fieldid', 'location', 'beforeid'));
         self::validate_parameters(self::move_field_to_location_parameters(), $inparams);
@@ -157,19 +158,24 @@ class manage_customfields extends external_api {
 
         $alllocations = syllabus_location::get_records(array('location' => $location), 'sortorder');
 
-        $sortorder = 0; // We start with 0.
         $cfsortorder = -1; // No next field.
-        // Move each location to the right sortorder.
-        foreach ($alllocations as $ltosort) {
-            if ($ltosort->get('fieldid') == $beforeid) {
-                $cfsortorder = $sortorder++; // Make space for this field.
+        if ($forcesortorder == -1) {
+            $sortorder = 0; // We start with 0.
+            $cfsortorder = -1; // No next field.
+            // Move each location to the right sortorder.
+            foreach ($alllocations as $ltosort) {
+                if ($ltosort->get('fieldid') == $beforeid) {
+                    $cfsortorder = $sortorder++; // Make space for this field.
+                }
+                $ltosort->set('sortorder', $sortorder);
+                $ltosort->save();
+                $sortorder++;
             }
-            $ltosort->set('sortorder', $sortorder);
-            $ltosort->save();
-            $sortorder++;
-        }
-        if ($cfsortorder == -1) {
-            $cfsortorder = $sortorder;
+            if ($cfsortorder == -1) {
+                $cfsortorder = $sortorder;
+            }
+        } else {
+            $cfsortorder = $forcesortorder;
         }
         $loc->set('sortorder', $cfsortorder);
         $loc->save();

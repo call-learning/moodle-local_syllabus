@@ -83,6 +83,8 @@ class local_syllabus_define_testcase extends advanced_testcase {
     /**
      * Create customfield from text
      *
+     * @param string $importfile
+     * @param string $separator
      * @dataProvider importfile_parameters
      * @throws coding_exception
      * @throws dml_exception

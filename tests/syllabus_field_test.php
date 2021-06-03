@@ -172,7 +172,7 @@ class local_syllabus_field_testcase extends advanced_testcase {
         $cfbuild = \local_syllabus\local\field_origin\base::build($this->syllabusfield[0]);
         $corefbuild = \local_syllabus\local\field_origin\base::build($this->syllabusfield[4]);
         $this->assertEquals('Origin: Custom Field', $cfbuild->get_origin_displayname());
-        $this->assertEquals('Origin : Course', $corefbuild->get_origin_displayname());
+        $this->assertEquals('Origin: Course', $corefbuild->get_origin_displayname());
     }
 
     public function test_get_shortname() {
