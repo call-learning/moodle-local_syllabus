@@ -65,7 +65,9 @@ class field_location_management implements renderable, templatable {
             if ($allfields) {
                 foreach ($allfields as $fl) {
                     $fieldarray = $this->create_field_data($fl);
-                    $locationobject['fields'][] = $fieldarray;
+                    if (!empty($fieldarray)) {
+                        $locationobject['fields'][] = $fieldarray;
+                    }
                 }
             }
             $data->locations[] = $locationobject;
@@ -86,26 +88,29 @@ class field_location_management implements renderable, templatable {
         global $CFG;
         global $PAGE;
         $fieldorigin = field_origin_base::build($field);
-        $displayclass = explode("\\", $field->get_display_class());
-        $displayclass = end($displayclass);
         $fieldarray = [];
-        $fieldid = $field->get('id');
-        $fieldname = $fieldorigin->get_formatted_name();
-        $fieldarray['type'] = $fieldorigin->get_type();
-        $fieldarray['origin'] = $fieldorigin->get_origin_displayname();
-        $fieldarray['id'] = $fieldid;
-        $fieldarray['name'] = $fieldname;
-        $fieldarray['shortname'] = $field->get_shortname();
-        $fieldarray['displayclass'] = $displayclass;
-        $fieldarray['movetitle'] = get_string('movefield', 'local_syllabus', $fieldname);
-        $params = [];
-        $pageurl = $PAGE->url; // Beware : empty($PAGE->url) is always false.
-        if (!empty($pageurl)) {
-            $params = $PAGE->url->params();
+        if ($fieldorigin) {
+            $displayclass = explode("\\", $field->get_display_class());
+            $displayclass = end($displayclass);
+            $fieldarray = [];
+            $fieldid = $field->get('id');
+            $fieldname = $fieldorigin->get_formatted_name();
+            $fieldarray['type'] = $fieldorigin->get_type();
+            $fieldarray['origin'] = $fieldorigin->get_origin_displayname();
+            $fieldarray['id'] = $fieldid;
+            $fieldarray['name'] = $fieldname;
+            $fieldarray['shortname'] = $field->get_shortname();
+            $fieldarray['displayclass'] = $displayclass;
+            $fieldarray['movetitle'] = get_string('movefield', 'local_syllabus', $fieldname);
+            $params = [];
+            $pageurl = $PAGE->url; // Beware : empty($PAGE->url) is always false.
+            if (!empty($pageurl)) {
+                $params = $PAGE->url->params();
+            }
+            $params['id'] = $fieldid;
+            $editurl = new moodle_url($CFG->wwwroot . '/local/syllabus/editfield.php', $params);
+            $fieldarray['editfieldurl'] = $editurl->out(false);
         }
-        $params['id'] = $fieldid;
-        $editurl = new moodle_url($CFG->wwwroot . '/local/syllabus/editfield.php', $params);
-        $fieldarray['editfieldurl'] = $editurl->out(false);
         return $fieldarray;
     }
 

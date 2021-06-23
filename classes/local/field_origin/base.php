@@ -161,4 +161,12 @@ abstract class base {
     public function get_contextinfo() {
         return '';
     }
+
+    /**
+     * Check first if the field still exist.
+     * This can happen that the field does not exist anymore after deletion (customfield for example)
+     */
+    public function field_exists() {
+        return true;
+    }
 }

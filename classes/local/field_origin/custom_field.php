@@ -25,6 +25,7 @@
 namespace local_syllabus\local\field_origin;
 
 use core_course\customfield\course_handler;
+use core_customfield\field;
 use core_customfield\field_controller;
 use core_customfield\output\field_data;
 
@@ -38,6 +39,7 @@ defined('MOODLE_INTERNAL') || die;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class custom_field extends base {
+
     /**
      * Get field formatted name
      *
@@ -46,11 +48,15 @@ class custom_field extends base {
      * @throws \moodle_exception
      */
     public function get_formatted_name() {
-        $cfield = field_controller::create(intval($this->syllabusfield->get('iddata'))); // Data should be the id.
-        if ($cfield) {
-            return $cfield->get_formatted_name();
+        $value = '';
+        if ($this->field_exists()) {
+            $iddata = $this->syllabusfield->get('iddata');
+            $cfield = field_controller::create(intval($iddata)); // Data should be the id.
+            if ($cfield) {
+                $value = $cfield->get_formatted_name();
+            }
         }
-        return '';
+        return $value;
     }
 
     /**
@@ -61,10 +67,13 @@ class custom_field extends base {
      * @throws \moodle_exception
      */
     public function get_type() {
-        $cfield = field_controller::create($this->syllabusfield->get('iddata'));// Data should be the id.
-        if ($cfield) {
-            return $cfield->get('type');
+        if ($this->field_exists()) {
+            $cfield = field_controller::create($this->syllabusfield->get('iddata'));// Data should be the id.
+            if ($cfield) {
+                return $cfield->get('type');
+            }
         }
+        return '';
     }
 
     /**
@@ -75,8 +84,11 @@ class custom_field extends base {
      * @throws \moodle_exception
      */
     public function get_shortname() {
-        $cfield = field_controller::create($this->syllabusfield->get('iddata'));
-        return $cfield->get('shortname');
+        if ($this->field_exists()) {
+            $cfield = field_controller::create($this->syllabusfield->get('iddata'));
+            return $cfield->get('shortname');
+        }
+        return '';
     }
 
     /**
@@ -105,6 +117,7 @@ class custom_field extends base {
 
     /**
      * Create a definition array for this field
+     *
      * @param mixed $fieldid
      * @return array
      */
@@ -137,4 +150,13 @@ class custom_field extends base {
         return $cfield->get_category()->get('name');
     }
 
+    /**
+     * Check first if the field still exist.
+     * This can happen that the field does not exist anymore after deletion (customfield for example)
+     */
+    public function field_exists() {
+        global $DB;
+        $iddata = $this->syllabusfield->get('iddata');
+        return $iddata && $DB->record_exists(field::TABLE, array('id' => intval($iddata)));
+    }
 }

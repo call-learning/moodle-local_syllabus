@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_syllabus';
-$plugin->release = '0.2.0';
-$plugin->version = 2021042600;
+$plugin->release = '0.2.1';
+$plugin->version = 2021042603;
 $plugin->requires = 2019111800;
 $plugin->maturity = MATURITY_ALPHA;

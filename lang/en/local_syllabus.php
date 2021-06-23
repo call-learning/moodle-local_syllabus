@@ -29,10 +29,13 @@ $string['action'] = 'Action';
 $string['afterfield'] = 'After field {$a}';
 $string['display:base'] = 'Basic display';
 $string['displayclass'] = 'Display class';
+$string['displayclass_help'] = 'Way to display the field. The display class is a php file (created through development). Here
+we list the available display classes.';
 $string['display:date'] = 'Date display (userdate)';
 $string['display:dlist'] = 'List display';
 $string['display:image'] = 'Image display';
 $string['displaylabel'] = 'Display label';
+$string['displaylabel_help'] = 'Should or should we not display the label for this field';
 $string['display:price'] = 'Price display';
 $string['editfield'] = 'Additional fields parameters';
 $string['enablesyllabus'] = 'Enable Syllabus';
@@ -40,11 +43,14 @@ $string['export:syllabus'] = 'Export syllabus data';
 $string['field'] = 'Field';
 $string['generalsettings'] = 'General Settings';
 $string['hideifempty'] = 'Hide if empty';
+$string['hideifempty_help'] = 'If the field if empty should we display the HTML part of this field or not
+(title, container). Setting this to yes, will hide the field if its value is considered empty or null';
 $string['icon'] = 'Icon';
+$string['icon_help'] = 'An icon to display next to the label for this field. This is from the FontAwesome icons used by Moodle.';
 $string['labells'] = 'Label language string';
-$string['labells_help'] = 'Label for the language string to replace the label, for example "coursefullname,core_moodle" will
-replace the label with the coursefullname from the core_moodle language string. To see all codes for this field, look at the
-language pack.';
+$string['labells_help'] = 'Point to the language string used to display the label. This way labels can be freely
+translated.For example "coursefullname,core_moodle" will replace the label with the coursefullname from the core_moodle
+language string. To see all codes for this field, look at the language pack.';
 $string['location:content'] = 'Content area';
 $string['location:header'] = 'Header area';
 $string['location:none'] = 'No area defined';

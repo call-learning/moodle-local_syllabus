@@ -80,6 +80,7 @@ class syllabus_field_editor extends persistent {
             $displayclasses
         );
         $mform->setType('displayclass', PARAM_RAW);
+        $mform->addHelpButton('displayclass', 'displayclass', 'local_syllabus');
         $icons = ['' => get_string('none')];
 
         // Icon attached to this field.
@@ -101,19 +102,21 @@ class syllabus_field_editor extends persistent {
         );
         $mform->setType('icon', PARAM_RAW);
         $mform->setDefault('icon', '');
+        $mform->addHelpButton('icon', 'icon', 'local_syllabus');
 
         // Should we display a label ?
         $mform->addElement('advcheckbox',
             'displaylabel', get_string('displaylabel', 'local_syllabus'));
         $mform->setType('displaylabel', PARAM_BOOL);
         $mform->setDefault('displaylabel', true);
+        $mform->addHelpButton('displaylabel', 'displaylabel', 'local_syllabus');
 
         // Should we display if empty ?
         $mform->addElement('advcheckbox',
             'hideifempty', get_string('hideifempty', 'local_syllabus'));
         $mform->setType('hideifempty', PARAM_BOOL);
         $mform->setDefault('hideifempty', false); // False by default as not present.
-
+        $mform->addHelpButton('hideifempty', 'hideifempty', 'local_syllabus');
         // Label language string.
         $mform->addElement('text',
             'labells',
