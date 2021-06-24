@@ -49,7 +49,7 @@
           }
   }
 }}
-<section class="syllabus-pres" id="course-{{#courseraw}}{{id}}{{/courseraw}}">
+<section class="syllabus-pres d-flex flex-column" id="course-{{#courseraw}}{{id}}{{/courseraw}}">
     <div class="row">
         <section class="col syllabus-title">
             {{#title}}
@@ -61,14 +61,14 @@
             {{/title}}
         </section>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid d-flex flex-column-reverse flex-lg-column">
 
         <section class="syllabus-head d-flex justify-content-center mb-4">
-            <div class="row">
+            <div class="row-fluid">
                 {{#header}}
                     {{#fields}}
                         {{#display}}
-                            <div class="col-sm-1 col-md m-2">
+                            <div class="col-12 col-lg m-2">
                                 {{> local_syllabus/syllabus_field_head }}
                             </div>
                         {{/display}}
@@ -77,7 +77,7 @@
             </div>
         </section>
 
-        <div class="d-lg-flex">
+        <div class="d-flex flex-column-reverse flex-lg-row">
 
             <section class="syllabus-content">
                 {{#content}}
