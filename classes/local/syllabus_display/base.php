@@ -111,7 +111,8 @@ class base implements renderable, templatable {
     protected function should_display_field($courserawvals, $exportedvalue) {
         $shoulddisplay = !empty($this->fieldspec);
         if (!empty($this->additionaldata->hideifempty)) {
-            if (empty(trim($exportedvalue))) {
+            $ishtml = $exportedvalue != strip_tags($exportedvalue);
+            if (empty(trim($exportedvalue)) || ($ishtml && html_is_blank($exportedvalue))) {
                 $shoulddisplay = false;
             }
         }
