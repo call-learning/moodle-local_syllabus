@@ -77,19 +77,8 @@
             </div>
         </section>
 
-        <div class="d-flex flex-column-reverse flex-lg-row">
-
-            <section class="syllabus-content">
-                {{#content}}
-                    {{#fields}}
-                        {{#display}}
-                            {{> local_syllabus/syllabus_field_content }}
-                        {{/display}}
-                    {{/fields}}
-                {{/content}}
-            </section>
-
-            <aside class="syllabus-side">
+        <div class="d-flex flex-column">
+            <aside class="syllabus-side d-flex align-self-center">
                 <ul class="list-group">
                     {{#side}}
                         {{#fields}}
@@ -100,6 +89,15 @@
                     {{/side}}
                 </ul>
             </aside>
+            <section class="syllabus-content">
+                {{#content}}
+                    {{#fields}}
+                        {{#display}}
+                            {{> local_syllabus/syllabus_field_content }}
+                        {{/display}}
+                    {{/fields}}
+                {{/content}}
+            </section>
         </div>
     </div>
 </section>
