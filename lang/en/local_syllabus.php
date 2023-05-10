@@ -71,6 +71,7 @@ $string['syllabus:customfielddef'] = 'Custom Field Definition';
 $string['syllabus:customfielddef:desc'] = 'Custom Field Definition as tab separated values (tsv) :' .
         'origin	location	shortname	contextinfo	sortorder	additionaldata';
 $string['syllabus:editfield'] = 'Syllabus Edit Additional Parameters for "{$a}"';
+$string['syllabus:manage'] = 'Manage Syllabus';
 $string['syllabus:managefields'] = 'Syllabus Manage Fields';
 $string['syllabus:management'] = 'Syllabus Management';
 $string['syllabuspositions'] = 'Setup Syllabus field positions';
