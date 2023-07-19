@@ -61,23 +61,21 @@
             {{/title}}
         </section>
     </div>
-    <div class="container-fluid d-flex flex-column-reverse flex-lg-column">
+    <div class="container-fluid px-0 d-flex flex-column-reverse flex-lg-column">
 
         <section class="syllabus-head d-flex justify-content-center mb-4">
-            <div class="row-fluid">
-                {{#header}}
-                    {{#fields}}
-                        {{#display}}
-                            <div class="col-12 col-lg m-2">
-                                {{> local_syllabus/syllabus_field_head }}
-                            </div>
-                        {{/display}}
-                    {{/fields}}
-                {{/header}}
-            </div>
+            {{#header}}
+                {{#fields}}
+                    {{#display}}
+                        <div class="m-2">
+                            {{> local_syllabus/syllabus_field_head }}
+                        </div>
+                    {{/display}}
+                {{/fields}}
+            {{/header}}
         </section>
 
-        <div class="d-flex flex-column-reverse flex-lg-row">
+        <div class="d-flex flex-column-reverse flex-lg-row align-items-start">
 
             <section class="syllabus-content">
                 {{#content}}

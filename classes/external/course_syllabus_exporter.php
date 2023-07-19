@@ -65,7 +65,7 @@ class course_syllabus_exporter extends course_summary_exporter {
         $courseactions = static::get_course_actions($this->related['context'], $this->data->id);
 
         $otherfields = [
-            'fullnamehtml' => \html_writer::tag('h3', get_course_display_name_for_list($this->data)),
+            'fullnamehtml' => \html_writer::tag('h1', get_course_display_name_for_list($this->data)),
             'courseimage' => $courseimage,
             'coursecategory' => $coursecategory->name,
             'isenrolled' => !is_enrolled($this->related['context'])

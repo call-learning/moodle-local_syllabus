@@ -1,14 +1,180 @@
-/* Default stylesheet for Syllabus, will be overridden if necessary in theme */
-.syllabus-action fieldset.clearfix {
-    margin-left: auto;
-    border-bottom: initial;
+.path-syllabus {
+    --radius: 5px;
 }
 
-.syllabus-action .mform > .form-group {
-    margin-left: auto;
+.path-syllabus .syllabus-title {
+    padding-bottom: 2em;
+    display: flex;
+    flex-direction: column;
 }
-/* stylelint-disable declaration-no-important */
-.syllabus-action .femptylabel .col-form-label {
-    display: none !important;
+
+.path-syllabus .syllabus-title .sfield-fullnamehtml {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
 }
-/* stylelint-enable  declaration-no-important */
+
+.path-syllabus .syllabus-title .sfield-courseimage {
+    max-width: 400px;
+    margin: 0.75rem auto 3rem;
+    position: relative;
+    display: flex;
+    border-radius: var(--radius);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 6px 0px, rgba(0, 0, 0, 0.2) 0px 2px 4px 3px;
+}
+
+.path-syllabus .syllabus-title .sfield-courseimage .sfield-content {
+    z-index: 1;
+    border-radius: var(--radius);
+}
+
+.path-syllabus .syllabus-title .sfield-courseimage:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    border-radius: var(--radius);
+    background-color: #40c0d8;
+    background-image: linear-gradient(283deg, #a1a1a1, transparent);
+    transform: rotate(-2deg) translate(-6px, -14px);
+}
+
+.path-syllabus .syllabus-title .sfield-courseimage img {
+    border-radius: var(--radius);
+}
+
+.path-syllabus .syllabus-title .sfield-tagline {
+    max-width: 75%;
+    margin: auto;
+    font-size: 1.5em;
+}
+
+.path-syllabus .syllabus-head .sfield-label {
+    color: var(--primary);
+}
+
+.path-syllabus .syllabus-head .sfield {
+    display: flex;
+    align-items: center;
+    padding-right: 1rem;
+    border: 1px dotted var(--primary);
+    background-color: aliceblue;
+    border-radius: 17px;
+}
+
+.path-syllabus .syllabus-head .sfield .icon {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+    color: #fff;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    margin-left: -2px;
+}
+
+@media (min-width: 768px) {
+    .path-syllabus .syllabus-head .sfield-label {
+        white-space: nowrap;
+    }
+}
+
+.path-syllabus .syllabus-head .sfield-content {
+    color: var(--appgray2, var(--gray));
+    font-size: 14px;
+    font-style: italic;
+}
+
+@media (min-width: 768px) {
+    .path-syllabus .syllabus-head .sfield-content {
+        white-space: nowrap;
+    }
+}
+
+.path-syllabus .syllabus-head .sfield-content p {
+    display: none;
+}
+
+.path-syllabus .syllabus-head .sfield-content ul {
+    display: inline;
+    list-style: none;
+    padding: 0px;
+}
+
+.path-syllabus .syllabus-head .sfield-content ul li {
+    display: inline;
+}
+
+.path-syllabus .syllabus-head .sfield-content ul li::after {
+    content: ", ";
+}
+
+.path-syllabus .syllabus-head .sfield-content ul li:last-child::after {
+    content: "";
+}
+
+.path-syllabus .syllabus-content {
+    flex: 1 1 auto;
+}
+
+.path-syllabus .syllabus-content h2 {
+    color: var(--primary);
+    margin-top: 30px;
+}
+
+.path-syllabus .syllabus-content > .sfield:first-child h2 {
+    margin-top: 0;
+}
+
+.path-syllabus .syllabus-side {
+    margin-bottom: 2rem;
+}
+
+.path-syllabus .syllabus-side .list-group-item {
+    padding: 0;
+}
+
+@media (min-width: 992px) {
+    .path-syllabus .syllabus-side {
+        border-left: 1px dashed var(--gray-dark);
+        flex: 0 0 32%;
+        min-width: 32%;
+        margin-left: 1rem;
+        margin-bottom: 0;
+    }
+    .path-syllabus .syllabus-side .list-group-item {
+        padding: 0.75rem 1.25rem;
+    }
+}
+
+.path-syllabus .syllabus-action .ftoggler > a {
+    display: none;
+}
+
+.path-syllabus .syllabus-action .mform .fitem.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.path-syllabus .syllabus-action .mform .fitem.row > .col-md-3,
+.path-syllabus .syllabus-action .mform .fitem.row > .col-md-9 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: inherit;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.path-syllabus .syllabus-action .mform .fitem.row.femptylabel > .col-md-3 {
+    display: none;
+}
+
+.path-syllabus .syllabus-action .mform .fitem.row .form-control {
+    width: 100%;
+}
