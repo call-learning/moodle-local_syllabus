@@ -5,6 +5,17 @@
 A Syllabus page for course. This will allow to display a syllabus page per course
 using a couple of predefined zones in which we will display the information.
 
+## Building the CSS ##
+
+The CSS for the Syllabus needs to be compiled on the command line. In order to compile you will
+need to have npm installed and the node_modules folder in Moodle's root populated
+
+Then on the command line navigate into local/syllabus and run
+
+npx node-sass --output-style expanded --precision 6 --indent-width 4 scss/syllabus.scss > styles.css
+
+
+
 ## License ##
 
 2020 CALL Learning <contact@call-learning.fr>
