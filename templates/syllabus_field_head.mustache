@@ -22,11 +22,11 @@
   The purpose of this template is to render a syllabus field.
   Example context (json):
   {
-   "label": label for this field
-   "html": html content representing the field data
+     "label": "label for this field",
+     "html": "html content representing the field data"
   }
 }}
-<div class="sfield sfield-{{shortname}} mx-3 d-flex align-items-center">
-    {{#icon}}<i class="icon fa {{icon}}"> </i>{{/icon}}{{#label}}<span class="sfield-label mx-2">{{label}}</span>{{/label}}
-    <span class="sfield-content">{{{html}}}</span>
+<div class="sfield sfield-{{shortname}}">
+    {{#label}}<span class="sfield-label">{{label}}</span>{{/label}}
+    {{#icon}}<i class="icon fa {{icon}}"> </i>{{/icon}} <span class="sfield-content">{{{html}}}</span>
 </div>

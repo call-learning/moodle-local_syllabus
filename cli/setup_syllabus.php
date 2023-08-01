@@ -56,14 +56,14 @@ if ($unrecognized) {
     cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
 }
 
-if ($options['help'] || empty($options['fileinput'])) {
+if ($options['help'] || empty($option['configtext'])) {
     cli_writeln($help);
     die();
 }
-if (!file_exists($options['fileinput'])) {
-    cli_error('File does not exist ' . $options['fileinput']);
+if (!file_exists($option['configtext'])) {
+    cli_error('filedoesnotexist');
     cli_writeln($help);
     die();
 }
 
-config_utils::import_syllabus(file_get_contents($options['fileinput']));
+config_utils::import_syllabus(file_get_contents($option['configtext']));
