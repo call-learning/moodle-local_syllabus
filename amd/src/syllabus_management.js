@@ -16,34 +16,33 @@
 /**
  * A javascript module to retrieve a course list from the server.
  *
- * @package    local_syllabus
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/ajax', 'core/str', 'core/notification', 'core/sortable_list'],
-    function ($,
+    function($,
               Ajax,
               Str,
               Notification,
               SortableList
               ) {
         return {
-            init: function () {
+            init: function() {
                 // Sort fields who already have a location.
                 var sortwloc = new SortableList(
                     $('#syllabus-management .location-list tbody'),
                     {moveHandlerSelector: '.movefield [data-drag-type=move]'}
                 );
-                var locationName = function (element) {
+                var locationName = function(element) {
                     return element
                         .closest('[data-location-id]')
                         .attr('data-label');
                 };
-                var displayNoElementIfNeeded = function (evt) {
+                var displayNoElementIfNeeded = function(evt) {
                     evt.stopPropagation(); // Important for nested lists to prevent multiple targets.
                     // Refreshing fields tables.
-                    Str.get_string('therearenofields', 'core_customfield').then(function (s) {
-                        $('#syllabus-management .location-list').children().each(function () {
+                    Str.get_string('therearenofields', 'core_customfield').then(function(s) {
+                        $('#syllabus-management .location-list').children().each(function() {
                             var fields = $(this).find($('.field')),
                                 nofields = $(this).find($('.nofields'));
                             if (!fields.length && !nofields.length) {
@@ -59,7 +58,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification', 'core/sortable_l
                     }).fail(Notification.exception);
                 };
 
-                var dropIntoList = function (evt, info) {
+                var dropIntoList = function(evt, info) {
                     evt.stopPropagation(); // Important for nested lists to prevent multiple targets.
                     if (info.positionChanged) {
                         const fieldid = info.element.data('field-id');
@@ -79,7 +78,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification', 'core/sortable_l
                     }
                 };
 
-                sortwloc.getDestinationName = function (parentElement, afterElement) {
+                sortwloc.getDestinationName = function(parentElement, afterElement) {
                     if (!afterElement.length) {
                         return Str.get_string('totopoflocation', 'local_syllabus', locationName(parentElement));
                     } else if (afterElement.attr('data-field-name')) {
@@ -89,15 +88,15 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification', 'core/sortable_l
                     }
                 };
 
-                $('[data-field-name]').on('sortablelist-drop', function (evt, info) {
+                $('[data-field-name]').on('sortablelist-drop', function(evt, info) {
                     dropIntoList(evt, info);
-                }).on('sortablelist-drag', function (evt) {
+                }).on('sortablelist-drag', function(evt) {
                     displayNoElementIfNeeded(evt);
                 });
 
                 $('[data-field-name]').on('sortablelist-dragstart',
-                    function (evt, info) {
-                        setTimeout(function () {
+                    function(evt, info) {
+                        setTimeout(function() {
                             $('.sortable-list-is-dragged').width(info.element.width());
                         }, 501);
                     }
@@ -115,6 +114,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification', 'core/sortable_l
                         }
                     ])[0].then(function() {
                         window.location.reload();
+                        return '';
                     }).fail(Notification.exception);
                     e.preventDefault();
                 });

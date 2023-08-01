@@ -27,8 +27,6 @@ namespace local_syllabus\local\field_origin;
 use core_customfield\field_controller;
 use local_syllabus\syllabus_field;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Class base
  *

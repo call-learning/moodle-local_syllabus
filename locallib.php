@@ -26,8 +26,6 @@
 
 use local_syllabus\local\config_utils;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Change syllabus field
  *

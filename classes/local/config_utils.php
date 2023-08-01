@@ -37,8 +37,6 @@ use moodle_url;
 use navigation_node;
 use ReflectionClass;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Syllabus config utilities
  *
@@ -178,5 +176,4 @@ class config_utils {
 
             });
     }
-
 }

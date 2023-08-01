@@ -94,3 +94,7 @@ jobs:
       - name: Grunt
         if: ${{ always() }}
         run: moodle-plugin-ci grunt --max-lint-warnings 0
+
+      - name: Behat features
+        if: ${{ always() }}
+        run: moodle-plugin-ci behat --profile chrome --auto-rerun 0

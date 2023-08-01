@@ -23,7 +23,6 @@
  */
 
 namespace local_syllabus\form;
-defined('MOODLE_INTERNAL') || die;
 
 /**
  * Class syllabus_management_form

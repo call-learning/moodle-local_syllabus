@@ -20,7 +20,7 @@
     position: relative;
     display: flex;
     border-radius: var(--radius);
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 6px 0px, rgba(0, 0, 0, 0.2) 0px 2px 4px 3px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 6px 6px 0, rgba(0, 0, 0, 0.2) 0 2px 4px 3px;
 }
 
 .path-syllabus .syllabus-title .sfield-courseimage .sfield-content {
@@ -104,7 +104,7 @@
 .path-syllabus .syllabus-head .sfield-content ul {
     display: inline;
     list-style: none;
-    padding: 0px;
+    padding: 0;
 }
 
 .path-syllabus .syllabus-head .sfield-content ul li {

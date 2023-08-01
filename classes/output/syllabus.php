@@ -23,7 +23,6 @@
  */
 
 namespace local_syllabus\output;
-defined('MOODLE_INTERNAL') || die();
 
 use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
@@ -80,5 +79,4 @@ class syllabus implements renderable, templatable {
         }
         return $data;
     }
-
 }

@@ -49,50 +49,61 @@
           }
   }
 }}
-<section class="syllabus-pres d-flex flex-column" id="course-{{#courseraw}}{{id}}{{/courseraw}}">
+<div class="syllabus-pres d-flex flex-column" id="course-{{#courseraw}}{{id}}{{/courseraw}}">
     <div class="row">
-        <section class="col syllabus-title">
+        <div class="col syllabus-title">
             {{#title}}
                 {{#fields}}
                     {{#display}}
-                        {{> local_syllabus/syllabus_field_title }}
+                        <div class="sfield icon-no-margin sfield-{{shortname}}">
+                            {{#icon}}<i class="icon fa {{icon}}"></i>{{/icon}} <span class="sfield-content">{{{html}}}</span>
+                        </div>
                     {{/display}}
                 {{/fields}}
             {{/title}}
-        </section>
+        </div>
     </div>
     <div class="container-fluid px-0 d-flex flex-column-reverse flex-lg-column">
 
-        <section class="syllabus-head d-flex justify-content-center mb-4">
+        <div class="syllabus-head d-flex justify-content-center mb-4">
             {{#header}}
                 {{#fields}}
                     {{#display}}
                         <div class="m-2">
-                            {{> local_syllabus/syllabus_field_head }}
+                            <div class="sfield icon-no-margin sfield-{{shortname}}">
+                                {{#label}}<span class="sfield-label">{{label}}</span>{{/label}}
+                                {{#icon}}<i class="icon fa {{icon}}"> </i>{{/icon}} <span class="sfield-content">{{{html}}}</span>
+                            </div>
                         </div>
                     {{/display}}
                 {{/fields}}
             {{/header}}
-        </section>
+        </div>
 
         <div class="d-flex flex-column-reverse flex-lg-row align-items-start">
 
-            <section class="syllabus-content">
+            <div class="syllabus-content">
                 {{#content}}
                     {{#fields}}
                         {{#display}}
-                            {{> local_syllabus/syllabus_field_content }}
+                            <div class="sfield sfield-{{shortname}}">
+                                {{#label}}<h2>{{label}}</h2>{{/label}}
+                                <span class="sfield-content">{{{html}}}</span>
+                            </div>
                         {{/display}}
                     {{/fields}}
                 {{/content}}
-            </section>
+            </div>
 
             <aside class="syllabus-side">
                 <ul class="list-group">
                     {{#side}}
                         {{#fields}}
                             {{#display}}
-                                {{> local_syllabus/syllabus_field_side }}
+                                <li class="sfield list-group-item border-0 icon-no-margin sfield-{{shortname}}">
+                                    {{#label}}<h3>{{label}}</h3>{{/label}}
+                                    {{#icon}}<i class="icon fa {{icon}}"></i>{{/icon}} <span class="content">{{{html}}}</span>
+                                </li>
                             {{/display}}
                         {{/fields}}
                     {{/side}}
@@ -100,7 +111,7 @@
             </aside>
         </div>
     </div>
-</section>
+</div>
 {{#js}}
 require(['local_syllabus/syllabus'], function(syllabus) {
     syllabus.init();

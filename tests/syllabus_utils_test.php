@@ -25,8 +25,6 @@
 
 use local_syllabus\local\utils;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The syllabus utils test class.
  *
@@ -34,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright   2020 CALL Learning <contact@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_syllabus_utils_testcase extends advanced_testcase {
+class syllabus_utils_test extends advanced_testcase {
     /**
      * Test replace course node URL
      *

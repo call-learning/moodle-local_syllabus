@@ -24,8 +24,6 @@
 
 use core_customfield\field;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Behat data generator for resource library
  *

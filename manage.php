@@ -52,7 +52,6 @@ if ($export && !empty($dataformat)) {
 
 $additionalbuttons = '';
 if ($returnurl) {
-    /* @var core_renderer $OUTPUT */
     $returnbutton = $OUTPUT->single_button(
         new moodle_url($returnurl),
         get_string('back')

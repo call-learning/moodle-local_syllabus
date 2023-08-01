@@ -1,5 +1,5 @@
 @local @local_syllabus @core @javascript
-Feature: As an admin I want to be able to turn on and off the plugin and
+Feature: As an admin I want to be able to view the plugin
 
   Background:
     Given the following "courses" exist:

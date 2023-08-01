@@ -28,8 +28,6 @@ use local_syllabus\local\field_origin\custom_field;
 use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The syllabus field test class.
  *
@@ -37,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright   2020 CALL Learning <contact@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_syllabus_field_testcase extends advanced_testcase {
+class syllabus_field_test extends advanced_testcase {
 
     /**
      * @var syllabus_field[] $syllabusfield

@@ -23,7 +23,6 @@
  */
 
 namespace local_syllabus\external;
-defined('MOODLE_INTERNAL') || die();
 
 use context;
 use core_course\external\course_summary_exporter;

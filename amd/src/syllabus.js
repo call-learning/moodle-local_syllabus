@@ -49,8 +49,8 @@ const initSponsorRegion = () => {
 };
 
 /**
-  * Initialise all the syllabus UI elements.
-  */
+ * Initialise all the syllabus UI elements.
+ */
 const init = () => {
     initSponsorRegion();
 };
