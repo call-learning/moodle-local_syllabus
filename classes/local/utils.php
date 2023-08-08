@@ -33,8 +33,6 @@ use moodle_url;
 use navigation_node;
 use ReflectionClass;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Syllabus utilities
  *

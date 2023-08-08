@@ -26,8 +26,6 @@ namespace local_syllabus;
 
 use core\persistent;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class syllabus_location
  *

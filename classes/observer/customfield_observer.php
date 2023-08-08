@@ -28,8 +28,6 @@ use local_syllabus\local\field_origin\custom_field;
 use local_syllabus\syllabus_field;
 use local_syllabus\syllabus_location;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class customfield_observer
  *

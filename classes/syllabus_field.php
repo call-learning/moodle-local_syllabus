@@ -33,8 +33,6 @@ use local_syllabus\local\syllabus_display\base;
 use local_syllabus\local\field_origin\base as field_origin_base;
 use local_syllabus\local\utils;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class syllabus_field
  *

@@ -1,0 +1,183 @@
+@import "../../theme/boost/scss/bootstrap/functions";
+@import "../../theme/boost/scss/bootstrap/variables";
+@import "../../theme/boost/scss/bootstrap/mixins";
+
+.path-syllabus {
+    --radius: 5px;
+    .syllabus-title {
+        padding-bottom: 2em;
+        display: flex;
+        flex-direction: column;
+
+        .sfield-fullnamehtml {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .sfield-courseimage {
+            max-width: 400px;
+            margin: 0.75rem auto 3rem;
+            position: relative;
+            display: flex;
+            border-radius: var(--radius);
+            box-shadow: rgba(0, 0, 0, 0.1) 0 6px 6px 0, rgba(0, 0, 0, 0.2) 0 2px 4px 3px;
+            .sfield-content {
+                z-index: 1;
+                border-radius: var(--radius);
+            }
+            &:after {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 0;
+                border-radius: var(--radius);
+                background-color: #40c0d8;
+                background-image: linear-gradient(283deg, #a1a1a1, transparent);
+                transform: rotate(-2deg) translate(-6px, -14px);
+            }
+            img {
+                border-radius: var(--radius);
+            }
+        }
+
+        .sfield-tagline {
+            max-width: 75%;
+            margin: auto;
+            font-size: 1.5em;
+        }
+    }
+
+    .syllabus-head {
+        .sfield-label {
+            color: var(--primary);
+        }
+
+        .sfield {
+            display: flex;
+            align-items: center;
+            padding-right: 1rem;
+            border: 1px dotted var(--primary);
+            background-color: aliceblue;
+            border-radius: 17px;
+
+            .icon {
+                width: 30px;
+                height: 30px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: var(--primary);
+                color: #fff;
+                border-radius: 50%;
+                margin-right: 0.5rem;
+                margin-left: -2px;
+            }
+        }
+
+        @include media-breakpoint-up(md) {
+            .sfield-label {
+                white-space: nowrap;
+            }
+        }
+
+        .sfield-content {
+            @include media-breakpoint-up(md) {
+                white-space: nowrap;
+            }
+
+            p {
+                display: none; // Moodle always insert an empty paragraph in text area content.
+            }
+
+            ul {
+                display: inline;
+                list-style: none;
+                padding: 0;
+
+                li {
+                    display: inline;
+                }
+
+                li::after {
+                    content: ", ";
+                }
+
+                li:last-child::after {
+                    content: "";
+                }
+            }
+
+            color: var(--appgray2, var(--gray));
+            font-size: 14px;
+            font-style: italic;
+        }
+    }
+
+    .syllabus-content {
+        flex: 1 1 auto;
+        h2 {
+            color: var(--primary);
+            margin-top: 30px;
+        }
+        > .sfield:first-child h2 {
+            margin-top: 0;
+        }
+    }
+    .syllabus-side {
+        margin-bottom: 2rem;
+        .list-group-item {
+            padding: 0;
+        }
+    }
+
+    @include media-breakpoint-up(lg) {
+
+        .syllabus-side {
+            border-left: 1px dashed var(--gray-dark);
+            flex: 0 0 32%;
+            min-width: 32%;
+            margin-left: 1rem;
+            margin-bottom: 0;
+            .list-group-item {
+                padding: 0.75rem 1.25rem;
+            }
+        }
+    }
+
+    .sponsorimage {
+        max-width: 300px;
+        max-height: 200px;
+        width: auto;
+        height: auto;
+    }
+
+
+    .syllabus-action {
+        .ftoggler > a {
+            display: none;
+        }
+        .mform .fitem.row {
+            margin-left: 0;
+            margin-right: 0;
+            & > .col-md-3,
+            & > .col-md-9 {
+                flex: 0 0 100%;
+                max-width: 100%;
+                width: inherit;
+                padding-right: 0;
+                padding-left: 0;
+            }
+            &.femptylabel > .col-md-3 {
+                display: none;
+            }
+            .form-control {
+                width: 100%;
+            }
+        }
+    }
+}

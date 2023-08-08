@@ -38,9 +38,9 @@ $context = context_course::instance($course->id, MUST_EXIST);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_pagetype('syllabus-view');
 $PAGE->set_context($context);
-$PAGE->set_heading($course->fullname);
 $PAGE->set_course($course);
 $output = $PAGE->get_renderer('local_syllabus');
+$PAGE->set_secondary_navigation(false);
 $syllabus = new \local_syllabus\output\syllabus($course->id);
 
 echo $OUTPUT->header();

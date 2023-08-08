@@ -23,7 +23,6 @@
  */
 
 namespace local_syllabus\output;
-defined('MOODLE_INTERNAL') || die();
 
 use local_syllabus\local\field_origin\base as field_origin_base;
 use local_syllabus\syllabus_field;
@@ -113,5 +112,4 @@ class field_location_management implements renderable, templatable {
         }
         return $fieldarray;
     }
-
 }

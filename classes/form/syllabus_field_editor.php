@@ -28,8 +28,6 @@ use core\form\persistent;
 use local_syllabus\local\fa_icons;
 use local_syllabus\local\utils;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Class syllabus_field_editor
  *

@@ -24,8 +24,6 @@
 
 namespace local_syllabus\local\field_origin;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Class tag_field
  *

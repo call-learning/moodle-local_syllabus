@@ -29,8 +29,6 @@ use core_customfield\field;
 use core_customfield\field_controller;
 use core_customfield\output\field_data;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Class custom_field
  *
