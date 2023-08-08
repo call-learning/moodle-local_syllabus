@@ -103,7 +103,6 @@ class custom_field extends base {
             $cfield = field_controller::create($iddata);
             $allfieldsdata = course_handler::create()->export_instance_data($exportedvalue->id);
             if ($allfieldsdata && !empty($allfieldsdata[$iddata])) {
-                /* @var $data field_data */
                 $data = $allfieldsdata[$iddata];
                 $value = $data->get_value();
             }

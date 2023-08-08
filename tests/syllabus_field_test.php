@@ -22,11 +22,10 @@
  * @copyright   2020 CALL Learning <contact@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace local_syllabus;
+use advanced_testcase;
 use local_syllabus\local\field_origin\course_field;
 use local_syllabus\local\field_origin\custom_field;
-use local_syllabus\syllabus_field;
-use local_syllabus\syllabus_location;
 
 /**
  * The syllabus field test class.
@@ -95,10 +94,7 @@ class syllabus_field_test extends advanced_testcase {
 
     /**
      * Get all fields by location test case
-     *
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
+     * @covers \local_syllabus\syllabus_location::get_all_fields_by_location
      */
     public function test_get_all_fields_by_location() {
         $this->resetAfterTest();
@@ -133,10 +129,7 @@ class syllabus_field_test extends advanced_testcase {
 
     /**
      * Custom formatted name function test
-     *
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
+     * @covers \local_syllabus\syllabus_field::get_formatted_name
      */
     public function test_get_formatted_name() {
         $this->resetAfterTest();
@@ -151,9 +144,7 @@ class syllabus_field_test extends advanced_testcase {
     /**
      * Get type function test
      *
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
+     * @covers \local_syllabus\syllabus_field::get_type
      */
     public function test_get_type() {
         $this->resetAfterTest();
@@ -165,6 +156,11 @@ class syllabus_field_test extends advanced_testcase {
         $this->assertEquals(PARAM_BOOL, $this->syllabusfield[5]->get_type());
     }
 
+    /**
+     * Get origin function test
+     * @return void
+     * @covers \local_syllabus\syllabus_field::get_origin
+     */
     public function test_get_origin_displayname() {
         $this->resetAfterTest();
         $cfbuild = \local_syllabus\local\field_origin\base::build($this->syllabusfield[0]);
@@ -173,6 +169,11 @@ class syllabus_field_test extends advanced_testcase {
         $this->assertEquals('Origin: Course', $corefbuild->get_origin_displayname());
     }
 
+    /**
+     * Get shortname function test
+     * @return void
+     * @covers \local_syllabus\syllabus_field::get_shortname
+     */
     public function test_get_shortname() {
         $this->resetAfterTest();
         $this->assertEquals('field1', $this->syllabusfield[0]->get_shortname());
@@ -183,6 +184,11 @@ class syllabus_field_test extends advanced_testcase {
         $this->assertEquals('visible', $this->syllabusfield[5]->get_shortname());
     }
 
+    /**
+     * Get display object function test
+     * @return void
+     * @covers \local_syllabus\syllabus_field::get_display_object
+     */
     public function test_get_display_object() {
         global $PAGE;
         $course = $this->getDataGenerator()->create_course();
@@ -201,6 +207,11 @@ class syllabus_field_test extends advanced_testcase {
             $displayobjdate->get_label($PAGE->get_renderer('core')));
     }
 
+    /**
+     * Get additional data function test
+     * @return void
+     * @covers \local_syllabus\syllabus_field::get_additional_data
+     */
     public function test_get_additional_data() {
         $this->syllabusfield[1]->set('data', json_encode((object) [
             'displayclass' => \local_syllabus\local\syllabus_display\date::class
@@ -210,6 +221,11 @@ class syllabus_field_test extends advanced_testcase {
         $this->assertNotNull($this->syllabusfield[1]->get_additional_data());
     }
 
+    /**
+     * Get raw values function test
+     * @return void
+     * @covers \local_syllabus\syllabus_field::get_raw_values
+     */
     public function test_get_raw_values() {
         global $PAGE;
         $course = $this->getDataGenerator()->create_course();
@@ -231,6 +247,8 @@ class syllabus_field_test extends advanced_testcase {
 
     /**
      * Get all possible fields
+     * @return void
+     * @covers \local_syllabus\syllabus_field::get_all_possible_fields
      */
     public function test_get_all_possible_fields() {
         $allfields = syllabus_field::get_all_possible_fields();
@@ -243,9 +261,5 @@ class syllabus_field_test extends advanced_testcase {
         });
         $this->assertCount(count(static::CFIELDS) * 2, $allcustomfields);
         $this->assertCount(14, $allcoursefields);
-    }
-
-    public function test_get_customfield_from_shortname_and_cat_id() {
-
     }
 }

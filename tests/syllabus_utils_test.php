@@ -22,7 +22,9 @@
  * @copyright   2020 CALL Learning <contact@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace local_syllabus;
+use advanced_testcase;
+use context_course;
 use local_syllabus\local\utils;
 
 /**
@@ -35,10 +37,7 @@ use local_syllabus\local\utils;
 class syllabus_utils_test extends advanced_testcase {
     /**
      * Test replace course node URL
-     *
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
+     * @covers \local_syllabus\utils::replace_nav_courses_url
      */
     public function test_replace_nav_courses_url() {
         global $PAGE;
@@ -57,12 +56,18 @@ class syllabus_utils_test extends advanced_testcase {
 
     /**
      * Get syllabus page URL
+     * @covers \local_syllabus\utils::get_syllabus_page_url
      */
     public function test_get_syllabus_page_url() {
         $this->assertEquals('https://www.example.com/moodle/local/syllabus/view.php?id=1',
             utils::get_syllabus_page_url(['id' => 1])->out());
     }
 
+    /**
+     * Get syllabus native course fields
+     * @return void
+     * @covers \local_syllabus\utils::get_all_native_course_fields
+     */
     public function test_get_all_native_course_fields() {
         $nativefields = utils::get_all_native_course_fields();
         $expectedfields = json_decode('{"fullnamehtml":{"type":"cleanhtml"},"viewurl":{"type":"url"},

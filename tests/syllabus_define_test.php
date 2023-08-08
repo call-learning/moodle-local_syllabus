@@ -22,8 +22,8 @@
  * @copyright   2020 CALL Learning <contact@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use core_customfield\api;
+namespace local_syllabus;
+use advanced_testcase;
 use local_syllabus\local\config_utils;
 
 /**
@@ -63,10 +63,7 @@ class syllabus_define_test extends advanced_testcase {
 
     /**
      * Custom field definition
-     *
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
+     * @covers \local_syllabus\syllabus_field::define_custom_field
      */
     public function test_define_custom_field() {
         $this->resetAfterTest();
@@ -84,9 +81,7 @@ class syllabus_define_test extends advanced_testcase {
      * @param string $importfile
      * @param string $separator
      * @dataProvider importfile_parameters
-     * @throws coding_exception
-     * @throws dml_exception
-     * @throws moodle_exception
+     * @covers \local_syllabus\config_utils::import_syllabus
      */
     public function test_syllabus_from_text($importfile, $separator) {
         $this->resetAfterTest();

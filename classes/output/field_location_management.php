@@ -102,7 +102,8 @@ class field_location_management implements renderable, templatable {
             $fieldarray['displayclass'] = $displayclass;
             $fieldarray['movetitle'] = get_string('movefield', 'local_syllabus', $fieldname);
             $params = [];
-            $pageurl = $PAGE->url; // Beware : empty($PAGE->url) is always false.
+            // Beware : empty($PAGE->url) is always false. So make sure that you never test it this way.
+            $pageurl = $PAGE->url;
             if (!empty($pageurl)) {
                 $params = $PAGE->url->params();
             }
