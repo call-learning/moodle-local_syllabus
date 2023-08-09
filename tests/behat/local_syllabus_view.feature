@@ -1,4 +1,4 @@
-@local @local_syllabus @core @javascript
+@local @local_syllabus @core
 Feature: As an admin I want to be able to view the plugin
 
   Background:
@@ -23,7 +23,6 @@ Feature: As an admin I want to be able to view the plugin
   Scenario: As a guest user I should be able to see the syllabus with its components
     Given I log in as "guest"
     And I am on "Course 1" course homepage
-    And I click on "C1" "link" in the ".breadcrumb" "css_element"
     Then I should see "Summary"
     Then I should see "Course 1"
     Then I should see "Course summary ..."

@@ -49,6 +49,17 @@ function local_syllabus_extend_navigation_course(navigation_node $parentnode, st
             new pix_icon('t/editstring', get_string('edit'))
         );
     }
+    $parentnode->add(
+        get_string('syllabus:view', 'local_syllabus'),
+        new moodle_url(
+            '/local/syllabus/view.php',
+            array('id' => $PAGE->course->id)
+        ),
+        navigation_node::NODETYPE_LEAF,
+        null,
+        'syllabusbview',
+        new pix_icon('t/viewdetails', get_string('syllabus:view', 'local_syllabus'))
+    );
 }
 
 /**

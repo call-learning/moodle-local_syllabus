@@ -79,7 +79,14 @@
                 {{/fields}}
             {{/header}}
         </div>
+        {{#canaccess}}
+            <div class="syllabus-view d-flex justify-content-center mb-4">
 
+                    <a href="{{viewurl}}" class="btn btn-primary">
+                        {{#str}}view{{/str}}
+                    </a>
+            </div>
+        {{/canaccess}}
         <div class="d-flex flex-column-reverse flex-lg-row align-items-start">
 
             <div class="syllabus-content">
@@ -94,7 +101,7 @@
                     {{/fields}}
                 {{/content}}
             </div>
-
+            {{#showside}}
             <aside class="syllabus-side">
                 <ul class="list-group">
                     {{#side}}
@@ -109,11 +116,7 @@
                     {{/side}}
                 </ul>
             </aside>
+            {{/showside}}
         </div>
     </div>
 </div>
-{{#js}}
-require(['local_syllabus/syllabus'], function(syllabus) {
-    syllabus.init();
-});
-{{/js}}

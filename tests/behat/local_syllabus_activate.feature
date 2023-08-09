@@ -1,4 +1,4 @@
-@local @local_syllabus @core @javascript
+@local @local_syllabus @core
 Feature: As an admin I want to be able to turn on and off the plugin and
 
   Background:
@@ -13,12 +13,12 @@ Feature: As an admin I want to be able to turn on and off the plugin and
       | fullname  | Origin: Course | title    | -1        |
       | summary   | Origin: Course | content  | -1        |
 
+    @javascript
   Scenario: As an admin if I turn off the plugin feature, I should not see any the syllabus for the course and instead the usual Moodle course
   info page
     Given I log in as "guest"
     And I am on "Course 1" course homepage
-    And I click on "C1" "link" in the ".breadcrumb" "css_element"
-    Then I should see "Summary"
+    Then I should see "Short name"
     And I log in as "admin"
     And I navigate to "Advanced features" in site administration
     And I should see "Enable Syllabus"
@@ -27,8 +27,4 @@ Feature: As an admin I want to be able to turn on and off the plugin and
     And I log out
     Given I log in as "guest"
     And I am on "Course 1" course homepage
-    And I click on "C1" "link" in the ".breadcrumb" "css_element"
-    Then I should not see "Syllabus"
-    Given I am on "Course 1" course homepage
-    And I follow "C1"
-    Then I should not see "Summary"
+    Then I should not see "Short name"

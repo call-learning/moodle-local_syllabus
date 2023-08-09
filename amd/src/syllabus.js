@@ -23,38 +23,30 @@
  */
 
 /**
- * Get all the images from the sponsor region. Put the images in a
+ * Get all the images from the logos area. Put the images in a
  * responsive grid and make sure the all have a minimum width of 250px.
+ * @param {string} regionname The name of the region.
  */
-const initSponsorRegion = () => {
-    const sponsorRegion = document.querySelector('.sfield-sponsorimages');
-    const contentRegion = sponsorRegion.querySelector('.sfield-content');
+export const initSponsorRegion = (regionname) => {
+    const sponsorRegion = document.querySelector('.sfield-' + regionname);
     if (sponsorRegion) {
-        const images = sponsorRegion.querySelectorAll('img.img-fluid');
-        if (images.length === 0) {
-            return;
+        const contentRegion = sponsorRegion.querySelector('.sfield-content');
+        if (sponsorRegion) {
+            const images = sponsorRegion.querySelectorAll('img.img-fluid,img.img-responsive');
+            if (images.length === 0) {
+                return;
+            }
+            const grid = document.createElement('div');
+            grid.classList.add('row');
+            images.forEach((image) => {
+                image.setAttribute('class', 'sponsorimage');
+                const col = document.createElement('div');
+                col.classList.add('col-12', 'col-md-6', 'd-flex', 'justify-content-center', 'align-items-center', 'mb-3');
+                col.appendChild(image);
+                grid.appendChild(col);
+            });
+            contentRegion.innerHTML = '';
+            contentRegion.appendChild(grid);
         }
-        const grid = document.createElement('div');
-        grid.classList.add('row');
-        images.forEach((image) => {
-            image.setAttribute('class', 'sponsorimage');
-            const col = document.createElement('div');
-            col.classList.add('col-12', 'col-md-6', 'd-flex', 'justify-content-center', 'align-items-center', 'mb-3');
-            col.appendChild(image);
-            grid.appendChild(col);
-        });
-        contentRegion.innerHTML = '';
-        contentRegion.appendChild(grid);
-   }
-};
-
-/**
- * Initialise all the syllabus UI elements.
- */
-const init = () => {
-    initSponsorRegion();
-};
-
-export default {
-    init: init
+    }
 };

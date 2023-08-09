@@ -77,6 +77,18 @@ class syllabus implements renderable, templatable {
             }
             $data->$location = $allfieldsvals;
         }
+        // Check that the current user is registered in the current course.
+        $context = \context_course::instance($this->courseid);
+
+        $course = get_course($this->courseid);
+        // Check that $USER has access to the course and if so, do not display the action.
+        $data->canaccess = can_access_course($course, null, '', true);
+        $data->viewurl = new \moodle_url('/course/view.php', ['id' => $this->courseid]);
+        $data->showside = true;
+        if ($data->canaccess) {
+            $data->showside = false;
+        }
+
         return $data;
     }
 }
