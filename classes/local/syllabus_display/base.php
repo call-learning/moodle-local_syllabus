@@ -87,11 +87,13 @@ class base implements renderable, templatable {
         $data->display = $this->should_display_field($courserawvalues, $exportedvalue);
         $fieldorigin = \local_syllabus\local\field_origin\base::build($this->fieldspec);
         $data->shortname = $fieldorigin->get_shortname();
+        $data->additionalclasses = '';
         if ($data->display) {
             $data->display = true;
             $icon = $this->get_icon($output);
             if ($icon) {
                 $data->icon = $icon;
+                $data->additionalclasses = 'with-icon';
             }
             $data->label = $this->get_label($output);
             $data->html = $exportedvalue;

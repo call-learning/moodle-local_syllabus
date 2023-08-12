@@ -2,6 +2,28 @@
 @import "../../theme/boost/scss/bootstrap/variables";
 @import "../../theme/boost/scss/bootstrap/mixins";
 
+@mixin sfield-style-with-icon {
+    display: flex;
+    align-items: center;
+    padding-right: 1rem;
+    border: 1px dotted var(--primary);
+    background-color: aliceblue;
+    border-radius: 17px;
+
+    .icon {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--primary);
+        color: #fff;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        margin-left: -2px;
+    }
+}
+
 .path-syllabus {
     --radius: 5px;
     .syllabus-title {
@@ -58,25 +80,7 @@
         }
 
         .sfield {
-            display: flex;
-            align-items: center;
-            padding-right: 1rem;
-            border: 1px dotted var(--primary);
-            background-color: aliceblue;
-            border-radius: 17px;
-
-            .icon {
-                width: 30px;
-                height: 30px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background-color: var(--primary);
-                color: #fff;
-                border-radius: 50%;
-                margin-right: 0.5rem;
-                margin-left: -2px;
-            }
+            @include sfield-style-with-icon;
         }
 
         @include media-breakpoint-up(md) {
@@ -126,6 +130,11 @@
         }
         > .sfield:first-child h2 {
             margin-top: 0;
+        }
+        .sfield.with-icon {
+            @include sfield-style-with-icon;
+            margin: 1em auto;
+            width: fit-content;
         }
     }
     .syllabus-side {

@@ -70,9 +70,10 @@
                 {{#fields}}
                     {{#display}}
                         <div class="m-2">
-                            <div class="sfield icon-no-margin sfield-{{shortname}}">
+                            <div class="sfield icon-no-margin sfield-{{shortname}} {{additionalclasses}}">
                                 {{#label}}<span class="sfield-label">{{label}}</span>{{/label}}
-                                {{#icon}}<i class="icon fa {{icon}}"> </i>{{/icon}} <span class="sfield-content">{{{html}}}</span>
+                                {{#icon}}<i class="icon fa {{icon}}"> </i>{{/icon}}
+                                <span class="sfield-content">{{{html}}}</span>
                             </div>
                         </div>
                     {{/display}}
@@ -93,8 +94,9 @@
                 {{#content}}
                     {{#fields}}
                         {{#display}}
-                            <div class="sfield sfield-{{shortname}}">
+                            <div class="sfield sfield-{{shortname}} {{additionalclasses}}">
                                 {{#label}}<h2>{{label}}</h2>{{/label}}
+                                {{#icon}}<i class="icon fa {{icon}}"> </i>{{/icon}}
                                 <span class="sfield-content">{{{html}}}</span>
                             </div>
                         {{/display}}
@@ -107,9 +109,10 @@
                     {{#side}}
                         {{#fields}}
                             {{#display}}
-                                <li class="sfield list-group-item border-0 icon-no-margin sfield-{{shortname}}">
+                                <li class="sfield list-group-item border-0 icon-no-margin sfield-{{shortname}} {{additionalclasses}}">
                                     {{#label}}<h3>{{label}}</h3>{{/label}}
-                                    {{#icon}}<i class="icon fa {{icon}}"></i>{{/icon}} <span class="content">{{{html}}}</span>
+                                    {{#icon}}<i class="icon fa {{icon}}"></i>{{/icon}}
+                                    <span class="content">{{{html}}}</span>
                                 </li>
                             {{/display}}
                         {{/fields}}
