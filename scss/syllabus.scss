@@ -135,6 +135,11 @@
             @include sfield-style-with-icon;
             margin: 1em auto;
             width: fit-content;
+            h2 {
+                font-size: xx-small;
+                margin: 0.5em;
+                margin-right: 2em;
+            }
         }
     }
     .syllabus-side {

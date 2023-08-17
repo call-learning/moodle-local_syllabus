@@ -156,6 +156,12 @@
     margin-left: -2px;
 }
 
+.path-syllabus .syllabus-content .sfield.with-icon h2 {
+    font-size: xx-small;
+    margin: 0.5em;
+    margin-right: 2em;
+}
+
 .path-syllabus .syllabus-side {
     margin-bottom: 2rem;
 }
