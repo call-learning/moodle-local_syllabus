@@ -53,7 +53,12 @@ class date extends base {
     protected function export_raw_value($courserawvals, renderer_base $output) {
         $dateformat = get_string('strftimedatefullshort');
         $fielddataid = $this->fieldspec->get('iddata');
-        return userdate($courserawvals->$fielddataid, $dateformat);
+        $datevalue = $courserawvals->$fielddataid;
+        if (is_numeric($datevalue)) {
+            return userdate($datevalue, $dateformat);
+        } else {
+            return $datevalue;
+        }
     }
 
     /**
