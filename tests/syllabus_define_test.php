@@ -70,7 +70,7 @@ class syllabus_define_test extends advanced_testcase {
         // The call should have been made to the observer and created the relevant field definition.
         $this->assertTrue(\local_syllabus\syllabus_field::record_exists_select(
             "origin=:origin AND iddata=:iddata",
-            array('origin' => 3, 'iddata' => $this->customfields[0]->get('id'))
+            ['origin' => 3, 'iddata' => $this->customfields[0]->get('id')]
         )
         );
     }
@@ -98,7 +98,7 @@ class syllabus_define_test extends advanced_testcase {
             (object) ['origin' => 3, 'iddata' => $this->customfields[2]->get('id'), 'data' => ''],
         ], array_map(function($sf) {
             return (object) [
-                'origin' => intval($sf->get('origin')), 'iddata' => $sf->get('iddata'), 'data' => $sf->get('data')
+                'origin' => intval($sf->get('origin')), 'iddata' => $sf->get('iddata'), 'data' => $sf->get('data'),
             ];
         },
             $fieldlocationside
@@ -109,7 +109,7 @@ class syllabus_define_test extends advanced_testcase {
             (object) ['origin' => 3, 'iddata' => $this->customfields[1]->get('id'), 'data' => ''],
         ], array_map(function($sf) {
             return (object) [
-                'origin' => intval($sf->get('origin')), 'iddata' => $sf->get('iddata'), 'data' => $sf->get('data')
+                'origin' => intval($sf->get('origin')), 'iddata' => $sf->get('iddata'), 'data' => $sf->get('data'),
             ];
         },
             $fieldlocationtitle
@@ -117,11 +117,11 @@ class syllabus_define_test extends advanced_testcase {
         $this->assertEquals([
             (object) ['origin' => 2, 'iddata' => 'courseimage', 'data' =>
                 '"{\"displayclass\":\"\\\\\\\\local_syllabus\\\\\\\\local\\\\\\\\syllabus_display\\\\\\\\image\",\"icon\":\"\",' .
-                '\"displaylabel\":1,\"hideifempty\":0,\"labells\":\"\"}"'
+                '\"displaylabel\":1,\"hideifempty\":0,\"labells\":\"\"}"',
             ],
         ], array_map(function($sf) {
             return (object) [
-                'origin' => intval($sf->get('origin')), 'iddata' => $sf->get('iddata'), 'data' => $sf->get('data')
+                'origin' => intval($sf->get('origin')), 'iddata' => $sf->get('iddata'), 'data' => $sf->get('data'),
             ];
         },
             $fieldlocationheader
@@ -132,10 +132,10 @@ class syllabus_define_test extends advanced_testcase {
      * Parameter for testing import
      * @return string[][]
      */
-    public function importfile_parameters() {
-        return array(
-            array('/fixtures/syllabus_import.csv', ","),
-            array('/fixtures/syllabus_import.tsv', "\t")
-        );
+    public static function importfile_parameters(): array {
+        return [
+            ['/fixtures/syllabus_import.csv', ","],
+            ['/fixtures/syllabus_import.tsv', "\t"],
+        ];
     }
 }

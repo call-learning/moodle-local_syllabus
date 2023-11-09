@@ -70,7 +70,7 @@ class syllabus_location extends persistent {
         self::HEADER,
         self::SIDE,
         self::CONTENT,
-        self::NONE
+        self::NONE,
     ];
 
     /**
@@ -79,20 +79,20 @@ class syllabus_location extends persistent {
      * @return array Where keys are the property names.
      */
     protected static function define_properties() {
-        return array(
-            'fieldid' => array(
+        return [
+            'fieldid' => [
                 'null' => NULL_NOT_ALLOWED,
-                'type' => PARAM_INT
-            ),
-            'location' => array(
+                'type' => PARAM_INT,
+            ],
+            'location' => [
                 'null' => NULL_NOT_ALLOWED,
                 'type' => PARAM_TEXT,
-                'choices' => self::LOCATION_TYPES
-            ),
-            'sortorder' => array(
+                'choices' => self::LOCATION_TYPES,
+            ],
+            'sortorder' => [
                 'type' => PARAM_INT,
-            )
-        );
+            ],
+        ];
     }
 
     /**
@@ -111,8 +111,8 @@ class syllabus_location extends persistent {
             . " LEFT JOIN {" . self::TABLE . "} fl ON fl.fieldid = f.id"
             . " WHERE COALESCE(fl.location,:locationnone) = :location"
             . " ORDER BY fl.sortorder ASC";
-        $fieldsid = $DB->get_fieldset_sql($sql, array('location' => $location,
-            'locationnone' => self::NONE));
+        $fieldsid = $DB->get_fieldset_sql($sql, ['location' => $location,
+            'locationnone' => self::NONE, ]);
         $fields = [];
         foreach ($fieldsid as $fid) {
             $fields[] = new syllabus_field($fid);

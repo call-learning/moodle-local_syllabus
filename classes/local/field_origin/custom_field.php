@@ -121,7 +121,7 @@ class custom_field extends base {
     public static function get_definition($fieldid) {
         return [
             'origin' => self::ORIGIN_CUSTOM_FIELD,
-            'iddata' => $fieldid
+            'iddata' => $fieldid,
         ];
     }
 
@@ -154,6 +154,6 @@ class custom_field extends base {
     public function field_exists() {
         global $DB;
         $iddata = $this->syllabusfield->get('iddata');
-        return $iddata && $DB->record_exists(field::TABLE, array('id' => intval($iddata)));
+        return $iddata && $DB->record_exists(field::TABLE, ['id' => intval($iddata)]);
     }
 }

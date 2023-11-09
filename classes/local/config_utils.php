@@ -54,7 +54,7 @@ class config_utils {
         "shortname",
         "contextinfo",
         "sortorder",
-        "additionaldata"
+        "additionaldata",
     ];
 
     /**
@@ -108,16 +108,16 @@ class config_utils {
                     $originalinfodata = $row['shortname']; // Shortname for tag + course field.
                     if ($row['origin'] == 'custom_field') {
                         if (empty($row['contextinfo'])) {
-                            $categories = category::get_records(array('component' => 'core_course'));
+                            $categories = category::get_records(['component' => 'core_course']);
                             $category = reset($categories); // Get the first category.
                         } else {
-                            $category = category::get_record(array('name' => $row['contextinfo'], 'component' => 'core_course'));
+                            $category = category::get_record(['name' => $row['contextinfo'], 'component' => 'core_course']);
                         }
 
                         if (empty($category)) {
                             continue; // Skip.
                         }
-                        $cfield = field::get_record(array('shortname' => $row['shortname'], 'categoryid' => $category->get('id')));
+                        $cfield = field::get_record(['shortname' => $row['shortname'], 'categoryid' => $category->get('id')]);
                         if (empty($cfield)) {
                             continue;
                         }
@@ -135,7 +135,7 @@ class config_utils {
                         $locationentity = new syllabus_location(0, (object) [
                             'fieldid' => $syllabusfield->get('id'),
                             'location' => $location,
-                            'sortorder' => $sortorder
+                            'sortorder' => $sortorder,
                         ]);
                         $locationentity->create();
                     }

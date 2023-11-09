@@ -66,7 +66,7 @@ $reset = $OUTPUT->action_link(
     ]),
     get_string('resetallpositions', 'local_syllabus'),
     new confirm_action(get_string('resetallpositions:confirmation', 'local_syllabus')),
-    array('class' => 'btn btn-danger mb-auto mt-0 ml-2')
+    ['class' => 'btn btn-danger mb-auto mt-0 ml-2']
 );
 $additionalbuttons .= $reset;
 $PAGE->set_button($PAGE->button . $additionalbuttons);

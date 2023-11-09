@@ -22,23 +22,23 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-$functions = array(
-    'local_syllabus_get_field_location' => array(
+$functions = [
+    'local_syllabus_get_field_location' => [
         'classname' => '\\local_syllabus\\external\\manage_customfields',
         'methodname' => 'get_field_location',
         'description' => 'Get the given field location if it set (the location on the syllabus page)',
         'type' => 'read',
         'capabilities' => 'local/syllabyus:manage',
         'ajax' => true,
-        'loginrequired' => true
-    ),
-    'local_syllabus_move_field_to_location' => array(
+        'loginrequired' => true,
+    ],
+    'local_syllabus_move_field_to_location' => [
         'classname' => '\\local_syllabus\\external\\manage_customfields',
         'methodname' => 'move_field_to_location',
         'description' => 'Move the field location on the syllabus page',
         'type' => 'write',
         'capabilities' => 'local/syllabyus:manage',
         'ajax' => true,
-        'loginrequired' => true
-    ),
-);
+        'loginrequired' => true,
+    ],
+];

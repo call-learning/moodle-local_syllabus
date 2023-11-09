@@ -57,7 +57,7 @@ class image extends base {
         return html_writer::img(
             $courserawvals->$fielddataid,
             parent::get_label($output),
-            array('class' => 'img-fluid')
+            ['class' => 'img-fluid']
         );
     }
 

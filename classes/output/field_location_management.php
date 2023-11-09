@@ -52,7 +52,7 @@ class field_location_management implements renderable, templatable {
      */
     public function export_for_template(\renderer_base $output) {
         $data = new \stdClass();
-        $data->locations = array();
+        $data->locations = [];
         $sm = get_string_manager();
         foreach (syllabus_location::LOCATION_TYPES as $location) {
             $locationfullname = $location;

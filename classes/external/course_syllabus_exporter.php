@@ -43,7 +43,7 @@ class course_syllabus_exporter extends course_summary_exporter {
      * @param mixed $data - Either an stdClass or an array of values.
      * @param array $related - An optional list of pre-loaded objects related to this object.
      */
-    public function __construct($data, $related = array()) {
+    public function __construct($data, $related = []) {
         parent::__construct($data, ['context' => \context_course::instance($data->id)]);
     }
 
@@ -67,7 +67,7 @@ class course_syllabus_exporter extends course_summary_exporter {
             'fullnamehtml' => \html_writer::tag('h1', get_course_display_name_for_list($this->data)),
             'courseimage' => $courseimage,
             'coursecategory' => $coursecategory->name,
-            'isenrolled' => !is_enrolled($this->related['context'])
+            'isenrolled' => !is_enrolled($this->related['context']),
         ];
         return array_merge($courseactions, $otherfields);
     }
@@ -84,10 +84,10 @@ class course_syllabus_exporter extends course_summary_exporter {
     public static function get_course_actions($context, $courseid) {
         $isenrolled = is_enrolled($context, null, '', true);
         $action = \html_writer::start_div('syllabus-action');
-        $viewurl = (new moodle_url('/course/view.php', array('id' => $courseid)))->out(false);
+        $viewurl = (new moodle_url('/course/view.php', ['id' => $courseid]))->out(false);
         if ($isenrolled || has_capability('moodle/course:view', $context)) {
             $action .= \html_writer::link($viewurl, get_string('view'),
-                array('class' => 'btn btn-primary'));
+                ['class' => 'btn btn-primary']);
         } else {
             $enrolinstances = enrol_get_instances($courseid, true);
             $hasenrolforms = false;
@@ -115,7 +115,7 @@ class course_syllabus_exporter extends course_summary_exporter {
         }
         $action .= \html_writer::end_div();
 
-        return array('action' => $action, 'viewurl' => $viewurl);
+        return ['action' => $action, 'viewurl' => $viewurl];
     }
 
     /**
@@ -124,33 +124,33 @@ class course_syllabus_exporter extends course_summary_exporter {
      * @return array[]
      */
     public static function define_properties() {
-        return array(
-            'id' => array(
+        return [
+            'id' => [
                 'type' => PARAM_INT,
-            ),
-            'fullname' => array(
+            ],
+            'fullname' => [
                 'type' => PARAM_TEXT,
-            ),
-            'shortname' => array(
+            ],
+            'shortname' => [
                 'type' => PARAM_TEXT,
-            ),
-            'idnumber' => array(
+            ],
+            'idnumber' => [
                 'type' => PARAM_RAW,
-            ),
-            'summary' => array(
+            ],
+            'summary' => [
                 'type' => PARAM_RAW,
-                'null' => NULL_ALLOWED
-            ),
-            'startdate' => array(
+                'null' => NULL_ALLOWED,
+            ],
+            'startdate' => [
                 'type' => PARAM_INT,
-            ),
-            'enddate' => array(
+            ],
+            'enddate' => [
                 'type' => PARAM_INT,
-            ),
-            'visible' => array(
+            ],
+            'visible' => [
                 'type' => PARAM_BOOL,
-            )
-        );
+            ],
+        ];
     }
 
     /**
@@ -171,25 +171,25 @@ class course_syllabus_exporter extends course_summary_exporter {
      * @return array[]
      */
     public static function define_other_properties() {
-        return array(
-            'fullnamehtml' => array(
+        return [
+            'fullnamehtml' => [
                 'type' => PARAM_CLEANHTML,
-            ),
-            'viewurl' => array(
+            ],
+            'viewurl' => [
                 'type' => PARAM_URL,
-            ),
-            'courseimage' => array(
+            ],
+            'courseimage' => [
                 'type' => PARAM_RAW,
-            ),
-            'coursecategory' => array(
-                'type' => PARAM_TEXT
-            ),
-            'action' => array(
-                'type' => PARAM_RAW
-            ),
-            'isenrolled' => array(
-                'type' => PARAM_BOOL
-            ),
-        );
+            ],
+            'coursecategory' => [
+                'type' => PARAM_TEXT,
+            ],
+            'action' => [
+                'type' => PARAM_RAW,
+            ],
+            'isenrolled' => [
+                'type' => PARAM_BOOL,
+            ],
+        ];
     }
 }

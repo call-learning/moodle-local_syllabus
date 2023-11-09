@@ -32,14 +32,14 @@ require_once($CFG->libdir . '/clilib.php');
 
 // Get the cli options.
 list($options, $unrecognized) = cli_get_params(
-    array(
+    [
         'help' => false,
-        'fileinput' => false
-    ),
-    array(
+        'fileinput' => false,
+    ],
+    [
         'h' => 'help',
         'f' => 'fileinput',
-    )
+    ]
 );
 
 $help = "

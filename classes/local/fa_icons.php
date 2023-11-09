@@ -35,7 +35,7 @@ class fa_icons {
     /**
      * List of possible FA icon
      */
-    const FA_LIST = array(
+    const FA_LIST = [
         'fa-glass',
         'fa-music',
         'fa-search',
@@ -822,6 +822,6 @@ class fa_icons {
         'fa-superpowers',
         'fa-wpexplorer',
         'fa-meetup',
-    );
+    ];
 }
 

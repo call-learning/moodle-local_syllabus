@@ -38,7 +38,7 @@ $action = get_string('editfield', 'local_syllabus');
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title($action);
 $PAGE->set_heading($action);
-$editpageurl = new moodle_url('/local/syllabus/editfield.php', array('id' => $fieldid));
+$editpageurl = new moodle_url('/local/syllabus/editfield.php', ['id' => $fieldid]);
 $listpageurl = new moodle_url('/local/syllabus/manage.php');
 if ($returnurl) {
     $editpageurl->param('returnurl', $returnurl);
@@ -57,7 +57,7 @@ if ($returnurl) {
 }
 
 $form = new syllabus_field_editor(null, $params);
-$jsondata = array();
+$jsondata = [];
 if ($additionaldata = $persistent->get('data')) {
     $additionaldata = json_decode($additionaldata);
     $jsondata = syllabus_field_editor::filter_persistent_additional_data($additionaldata);

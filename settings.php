@@ -48,7 +48,7 @@ if ($hassiteconfig) {
         new admin_externalpage('syllabus_manage_fields',
             new lang_string('syllabus:managefields', 'local_syllabus'),
             $CFG->wwwroot . '/local/syllabus/manage.php',
-            array('local/syllabus:manage')
+            ['local/syllabus:manage']
         )
     );
     $ADMIN->add('courses', $settings);

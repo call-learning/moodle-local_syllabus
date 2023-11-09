@@ -43,4 +43,18 @@ class behat_local_syllabus extends behat_base {
     public function syllabus_fields_are_updated() {
         \local_syllabus\local\utils::update_syllabus_fields();
     }
+
+    /**
+     * Opens the course homepage. (Consider using 'I am on the "shortname" "Course" page' step instead.)
+     *
+     * @Given /^I am on "(?P<coursefullname_string>(?:[^"]|\\")*)" syllabus page$/
+     * @throws coding_exception
+     * @param string $coursefullname The full name of the course.
+     * @return void
+     */
+    public function i_am_on_course_syllabus_page($coursefullname) {
+        $courseid = $this->get_course_id($coursefullname);
+        $url = new moodle_url('/local/syllabus/view.php', ['id' => $courseid]);
+        $this->execute('behat_general::i_visit', [$url]);
+    }
 }

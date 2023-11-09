@@ -25,10 +25,10 @@
 require_once('../../config.php');
 global $DB, $PAGE, $OUTPUT;
 $courseid = required_param('id', PARAM_INT);
-$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
 
 require_login();
-$urlparams = array('id' => $course->id);
+$urlparams = ['id' => $course->id];
 
 $PAGE->set_url('/local/syllabus/view.php', $urlparams);
 $PAGE->set_cacheable(true);

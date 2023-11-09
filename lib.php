@@ -41,7 +41,7 @@ function local_syllabus_extend_navigation_course(navigation_node $parentnode, st
             get_string('syllabus:managefields', 'local_syllabus'),
             new moodle_url(
                 '/local/syllabus/manage.php',
-                array('returnurl' => $PAGE->url->out())
+                ['returnurl' => $PAGE->url->out()]
             ),
             navigation_node::TYPE_SETTING,
             null,
@@ -53,7 +53,7 @@ function local_syllabus_extend_navigation_course(navigation_node $parentnode, st
         get_string('syllabus:view', 'local_syllabus'),
         new moodle_url(
             '/local/syllabus/view.php',
-            array('id' => $PAGE->course->id)
+            ['id' => $PAGE->course->id]
         ),
         navigation_node::NODETYPE_LEAF,
         null,

@@ -41,7 +41,7 @@ class course_field extends base {
      */
     const SPECIFIC_FULLNAME = [
         'fullname' => ['fullnamecourse', 'moodle'],
-        'fullnamehtml' => ['fullnamecourse', 'moodle']
+        'fullnamehtml' => ['fullnamecourse', 'moodle'],
     ];
 
     /**
@@ -112,7 +112,7 @@ class course_field extends base {
     public static function get_definition($key) {
         return [
             'origin' => self::ORIGIN_COURSE_FIELD,
-            'iddata' => $key
+            'iddata' => $key,
         ];
     }
 

@@ -43,8 +43,8 @@ class behat_local_syllabus_generator extends behat_generator_base {
         return [
             'fieldlocation' => [
                 'datagenerator' => 'fieldlocation',
-                'required' => ['iddata', 'origin', 'location', 'sortorder']
-            ]
+                'required' => ['iddata', 'origin', 'location', 'sortorder'],
+            ],
         ];
     }
 
@@ -61,13 +61,13 @@ class behat_local_syllabus_generator extends behat_generator_base {
         $originid = $origins[trim($elementdata['origin'])];
         $iddata = $elementdata['iddata'];
         if ($originid == local_syllabus\local\field_origin\base::ORIGIN_CUSTOM_FIELD) {
-            $field = field::get_record(array('shortname' => $elementdata['iddata']));
+            $field = field::get_record(['shortname' => $elementdata['iddata']]);
             $iddata = $field->get('id');
         }
-        $elementdata['fieldid'] = $DB->get_field('local_syllabus_field', 'id', array(
+        $elementdata['fieldid'] = $DB->get_field('local_syllabus_field', 'id', [
             'iddata' => $iddata,
-            'origin' => $origins[trim($elementdata['origin'])]
-        ));
+            'origin' => $origins[trim($elementdata['origin'])],
+        ]);
         if (empty($elementdata['sortorder'])) {
             $elementdata['sortorder'] = 0;
         }

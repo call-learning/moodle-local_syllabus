@@ -52,20 +52,20 @@ class syllabus_field extends persistent {
      * @throws \coding_exception
      */
     protected static function define_properties() {
-        return array(
-            'origin' => array(
+        return [
+            'origin' => [
                 'null' => NULL_NOT_ALLOWED,
                 'type' => PARAM_INT,
-                'choices' => array_keys(field_origin_base::get_fields_origins_names())
-            ),
-            'iddata' => array(
+                'choices' => array_keys(field_origin_base::get_fields_origins_names()),
+            ],
+            'iddata' => [
                 'type' => PARAM_ALPHANUMEXT,
-            ),
-            'data' => array(
+            ],
+            'data' => [
                 'type' => PARAM_RAW,
-                'default' => ''
-            ),
-        );
+                'default' => '',
+            ],
+        ];
     }
 
     /**
@@ -78,10 +78,10 @@ class syllabus_field extends persistent {
      */
     public static function create_from_def($fielddef) {
         $existingfield = self::get_record(
-            array(
+            [
                 'origin' => $fielddef['origin'],
-                'iddata' => strval($fielddef['iddata'])
-            ));
+                'iddata' => strval($fielddef['iddata']),
+            ]);
         if (!$existingfield) {
             $sfield = new self(0, (object) $fielddef);
             $sfield->create();
@@ -205,7 +205,7 @@ class syllabus_field extends persistent {
             return $courserawvalues[$courseid];
         }
         $exporterclass = utils::get_course_syllabus_exporter_class();
-        $course = $DB->get_record('course', array('id' => $courseid));
+        $course = $DB->get_record('course', ['id' => $courseid]);
         $exporter = new $exporterclass($course);
         $exportresults = $exporter->export($output);;
 
@@ -235,7 +235,7 @@ class syllabus_field extends persistent {
     public static function get_all_possible_fields() {
         // Tags.
         $tagfields = [
-            tag_field::get_definition('coursetags')
+            tag_field::get_definition('coursetags'),
         ];
 
         // Retrieve all course custom field and add them.

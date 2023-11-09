@@ -43,12 +43,12 @@ class syllabus_field_editor extends persistent {
     /**
      * @var string[] Fields to remove in the form
      */
-    protected static $fieldstoremove = array('id', 'submitbutton');
+    protected static $fieldstoremove = ['id', 'submitbutton'];
     /**
      * @var string[] Fields to remove when submitting the form to persistent
      */
-    protected static $foreignfields = array('icon', 'labells', 'displayclass', 'displaylabel', 'hideifempty',
-        'submitbutton', 'returnurl');
+    protected static $foreignfields = ['icon', 'labells', 'displayclass', 'displaylabel', 'hideifempty',
+        'submitbutton', 'returnurl', ];
 
     /**
      * Add further settings to each field.
@@ -92,10 +92,10 @@ class syllabus_field_editor extends persistent {
             [
                 'valuehtmlcallback' => function($value) {
                     if ($value) {
-                        return \html_writer::tag('i', '', array('class' => 'fa ' . $value)) . " ($value)";
+                        return \html_writer::tag('i', '', ['class' => 'fa ' . $value]) . " ($value)";
                     }
                     return '';
-                }
+                },
             ]
         );
         $mform->setType('icon', PARAM_RAW);

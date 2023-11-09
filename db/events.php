@@ -23,13 +23,13 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-$observers = array(
-    array(
+$observers = [
+    [
         'eventname' => '\core_customfield\event\field_created',
         'callback' => '\local_syllabus\observer\customfield_observer::customfield_created',
-    ),
-    array(
+    ],
+    [
         'eventname' => '\core_customfield\event\field_deleted',
         'callback' => '\local_syllabus\observer\customfield_observer::customfield_deleted',
-    ),
-);
+    ],
+];

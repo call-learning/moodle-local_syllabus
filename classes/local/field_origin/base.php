@@ -71,11 +71,11 @@ abstract class base {
      * @throws \coding_exception
      */
     public static function get_fields_origins_names() {
-        return array(
+        return [
             self::ORIGIN_TAG => get_string('origin:tag', 'local_syllabus'),
             self::ORIGIN_COURSE_FIELD => get_string('origin:course', 'local_syllabus'),
-            self::ORIGIN_CUSTOM_FIELD => get_string('origin:customfield', 'local_syllabus')
-        );
+            self::ORIGIN_CUSTOM_FIELD => get_string('origin:customfield', 'local_syllabus'),
+        ];
     }
 
     /**

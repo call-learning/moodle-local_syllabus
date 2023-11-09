@@ -91,7 +91,7 @@ class tag_field extends base {
     public static function get_definition($tag) {
         return [
             'origin' => self::ORIGIN_TAG,
-            'iddata' => $tag
+            'iddata' => $tag,
         ];
     }
 

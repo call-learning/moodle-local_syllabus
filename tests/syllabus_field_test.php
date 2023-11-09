@@ -47,12 +47,12 @@ class syllabus_field_test extends advanced_testcase {
         [
             'type' => 'text',
             'shortname' => 'field1',
-            'name' => 'Field A'
+            'name' => 'Field A',
         ],
         [
             'type' => 'text',
             'shortname' => 'field2',
-            'name' => 'Field B'
+            'name' => 'Field B',
         ],
     ];
 
@@ -107,7 +107,7 @@ class syllabus_field_test extends advanced_testcase {
                     $location = new syllabus_location(0, (object) [
                         'fieldid' => $cfield->get('id'),
                         'location' => $locationname,
-                        'sortorder' => $sortorder
+                        'sortorder' => $sortorder,
                     ]);
                     $location->create();
                     $sortorder++;
@@ -194,7 +194,7 @@ class syllabus_field_test extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $this->syllabusfield[1]->set('data', json_encode((object) [
             'displayclass' => \local_syllabus\local\syllabus_display\date::class,
-            'labells' => 'error,cannotcallscript'
+            'labells' => 'error,cannotcallscript',
         ]));
         $this->syllabusfield[1]->save();
         $displayobjbase = $this->syllabusfield[0]->get_display_object($course->id);
@@ -214,7 +214,7 @@ class syllabus_field_test extends advanced_testcase {
      */
     public function test_get_additional_data() {
         $this->syllabusfield[1]->set('data', json_encode((object) [
-            'displayclass' => \local_syllabus\local\syllabus_display\date::class
+            'displayclass' => \local_syllabus\local\syllabus_display\date::class,
         ]));
         $this->syllabusfield[1]->save();
         $this->assertNull($this->syllabusfield[0]->get_additional_data());

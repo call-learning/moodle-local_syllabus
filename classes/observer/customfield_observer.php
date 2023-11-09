@@ -61,7 +61,7 @@ class customfield_observer {
             custom_field::get_definition($event->objectid)
         );
         if ($field) {
-            $orphanlocations = syllabus_location::get_records(array('fieldid' => $field->get('id')));
+            $orphanlocations = syllabus_location::get_records(['fieldid' => $field->get('id')]);
             foreach ($orphanlocations as $of) {
                 $of->delete();
             }

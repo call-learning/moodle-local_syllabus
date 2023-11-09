@@ -53,12 +53,12 @@ class manage_customfields extends external_api {
      */
     public static function get_field_location_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'fieldid' => new external_value(PARAM_INT,
                     'Course customfield id',
                     VALUE_REQUIRED
                 ),
-            )
+            ]
         );
     }
 
@@ -72,19 +72,19 @@ class manage_customfields extends external_api {
      */
     public static function get_field_location(string $fieldid) {
         // Validate parameters.
-        $inparams = compact(array('fieldid'));
+        $inparams = compact(['fieldid']);
         self::validate_parameters(self::get_field_location_parameters(), $inparams);
         self::validate_field_id($fieldid);
 
         if ($fieldid) {
-            $location = syllabus_location::get_record(array('fieldid' => $fieldid));
+            $location = syllabus_location::get_record(['fieldid' => $fieldid]);
             if ($location) {
-                return array('location' => $location->location);
+                return ['location' => $location->location];
             } else {
-                return array('location' => syllabus_location::NONE);
+                return ['location' => syllabus_location::NONE];
             }
         } else {
-            return array('location' => syllabus_location::NONE);
+            return ['location' => syllabus_location::NONE];
         }
     }
 
@@ -97,10 +97,10 @@ class manage_customfields extends external_api {
         return
             new external_multiple_structure(
                 new external_single_structure(
-                    array(
+                    [
                         'location' => new external_value(PARAM_ALPHANUM, 'Location shortname'
                             .' on the syllabus page (mostly side, content, ....)'),
-                    )
+                    ]
                 )
             );
     }
@@ -112,7 +112,7 @@ class manage_customfields extends external_api {
      */
     public static function move_field_to_location_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'fieldid' => new external_value(PARAM_INT,
                     'Course customfield id',
                     VALUE_REQUIRED
@@ -126,7 +126,7 @@ class manage_customfields extends external_api {
                     VALUE_OPTIONAL,
                     0
                 ),
-            )
+            ]
         );
     }
 
@@ -144,11 +144,11 @@ class manage_customfields extends external_api {
      */
     public static function move_field_to_location(string $fieldid, string $location, int $beforeid = 0, int $forcesortorder=-1) {
         // Validate parameters.
-        $inparams = compact(array('fieldid', 'location', 'beforeid'));
+        $inparams = compact(['fieldid', 'location', 'beforeid']);
         self::validate_parameters(self::move_field_to_location_parameters(), $inparams);
         self::validate_field_id($fieldid);
 
-        $loc = syllabus_location::get_record(array('fieldid' => $fieldid));
+        $loc = syllabus_location::get_record(['fieldid' => $fieldid]);
 
         if (!$loc) {
             $loc = new syllabus_location(0);
@@ -156,7 +156,7 @@ class manage_customfields extends external_api {
         }
         $loc->set('location', $location);
 
-        $alllocations = syllabus_location::get_records(array('location' => $location), 'sortorder');
+        $alllocations = syllabus_location::get_records(['location' => $location], 'sortorder');
 
         $cfsortorder = -1; // No next field.
         if ($forcesortorder == -1) {
